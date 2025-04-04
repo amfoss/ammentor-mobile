@@ -1,5 +1,5 @@
-import 'package:cms/components/custom_button.dart';
-import 'package:cms/screen/auth_screen.dart';
+import 'package:amMentor/components/custom_button.dart';
+import 'package:amMentor/screen/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:page_animation_transition/animations/fade_animation_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';

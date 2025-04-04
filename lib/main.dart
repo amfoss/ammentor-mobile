@@ -1,4 +1,4 @@
-import 'package:cms/screen/welcome_screen.dart';
+import 'package:amMentor/screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
