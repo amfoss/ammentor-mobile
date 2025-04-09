@@ -1,16 +1,3 @@
 # ammentor
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+amMentor is a gamified mentorship platform crafted to transform how learning, mentorship, and collaboration take place in student communities. Built with a focus on accountability, growth, and engagement, the platform enables mentees to progress through curated tracks while being guided by experienced mentors. It turns mentorship into a journey filled with challenges, achievements, and recognition.
