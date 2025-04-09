@@ -1,4 +1,3 @@
-import 'package:ammentor/screen/login_screen.dart';
 import 'package:ammentor/screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
 

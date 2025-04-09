@@ -1,6 +1,6 @@
 import 'package:ammentor/components/custom_button.dart';
 import 'package:ammentor/components/theme.dart';
-import 'package:ammentor/screen/auth_screen.dart';
+
 import 'package:ammentor/screen/login_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -20,7 +20,6 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   String _selectedOption = 'Mentor';
-  final PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
