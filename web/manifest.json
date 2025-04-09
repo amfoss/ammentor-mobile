@@ -1,6 +1,6 @@
 {
-    "name": "cms",
-    "short_name": "cms",
+    "name": "ammentor",
+    "short_name": "ammentor",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

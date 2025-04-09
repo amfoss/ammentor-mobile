@@ -1,5 +1,8 @@
-import 'package:amMentor/screen/welcome_screen.dart';
+import 'package:ammentor/screen/login_screen.dart';
+import 'package:ammentor/screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'components/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,9 +13,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'amMentor',
+      theme: appTheme,
       home: WelcomeScreen(),
     );
   }
