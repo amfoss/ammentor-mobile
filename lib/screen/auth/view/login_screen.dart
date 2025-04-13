@@ -3,7 +3,7 @@ import 'package:ammentor/screen/mentor/mentor_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/custom_text_field.dart';
 import 'package:ammentor/components/theme.dart';
-import 'package:ammentor/screen/welcome_screen.dart';
+import 'package:ammentor/screen/welcome/welcome_screen.dart';
 import 'package:page_animation_transition/animations/bottom_to_top_faded_transition.dart';
 
 import 'package:page_animation_transition/page_animation_transition.dart';
@@ -53,10 +53,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Align(
                 alignment: Alignment.topCenter,
                 child: SizedBox(
-                  height: 300,
-                  width: 400,
+                  height: 200,
+                  width: 300,
                   child: Image.asset(
-                    'assets/images/amMentor.png',
+                    'assets/images/image.png',
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -124,7 +124,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-
+                     
+            Positioned(
+              bottom: -80,
+              right: -80,
+              child: Transform.rotate(
+                angle: -0.5,
+                child: Image.asset(
+                  'assets/images/amfoss_bulb_white.png',
+                  width: 350,
+                  height: 350,
+                ),
+              ),
+            ),
           ],
         ),
       ),

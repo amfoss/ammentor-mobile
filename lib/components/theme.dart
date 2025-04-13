@@ -9,6 +9,7 @@ class AppColors {
   static const white70 = Colors.white70;
   static const red = Colors.redAccent;
   static const grey = Colors.grey;
+  static const darkgrey = Color(0xFF2E2E2E);
   static const errorDark = Color(0xFFB00020);
   static const Color cardBackground = Color.fromARGB(102, 102, 102, 102);
   static const border = Color(0xFF837E93);

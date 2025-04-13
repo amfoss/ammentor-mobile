@@ -1,7 +1,7 @@
 import 'package:ammentor/components/custom_button.dart';
 import 'package:ammentor/components/theme.dart';
 
-import 'package:ammentor/screen/login_screen.dart';
+import 'package:ammentor/screen/auth/view/login_screen.dart';
 
 import 'package:flutter/material.dart';
 
@@ -40,10 +40,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               child: Align(
                 alignment: Alignment.topCenter,
                 child: SizedBox(
-                  height: 300,
-                  width: 400,
+                  height: 200,
+                  width: 300,
                   child: Image.asset(
-                    'assets/images/amMentor.png',
+                    'assets/images/image.png',
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -96,14 +96,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
             // amFOSS Bulb Logo at Bottom
             Positioned(
-              bottom: -100,
-              right: -100,
+              bottom: -80,
+              right: -80,
               child: Transform.rotate(
                 angle: -0.5,
                 child: Image.asset(
                   'assets/images/amfoss_bulb_white.png',
-                  width: 450,
-                  height: 450,
+                  width: 350,
+                  height: 350,
                 ),
               ),
             ),
