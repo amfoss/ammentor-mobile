@@ -46,10 +46,7 @@ class _MentorHomePageState extends State<MentorHomePage> {
         },
         letIndexChange: (index) => true,
       ),
-      body: Container(
-        color: AppColors.surface,
-        child: _pages[_page],
-      ),
+      body: Container(color: AppColors.surface, child: _pages[_page]),
     );
   }
 }
