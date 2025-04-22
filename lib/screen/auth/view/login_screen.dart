@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ammentor/components/custom_text_field.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/screen/welcome/welcome_screen.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:page_animation_transition/animations/bottom_to_top_faded_transition.dart';
 
 import 'package:page_animation_transition/page_animation_transition.dart';
@@ -83,14 +84,46 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: "Enter your email",
                     width: fieldWidth * 0.8,
                   ),
-                  SizedBox(height: fieldHeight * 0.02),
-                  CustomTextField(
-                    controller: passwordController,
-                    label: "Password",
-                    hintText: "Enter your password",
-                    isPassword: true,
-                    width: fieldWidth * 0.8,
+                  SizedBox (height : fieldHeight * 0.02),
+                  ElevatedButton(
+                      onPressed:(){
+                      
+                      },
+                      child: (
+                      Text ("Get OTP")
+
+                      )
                   ),
+                  SizedBox(height: fieldHeight * 0.02),
+                  OtpTextField(
+                          numberOfFields: 4,
+                          borderColor: AppColors.surface,
+                          //set to true to show as box or false to show as dash
+                          showFieldAsBox: true,
+                          //runs when a code is typed in
+                          onCodeChanged: (String code) {
+                              //handle validation or checks here
+                          },
+                          //runs when every textfield is filled
+                          onSubmit: (String verificationCode){
+                              showDialog(
+                                  context: context,
+                                  builder: (context){
+                                  return AlertDialog(
+                                      title: Text("Verification Code"),
+                                      content: Text('Code entered is $verificationCode'),
+                                  );
+                                  }
+                              );
+                          }, // end onSubmit
+                      ),
+//                   CustomTextField(
+//                     controller: passwordController,
+//                     label: "Password",
+//                     hintText: "Enter your password",
+//                     isPassword: true,
+//                     width: fieldWidth * 0.8,
+//                   ),
                   SizedBox(height: fieldHeight * 0.02),
                   ElevatedButton(
                     onPressed: () {
