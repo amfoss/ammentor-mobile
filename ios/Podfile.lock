@@ -2,16 +2,19 @@ PODS:
   - Flutter (1.0.0)
   - libphonenumber_plugin (0.0.1):
     - Flutter
-    - PhoneNumberKit
+    - PhoneNumberKit (~> 3.7.8)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - PhoneNumberKit (4.0.1):
-    - PhoneNumberKit/PhoneNumberKitCore (= 4.0.1)
-    - PhoneNumberKit/UIKit (= 4.0.1)
-  - PhoneNumberKit/PhoneNumberKitCore (4.0.1)
-  - PhoneNumberKit/UIKit (4.0.1):
+  - PhoneNumberKit (3.7.11):
+    - PhoneNumberKit/PhoneNumberKitCore (= 3.7.11)
+    - PhoneNumberKit/UIKit (= 3.7.11)
+  - PhoneNumberKit/PhoneNumberKitCore (3.7.11)
+  - PhoneNumberKit/UIKit (3.7.11):
     - PhoneNumberKit/PhoneNumberKitCore
+  - sqflite_darwin (0.0.4):
+    - Flutter
+    - FlutterMacOS
   - url_launcher_ios (0.0.1):
     - Flutter
 
@@ -19,6 +22,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - libphonenumber_plugin (from `.symlinks/plugins/libphonenumber_plugin/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
@@ -32,14 +36,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/libphonenumber_plugin/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  sqflite_darwin:
+    :path: ".symlinks/plugins/sqflite_darwin/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  libphonenumber_plugin: d134f173b22bfa5ede50887071f087f309277f8c
+  libphonenumber_plugin: e3f18ea4f29a54af15a8853817c3773c31646cff
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
-  PhoneNumberKit: a74155066daa6450475f6a029068eb919fb00d5d
+  PhoneNumberKit: ced55861269312a5e3bc2ef82a58d6255b1c976a
+  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
 
 PODFILE CHECKSUM: 4305caec6b40dde0ae97be1573c53de1882a07e5
