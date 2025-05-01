@@ -1,55 +1,63 @@
+import 'package:ammentor/screen/track/model/track_model.dart';
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/theme.dart';
 
 class TaskTile extends StatelessWidget {
-  final String taskName;
-  final VoidCallback onTap;
+  final Task task;
 
-  const TaskTile({Key? key, required this.taskName, required this.onTap})
-    : super(key: key);
+  const TaskTile({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.cardBackground,
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                offset: const Offset(0, 2),
-                blurRadius: 6,
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color:
+            task.isCompleted
+                ? const Color(0xFFA7C957)
+                : AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            alignment: Alignment.center,
+            child: Text(
+              '${task.taskNumber}',
+              style: TextStyle(
+                color: task.isCompleted ? Colors.black : AppColors.white,
+                fontSize: 16,
               ),
-            ],
+            ),
           ),
-          child: Row(
-            children: [
-              const Icon(Icons.check_circle_outline, color: AppColors.primary),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  taskName,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                color: AppColors.grey,
-                size: 16,
-              ),
-            ],
+          const SizedBox(width: 12),
+          Icon(
+            task.icon,
+            color: task.isCompleted ? Colors.black : AppColors.white,
+            size: 20,
           ),
-        ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              task.taskName,
+              style: TextStyle(
+                color: task.isCompleted ? Colors.black : AppColors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            '${task.points} Points',
+            style: TextStyle(
+              color: task.isCompleted ? Colors.black : Colors.grey,
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
   }

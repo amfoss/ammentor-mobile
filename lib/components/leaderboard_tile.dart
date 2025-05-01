@@ -27,9 +27,10 @@ class LeaderboardTile extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: isCurrentUser
-              ? AppColors.primary.withOpacity(0.2)
-              : AppColors.cardBackground,
+          color:
+              isCurrentUser
+                  ? AppColors.primary.withOpacity(0.2)
+                  : AppColors.cardBackground,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
             color: isCurrentUser ? AppColors.primary : Colors.transparent,
@@ -47,18 +48,12 @@ class LeaderboardTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 16),
-            CircleAvatar(
-              radius: 25,
-              backgroundImage: NetworkImage(avatarUrl),
-            ),
+            CircleAvatar(radius: 25, backgroundImage: NetworkImage(avatarUrl)),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
                 name,
-                style: const TextStyle(
-                  color: AppColors.white,
-                  fontSize: 18,
-                ),
+                style: const TextStyle(color: AppColors.white, fontSize: 18),
               ),
             ),
             Text(

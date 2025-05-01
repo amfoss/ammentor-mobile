@@ -18,7 +18,7 @@ class _MenteeHomePageState extends State<MenteeHomePage> {
 
   final List<Widget> _pages = [
     LeaderboardScreen(),
-    TrackScreen(),
+    TracksScreen(),
     Center(child: Text('Task Review Page', style: TextStyle(fontSize: 24))),
     ProfileScreen(),
   ];
