@@ -1,4 +1,30 @@
-# amMentor
+<p align="center">
+  <img src="assets/images/image.png" width="400" alt="amMentor Logo" />
+</p>
+<p align="center">
+  A gamified mentorship platform built with Flutter.
+</p>
+
+<p align="center">
+  <a href="https://github.com/flutter/flutter">
+    <img src="https://img.shields.io/badge/platform-Flutter-blue" alt="Flutter" />
+  </a>
+  <a href="https://github.com/django/django">
+    <img src="https://img.shields.io/badge/API-Django-green" alt="Django" />
+  </a>
+  <a href="https://github.com/AtharvaNair04/amMentor-Web">
+    <img src="https://img.shields.io/badge/Web-Next.js-orange" alt="Web App" />
+  </a>
+  <a href="https://github.com/naveen28204280/amMentor_Backend">
+    <img src="https://img.shields.io/badge/Common-Backend-green" alt="Backend" />
+  </a>
+  <a href="https://deepwiki.com/ganidande905/amMentor/1-overview">
+    <img src="https://img.shields.io/badge/Docs-DeepWiki-blueviolet" alt="Docs" />
+  </a>
+  <a href="#contributing-guidelines">
+    <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg" alt="Contributions Welcome" />
+  </a>
+</p>
 
 ## Overview
 amMentor is a Flutter-based mobile application that transforms traditional mentorship into an engaging, gamified experience. The platform enables mentees to progress through curated learning tracks while being guided by experienced mentors. The system emphasizes accountability, growth, and engagement through features like leaderboards, task management, and achievement recognition.
@@ -7,6 +33,10 @@ The application provides distinct interfaces for two primary user roles:
 
 - **Mentors**: Experienced guides who review tasks and support mentees
 - **Mentees**: Learners who complete tasks across various tracks to gain points and recognition
+
+<img width="1358" alt="Screenshot 2025-05-02 at 3 24 15 AM" src="https://github.com/user-attachments/assets/63bef2ed-d0be-47f5-816c-d4ddfcc55a98" />
+
+
 
 ## Key Features
 
@@ -21,6 +51,8 @@ The application provides distinct interfaces for two primary user roles:
 
 ## User Flow
 The application implements a role-based user flow, starting from common authentication and diverging into role-specific experiences:
+
+<img width="1353" alt="Screenshot 2025-05-02 at 3 22 55 AM" src="https://github.com/user-attachments/assets/6c8a655e-a1b9-4260-91da-585766c21b64" />
 
 ## Development and Extension
 
