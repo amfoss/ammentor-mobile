@@ -1,4 +1,3 @@
-import 'package:ammentor/screen/profile/view/profile_screen.dart';
 import 'package:ammentor/screen/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
