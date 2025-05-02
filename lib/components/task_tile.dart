@@ -12,10 +12,7 @@ class TaskTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color:
-            task.isCompleted
-                ? const Color(0xFFA7C957)
-                : AppColors.cardBackground,
+        color: task.isCompleted ? AppColors.primary : AppColors.cardBackground,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

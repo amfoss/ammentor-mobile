@@ -65,7 +65,7 @@ class TrackTile extends StatelessWidget {
                       value: track.progress! / 100,
                       backgroundColor: Colors.grey[700],
                       valueColor: const AlwaysStoppedAnimation<Color>(
-                        Color(0xFFA7C957),
+                        AppColors.primary,
                       ),
                     ),
                     const SizedBox(height: 4),
