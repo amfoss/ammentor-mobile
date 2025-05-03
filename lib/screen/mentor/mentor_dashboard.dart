@@ -2,6 +2,7 @@ import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/screen/leaderboard/view/leaderboard_screen.dart';
 import 'package:ammentor/screen/profile/view/profile_screen.dart';
 import 'package:ammentor/screen/track/view/track_screen.dart';
+import 'package:ammentor/screen/evaluation/view/mentee_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
@@ -19,7 +20,7 @@ class _MentorHomePageState extends State<MentorHomePage> {
   final List<Widget> _pages = [
     LeaderboardScreen(),
     TracksScreen(),
-    Center(child: Text('Task Review Page', style: TextStyle(fontSize: 24))),
+    MenteeListScreen(),
     ProfileScreen(),
   ];
 
