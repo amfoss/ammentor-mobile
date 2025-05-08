@@ -23,6 +23,7 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
   final TextEditingController _submissionLinkController =
       TextEditingController();
 
+
   Future<void> _selectDate(
     BuildContext context,
     TextEditingController controller,
@@ -62,62 +63,65 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
     final controller = ref.read(
       taskSubmissionControllerProvider(widget.task.taskNumber).notifier,
     );
-
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Submission',
-          style: TextStyle(color: AppColors.white),
+          style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
         ),
         backgroundColor: AppColors.background,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenWidth * 0.04),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Container(
-                  width: 30.0,
-                  height: 30.0,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6.0),
-                    color: AppColors.cardBackground,
-                  ),
-                  child: Text(
-                    '${widget.task.taskNumber}',
-                    style: const TextStyle(color: Colors.white, fontSize: 16.0),
-                  ),
-                ),
-                const SizedBox(width: 12.0),
+                // Container(
+                //   width: screenWidth * 0.08,
+                //   height: screenHeight * 0.03,
+                //   alignment: Alignment.center,
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(6.0),
+                //     color: AppColors.cardBackground,
+                //   ),
+                //   // child: Text(
+                //   //   '${widget.task.taskNumber}',
+                //   //   style:  ATextStyle(color: Colors.white, fontSize: 16.0),
+                //   // ),
+                // ),
+                SizedBox(width: screenWidth * 0.02),
                 if (widget.task.icon != null)
                   Icon(widget.task.icon, color: Colors.white, size: 20.0),
-                const SizedBox(width: 12.0),
+                SizedBox(width: screenWidth * 0.02),
                 Expanded(
                   child: Text(
                     widget.task.taskName,
-                    style: const TextStyle(
-                      color: AppColors.white,
-                      fontSize: 18.0,
+                    style:  AppTextStyles.body(context).copyWith(
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 24.0),
+            SizedBox(height: screenHeight * 0.03,
+            child: Divider(
+                color: AppColors.grey,
+                thickness: 1.0,
+              ),),
             _SubmissionRow(
               icon: HugeIcons.strokeRoundedComment01,
               text: 'Remarks',
               controller: _commentsController,
             ),
-            const SizedBox(height: 8.0),
+            SizedBox(height: screenHeight * 0.008),
             _SubmissionRow(
               icon: HugeIcons.strokeRoundedSunrise,
               text: 'Starting date',
@@ -125,7 +129,7 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
               readOnly: true,
               onTap: () => _selectDate(context, _startDateController),
             ),
-            const SizedBox(height: 8.0),
+            SizedBox(height: screenHeight * 0.008),
             _SubmissionRow(
               icon: HugeIcons.strokeRoundedSunset,
               text: 'Ending date',
@@ -133,7 +137,7 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
               readOnly: true,
               onTap: () => _selectDate(context, _endDateController),
             ),
-            const SizedBox(height: 8.0),
+            SizedBox(height: screenHeight * 0.008),
             _SubmissionRow(
               icon: HugeIcons.strokeRoundedLink01,
               text: 'Submission link',
@@ -141,7 +145,7 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
             ),
             const Spacer(),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              padding:  EdgeInsets.symmetric(vertical: screenHeight * 0.024),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -171,7 +175,7 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber,
                     foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    padding: EdgeInsets.symmetric(vertical: screenHeight*0.016),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -179,9 +183,9 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
                   child:
                       submissionState.isSubmitting
                           ? const CircularProgressIndicator()
-                          : const Text(
+                          : Text(
                             'Submit for review',
-                            style: TextStyle(fontSize: 18.0),
+                            style: AppTextStyles.button(context).copyWith(),
                           ),
                 ),
               ),
@@ -210,10 +214,12 @@ class _SubmissionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 16.0),
+        padding: EdgeInsets.symmetric(vertical: screenHeight*0.014, horizontal: screenWidth*0.02),
         decoration: BoxDecoration(
           color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(8.0),
@@ -221,22 +227,20 @@ class _SubmissionRow extends StatelessWidget {
         child: Row(
           children: [
             Icon(icon, color: Colors.white),
-            const SizedBox(width: 16.0),
+            SizedBox(width: screenWidth * 0.04),
             Expanded(
               child:
                   controller != null
                       ? TextField(
                         controller: controller,
-                        style: const TextStyle(
+                        style: AppTextStyles.input(context).copyWith(
                           color: AppColors.white,
-                          fontSize: 16.0,
                         ),
                         decoration: InputDecoration(
                           hintText: text,
-                          hintStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                          ),
+                          hintStyle: AppTextStyles.input(context).copyWith(
+                          color: AppColors.grey,
+                        ),
                           border: InputBorder.none,
                           disabledBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
@@ -254,9 +258,8 @@ class _SubmissionRow extends StatelessWidget {
                       )
                       : Text(
                         text,
-                        style: const TextStyle(
+                        style:  AppTextStyles.body(context).copyWith(
                           color: AppColors.white,
-                          fontSize: 16.0,
                         ),
                       ),
             ),
