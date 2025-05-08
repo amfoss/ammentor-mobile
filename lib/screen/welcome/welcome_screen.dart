@@ -22,6 +22,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   String _selectedOption = 'Mentor';
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -34,14 +36,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: [
             // Logo at Top
             Positioned(
-              top: 100,
+              top: screenHeight*0.1,
               left: 0,
               right: 0,
               child: Align(
                 alignment: Alignment.topCenter,
                 child: SizedBox(
-                  height: 200,
-                  width: 300,
+                  height: screenHeight*0.2,
+                  width: screenWidth*0.8,
                   child: Image.asset(
                     'assets/images/image.png',
                     fit: BoxFit.contain,
@@ -54,12 +56,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             SafeArea(
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 100),
+                  padding: EdgeInsets.only(bottom: screenHeight*0.1),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenHeight*0.02),
 
                       CustomButton(
                         options: const ['Mentee', 'Mentor'],
@@ -71,7 +73,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         },
                       ),
 
-                      const SizedBox(height: 20),
+                     SizedBox(height: screenHeight*0.02),
 
                       IconButton(
                         onPressed: () {
@@ -96,14 +98,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
             // amFOSS Bulb Logo at Bottom
             Positioned(
-              bottom: -80,
-              right: -80,
+              bottom: screenHeight*-0.08,
+              right: screenHeight*-0.08,
               child: Transform.rotate(
                 angle: -0.5,
                 child: Image.asset(
                   'assets/images/amfoss_bulb_white.png',
-                  width: 350,
-                  height: 350,
+                  width: screenWidth*0.95,
+                  height: screenHeight*0.45,
                 ),
               ),
             ),
