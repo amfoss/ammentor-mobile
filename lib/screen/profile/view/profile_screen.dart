@@ -1,5 +1,6 @@
 import 'package:ammentor/screen/profile/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/main.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -10,16 +11,13 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userAsync = ref.watch(userProvider);
-
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Profile',
-          style: TextStyle(
-            color: AppColors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyles.subheading(context).copyWith(),
         ),
         backgroundColor: AppColors.background,
         leading: IconButton(
@@ -34,14 +32,14 @@ class ProfileScreen extends ConsumerWidget {
         error: (err, _) => Center(child: Text('Error: $err')),
         data: (user) {
           return Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(screenWidth * 0.04),
             child: Column(
               children: [
 //------------------------------------------------------------------------------
                 // Profile Card
 //------------------------------------------------------------------------------
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(screenWidth * 0.04),
                   decoration: BoxDecoration(
                     color: AppColors.darkgrey,
                     borderRadius: BorderRadius.circular(26),
@@ -54,40 +52,31 @@ class ProfileScreen extends ConsumerWidget {
                             backgroundImage: NetworkImage(user.avatarUrl),
                             radius: 40,
                           ),
-                          const SizedBox(width: 20),
+                          SizedBox(width: screenWidth * 0.05),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   user.name,
-                                  style: const TextStyle(
-                                    color: AppColors.white,
-                                    fontSize: 20,
-                                  ),
+                                  style: AppTextStyles.body(context).copyWith(),
                                 ),
-                                const SizedBox(height: 4),
+                               SizedBox(height: screenHeight*0.001),
                                 Text(
                                   user.email,
-                                  style: const TextStyle(
-                                    color: AppColors.white,
-                                    fontSize: 16,
-                                  ),
+                                  style: AppTextStyles.caption(context).copyWith(color: AppColors.white),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: screenHeight*0.001),
                                 Text(
                                   user.role,
-                                  style: const TextStyle(
-                                    color: AppColors.white,
-                                    fontSize: 16,
-                                  ),
+                                  style: AppTextStyles.caption(context).copyWith(color: AppColors.white),
                                 ),
                               ],
                             ),
                           )
                         ],
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenHeight * 0.02),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: user.socialLinks.map((platform) {
@@ -110,13 +99,13 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                 ),
 
-                const SizedBox(height: 30),
+                 SizedBox(height: screenHeight * 0.03),
 
 //------------------------------------------------------------------------------
                 // Badges Card
 //------------------------------------------------------------------------------
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(screenWidth * 0.05),
                   decoration: BoxDecoration(
                     color: AppColors.darkgrey,
                     borderRadius: BorderRadius.circular(26),
@@ -126,23 +115,22 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       Row(
                         mainAxisSize: MainAxisSize.max,
-                        children: const [
+                        children:  [
                           Icon(
                             HugeIcons.strokeRoundedCheckmarkBadge02,
                             color: Colors.white,
                             size: 40,
                           ),
-                          SizedBox(width: 20),
+                          SizedBox(width: screenWidth * 0.05),
                           Text(
                             'Badges Gained',
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 20,
+                            style: AppTextStyles.body(context).copyWith(
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: screenHeight * 0.02),
                       Wrap(
                         spacing: 10,
                         children: user.badges.map((badge) {
@@ -163,12 +151,12 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                 ),
 
-                const SizedBox(height: 30,),
+                SizedBox(height: screenHeight * 0.03),
 //------------------------------------------------------------------------------
                 // Points Card
 //------------------------------------------------------------------------------
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(screenWidth * 0.05),
                 decoration: BoxDecoration(
                   color: AppColors.darkgrey,
                   borderRadius: BorderRadius.circular(26),
@@ -178,21 +166,15 @@ class ProfileScreen extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     const Icon(HugeIcons.strokeRoundedAnalytics01),
-                    const SizedBox(width: 20),
+                    SizedBox(width:screenWidth * 0.05),
                     Text(
                       'Points Earned : ',
-                      style: const TextStyle(
-                        color: AppColors.white,
-                        fontSize: 20,
-                      ),
+                      style:  AppTextStyles.body(context).copyWith(),
                     ),
                     const SizedBox(width: 10),
                     Text(
                       user.points.toString(),
-                      style: const TextStyle(
-                        color: AppColors.white,
-                        fontSize: 20,
-                      ),
+                      style:  AppTextStyles.body(context).copyWith(),
                     )
                   ]
                 ),
