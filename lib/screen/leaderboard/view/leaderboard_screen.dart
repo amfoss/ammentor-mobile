@@ -46,13 +46,14 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   Widget build(BuildContext context) {
     final selectedTrack = ref.watch(selectedTrackProvider);
     final leaderboardAsync = ref.watch(leaderboardProvider(selectedTrack));
-
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Leaderboard',
-          style: TextStyle(color: AppColors.white),
+          style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
         ),
         backgroundColor: AppColors.background,
         elevation: 0,
@@ -63,20 +64,20 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         builder: (context, child) {
           return Column(
             children: [
-              const SizedBox(height: 12),
+              SizedBox(height: screenHeight * 0.02),
               // Track Choice Chips
               SizedBox(
-                height: 40,
+                height: screenHeight * 0.04,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
                   itemCount: availableTracks.length,
                   itemBuilder: (context, index) {
                     final track = availableTracks[index];
                     final isSelected = selectedTrack == track;
 
                     return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
+                      padding:  EdgeInsets.only(right: screenWidth * 0.02),
                       child: ChoiceChip(
                         label: Text(track),
                         selected: isSelected,
@@ -88,7 +89,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                   },
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: screenHeight * 0.01),
               // Leaderboard List
               leaderboardAsync.when(
                 loading: () => const Expanded(
@@ -100,7 +101,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                 data: (users) => Expanded(
                   child: ListView.builder(
                     controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                    padding:  EdgeInsets.symmetric(horizontal: screenWidth*0.01, vertical: screenHeight*0.01),
                     itemCount: users.length,
                     itemBuilder: (context, index) {
                       final user = users[index];
