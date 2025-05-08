@@ -66,38 +66,84 @@ final ThemeData appTheme = ThemeData.dark().copyWith(
 );
 
 class AppTextStyles {
-  static const heading = TextStyle(
+  static TextStyle heading(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    return TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w600,
+      fontSize: height * 0.035, // ~27px on 800px height
+      color: AppColors.primary,
+    );
+  }
+
+  static TextStyle subheading(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    return TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w500,
+      fontSize: height * 0.028, // ~22px
+      color: AppColors.white,
+    );
+  }
+
+  static TextStyle body(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    return TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w400,
+      fontSize: height * 0.020, // ~16px
+      color: AppColors.white,
+    );
+  }
+
+  static TextStyle caption(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    return TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w400,
+      fontSize: height * 0.016, // ~12px
+      color: AppColors.white70,
+    );
+  }
+
+  static TextStyle input(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    return TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w400,
+      fontSize: height * 0.018, // ~14px
+      color: AppColors.white,
+    );
+  }
+
+  static TextStyle label(BuildContext context) {
+  final height = MediaQuery.of(context).size.height;
+  return TextStyle(
     fontFamily: 'Poppins',
     fontWeight: FontWeight.w500,
-    fontSize: 27,
-    color: AppColors.primary,
-  );
-
-  static const label = TextStyle(
-    fontFamily: 'Poppins',
-    fontWeight: FontWeight.w600,
-    fontSize: 15,
-    color: AppColors.primary,
-  );
-
-  static const input = TextStyle(
-    fontFamily: 'Poppins',
-    fontWeight: FontWeight.w400,
-    fontSize: 13,
+    fontSize: height * 0.018, // ~14–15px
     color: AppColors.white,
   );
+}
 
-  static const button = TextStyle(
-    fontFamily: 'Poppins',
-    fontWeight: FontWeight.w500,
-    fontSize: 15,
-    color: AppColors.white,
-  );
+  static TextStyle button(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    return TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w500,
+      fontSize: height * 0.02,
+      color: AppColors.background,
+    );
+  }
 
-  static const link = TextStyle(
-    fontFamily: 'Poppins',
-    fontWeight: FontWeight.w500,
-    fontSize: 13,
-    color: AppColors.primary,
-  );
+  static TextStyle link(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    return TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w500,
+      fontSize: height * 0.018,
+      color: AppColors.primary,
+      decoration: TextDecoration.underline,
+    );
+  }
 }

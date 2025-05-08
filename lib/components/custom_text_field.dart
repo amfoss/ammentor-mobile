@@ -32,13 +32,18 @@ class CustomTextField extends StatelessWidget {
         keyboardType: keyboardType,
         onChanged: onChanged,
         textAlign: TextAlign.center,
-        style: AppTextStyles.input,
+        style: AppTextStyles.input(context), 
         decoration: InputDecoration(
           labelText: label,
           hintText: hintText,
-          hintStyle: AppTextStyles.input.copyWith(color: AppColors.border),
-          labelStyle: AppTextStyles.label,
-          contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+          hintStyle: AppTextStyles.input(
+            context,
+          ).copyWith(color: AppColors.border), 
+          labelStyle: AppTextStyles.label(context), 
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 18,
+            horizontal: 12,
+          ),
           enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(30)),
             borderSide: BorderSide(width: 1, color: AppColors.border),
