@@ -32,8 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double fieldWidth = MediaQuery.of(context).size.width;
-    final double fieldHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -48,14 +48,14 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             // Logo
             Positioned(
-              top: 80,
+              top: screenHeight*0.08,
               left: 0,
               right: 0,
               child: Align(
                 alignment: Alignment.topCenter,
                 child: SizedBox(
-                  height: 200,
-                  width: 300,
+                  height: screenHeight*0.2,
+                  width: screenWidth*0.8,
                   child: Image.asset(
                     'assets/images/image.png',
                     fit: BoxFit.contain,
@@ -71,20 +71,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Text(
                     widget.userRole == UserRole.mentor ? "Mentor Login" : "Mentee Login",
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    style:  AppTextStyles.subheading(context).copyWith(
+                      fontWeight: FontWeight.w900
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: screenHeight*0.02),
                   CustomTextField(
                     controller: emailController,
                     label: "Email",
                     hintText: "Enter your email",
-                    width: fieldWidth * 0.8,
+                    width: screenWidth * 0.8,
                   ),
-                  SizedBox (height : fieldHeight * 0.02),
+                  SizedBox (height : screenHeight * 0.02),
                   ElevatedButton(
                       onPressed:(){
                       
@@ -94,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       )
                   ),
-                  SizedBox(height: fieldHeight * 0.02),
+                  SizedBox(height: screenHeight * 0.02),
                   OtpTextField(
                           numberOfFields: 4,
                           borderColor: AppColors.surface,
@@ -122,9 +120,9 @@ class _LoginScreenState extends State<LoginScreen> {
 //                     label: "Password",
 //                     hintText: "Enter your password",
 //                     isPassword: true,
-//                     width: fieldWidth * 0.8,
+//                     width: screenWidth * 0.8,
 //                   ),
-                  SizedBox(height: fieldHeight * 0.02),
+                  SizedBox(height: screenHeight * 0.02),
                   ElevatedButton(
                     onPressed: () {
                       final Widget targetPage = widget.userRole == UserRole.mentor
@@ -140,15 +138,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      padding: EdgeInsets.symmetric(horizontal: screenWidth*0.09, vertical: screenHeight*0.015),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Login",
-                      style: TextStyle(
-                        fontSize: 12,
+                      style: AppTextStyles.caption(context).copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -159,14 +156,14 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
                      
             Positioned(
-              bottom: -80,
-              right: -80,
+              bottom: screenHeight*-0.08,
+              right: screenHeight*-0.1,
               child: Transform.rotate(
                 angle: -0.5,
                 child: Image.asset(
                   'assets/images/amfoss_bulb_white.png',
-                  width: 350,
-                  height: 350,
+                  width: screenWidth*0.95,
+                  height: screenHeight*0.35,
                 ),
               ),
             ),
