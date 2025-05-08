@@ -34,7 +34,8 @@ class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
   @override
   Widget build(BuildContext context) {
     final mentees = ref.watch(menteeListControllerProvider);
-
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -47,16 +48,20 @@ class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(screenHeight * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 12),
-            const Text(
+            SizedBox(height: screenHeight * 0.001),
+            Text(
               'Choose the mentee',
-              style: TextStyle(fontSize: 18.0, color: AppColors.white),
+              style: AppTextStyles.subheading(context).copyWith(),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: screenHeight * 0.02,
+                child: Divider(
+                color: AppColors.grey,
+                thickness: 1.0,
+              ),),
             Expanded(
               child: AnimatedBuilder(
                 animation: _animationController!,
