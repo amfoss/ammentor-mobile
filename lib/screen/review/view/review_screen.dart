@@ -12,20 +12,22 @@ class TaskReviewScreen extends ConsumerWidget {
     final taskList = ref.watch(taskReviewControllerProvider);
     final controller = ref.read(taskReviewControllerProvider.notifier);
     final activeFilter = ref.watch(activeTaskFilterProvider);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Task review',
-          style: TextStyle(color: AppColors.white),
+          style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
         ),
         backgroundColor: AppColors.background,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenWidth * 0.018),
         child: Column(
           children: [
             Row(
@@ -54,12 +56,12 @@ class TaskReviewScreen extends ConsumerWidget {
                     children: [
                       if (activeFilter == 'notreviewed')
                         const Icon(Icons.check, color: Colors.black),
-                      const SizedBox(width: 8.0),
+                       SizedBox(width: screenWidth * 0.01),
                       const Text('Hand in'),
                     ],
                   ),
                 ),
-                const SizedBox(width: 8.0),
+                SizedBox(width: screenWidth * 0.02),
                 ElevatedButton(
                   onPressed: () {
                     controller.filterTasks('reviewed');
@@ -84,19 +86,23 @@ class TaskReviewScreen extends ConsumerWidget {
                       if (activeFilter == 'reviewed')
                         const Icon(Icons.check, color: Colors.black),
                       if (activeFilter == 'reviewed')
-                        const SizedBox(width: 8.0),
+                       SizedBox(width:screenWidth * 0.01),
                       const Text('Reviewed'),
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16.0),
+             SizedBox(height: screenHeight * 0.04,
+              child: Divider(
+                color: AppColors.grey,
+                thickness: 1.0,
+              ),),
             Expanded(
               child: ListView.separated(
                 itemCount: taskList.length,
                 separatorBuilder:
-                    (context, index) => const SizedBox(height: 8.0),
+                    (context, index) =>  SizedBox(height: screenHeight * 0.018),
                 itemBuilder: (context, index) {
                   final task = taskList[index];
                   return ReviewTaskTile(task: task);

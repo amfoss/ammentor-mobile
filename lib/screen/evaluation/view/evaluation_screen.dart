@@ -41,11 +41,13 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
     final evaluationController = ref.read(
       taskEvaluationControllerProvider(widget.task).notifier,
     );
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Evaluation',
           style: TextStyle(color: AppColors.white),
         ),
@@ -54,37 +56,41 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenWidth * 0.04),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Text(
-                  '${widget.task.taskNumber}',
-                  style: const TextStyle(fontSize: 18.0, color: Colors.white),
-                ),
-                const SizedBox(width: 8.0),
+                // Text(
+                //   '${widget.task.taskNumber}',
+                //   style: AppTextStyles.label(context).copyWith(color: AppColors.white),
+                // ),
+                // SizedBox(width: screenWidth * 0.02),
                 Icon(widget.task.icon, color: AppColors.grey),
-                const SizedBox(width: 8.0),
+                SizedBox(width: screenWidth * 0.02),
                 Text(
                   widget.task.taskName,
-                  style: const TextStyle(
-                    fontSize: 18.0,
+                  style: AppTextStyles.heading(context).copyWith(
+                    fontSize: screenHeight * 0.03,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 24.0),
-            const Text(
-              'Submission:',
-              style: TextStyle(fontSize: 16.0, color: AppColors.white70),
+            SizedBox(
+              height: screenHeight * 0.03,
+              child: Divider(
+                color: AppColors.grey,
+                thickness: 1.0,
+              ),
             ),
-            const SizedBox(height: 8.0),
-
-            // The static data below is to be fetched from database.
+            Text(
+              'Submission:',
+              style: AppTextStyles.label(context).copyWith(color: AppColors.white70),
+            ),
+            SizedBox(height: screenHeight * 0.01),
             _buildSubmissionDetail(
               HugeIcons.strokeRoundedComment01,
               'I have finished the work',
@@ -93,29 +99,32 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
               HugeIcons.strokeRoundedSunrise,
               '28/05/2025',
             ),
-            _buildSubmissionDetail(HugeIcons.strokeRoundedSunset, '29/05/2025'),
+            _buildSubmissionDetail(
+              HugeIcons.strokeRoundedSunset,
+              '29/05/2025',
+            ),
             _buildSubmissionDetail(
               HugeIcons.strokeRoundedLink01,
               'https://www.github.com',
             ),
-            const SizedBox(height: 24.0),
-            const Row(
+            SizedBox(height: screenHeight * 0.03),
+            Row(
               children: [
                 Icon(
                   HugeIcons.strokeRoundedCommentAdd01,
                   color: AppColors.grey,
                 ),
-                SizedBox(width: 8.0),
+                SizedBox(width: screenWidth * 0.02),
                 Text(
                   'Remarks',
-                  style: TextStyle(fontSize: 16.0, color: AppColors.white70),
+                  style: AppTextStyles.label(context).copyWith(color: AppColors.white70),
                 ),
               ],
             ),
-            const SizedBox(height: 8.0),
+            SizedBox(height: screenHeight * 0.01),
             TextFormField(
               controller: _remarksController,
-              style: const TextStyle(color: AppColors.white),
+              style: AppTextStyles.input(context),
               maxLines: 5,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -129,11 +138,11 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                 fillColor: AppColors.surface,
                 filled: true,
                 hintText: 'Type your remarks here...',
-                hintStyle: const TextStyle(color: AppColors.grey),
+                hintStyle: AppTextStyles.input(context).copyWith(color: AppColors.grey),
               ),
               onChanged: (value) => evaluationController.updateFeedback(value),
             ),
-            const SizedBox(height: 24.0),
+            SizedBox(height: screenHeight * 0.03),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -148,17 +157,17 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0,
-                      vertical: 12.0,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.04,
+                      vertical: screenHeight * 0.01,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Evaluate and return',
-                    style: TextStyle(fontSize: 16.0),
+                    style: AppTextStyles.button(context).copyWith(fontSize: screenWidth * 0.04),
                   ),
                 ),
                 ElevatedButton(
@@ -170,17 +179,17 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.red,
                     foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0,
-                      vertical: 12.0,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.04,
+                      vertical: screenHeight * 0.01,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Pause task',
-                    style: TextStyle(fontSize: 16.0),
+                    style: AppTextStyles.button(context).copyWith(fontSize: screenWidth * 0.04),
                   ),
                 ),
               ],
@@ -192,15 +201,17 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
   }
 
   Widget _buildSubmissionDetail(IconData icon, String text) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
       child: Row(
         children: [
           Icon(icon, color: AppColors.grey),
-          const SizedBox(width: 8.0),
+          SizedBox(width: screenWidth * 0.02),
           Text(
             text,
-            style: const TextStyle(fontSize: 16.0, color: Colors.white),
+            style: AppTextStyles.caption(context).copyWith(),
           ),
         ],
       ),
