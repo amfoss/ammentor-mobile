@@ -12,17 +12,18 @@ class TracksScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tracks = ref.watch(tracksProvider);
-
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Tracks', style: TextStyle(color: AppColors.white)),
+        title: Text('Tracks', style: AppTextStyles.subheading(context).copyWith(color: AppColors.white)),
         backgroundColor: AppColors.background,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(screenWidth*0.01),
         child: ListView.builder(
           itemCount: tracks.length,
           itemBuilder: (context, index) {
@@ -46,7 +47,6 @@ class TracksScreen extends ConsumerWidget {
 
 class TasksScreen extends ConsumerWidget {
   final Track track;
-
   const TasksScreen({super.key, required this.track});
 
   @override
@@ -62,10 +62,10 @@ class TasksScreen extends ConsumerWidget {
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding:  EdgeInsets.all(MediaQuery.of(context).size.width*0.01),
         child: ListView.separated(
           itemCount: tasks.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 8),
+          separatorBuilder: (context, index) => SizedBox(height: MediaQuery.of(context).size.height*0.01),
           itemBuilder: (context, index) {
             final task = tasks[index];
             return TaskTile(task: task);
