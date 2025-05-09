@@ -9,8 +9,10 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(screenWidth * 0.03),
       decoration: BoxDecoration(
         color: task.isCompleted ? AppColors.primary : AppColors.cardBackground,
         borderRadius: BorderRadius.circular(12),
@@ -18,8 +20,8 @@ class TaskTile extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 30,
-            height: 30,
+            width: screenWidth * 0.1,
+            height: screenHeight*0.03,
             alignment: Alignment.center,
             child: Text(
               '${task.taskNumber}',

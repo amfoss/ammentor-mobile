@@ -16,11 +16,14 @@ class MenteeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        padding: const EdgeInsets.all(14),
+        margin: EdgeInsets.symmetric(vertical: screenHeight*0.008),
+        padding: EdgeInsets.all(screenWidth * 0.03),
         decoration: BoxDecoration(
           color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(18),
@@ -29,13 +32,12 @@ class MenteeTile extends StatelessWidget {
           children: [
             Text(
               '$number',
-              style: const TextStyle(
+              style:  AppTextStyles.caption(context).copyWith(
                 color: AppColors.white,
-                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: screenWidth * 0.03),
             CircleAvatar(
               radius: 25,
               backgroundImage:
@@ -47,14 +49,14 @@ class MenteeTile extends StatelessWidget {
                       ? const Icon(Icons.person, color: Colors.white)
                       : null,
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: screenWidth * 0.03),
             Expanded(
               child: Text(
                 mentee.name,
-                style: const TextStyle(color: AppColors.white, fontSize: 18),
+                style: AppTextStyles.caption(context).copyWith(color: AppColors.white , fontWeight: FontWeight.w700),
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: screenWidth * 0.03),
           ],
         ),
       ),

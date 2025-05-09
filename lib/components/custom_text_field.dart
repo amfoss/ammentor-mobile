@@ -24,6 +24,8 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
       width: width ?? MediaQuery.of(context).size.width * 0.8,
       child: TextField(
@@ -40,9 +42,9 @@ class CustomTextField extends StatelessWidget {
             context,
           ).copyWith(color: AppColors.border), 
           labelStyle: AppTextStyles.label(context), 
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 18,
-            horizontal: 12,
+          contentPadding: EdgeInsets.symmetric(
+            vertical: screenHeight * 0.02,
+            horizontal: screenWidth * 0.05,
           ),
           enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(30)),
