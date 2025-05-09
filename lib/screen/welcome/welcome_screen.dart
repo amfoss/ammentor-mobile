@@ -1,5 +1,6 @@
 import 'package:ammentor/components/custom_button.dart';
 import 'package:ammentor/components/theme.dart';
+import 'package:ammentor/screen/auth/model/auth_model.dart';
 
 import 'package:ammentor/screen/auth/view/login_screen.dart';
 
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:page_animation_transition/animations/fade_animation_transition.dart';
 import 'package:page_animation_transition/page_animation_transition.dart';
 
-enum UserRole { mentee, mentor }
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
