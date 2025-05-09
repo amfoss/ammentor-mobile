@@ -10,11 +10,13 @@ class TrackTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () => onTrackTap(track),
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        padding: const EdgeInsets.all(16),
+        margin: EdgeInsets.symmetric(vertical: screenHeight * 0.008),
+        padding:  EdgeInsets.all(screenWidth * 0.03),
         decoration: BoxDecoration(
           color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(18),
@@ -22,8 +24,8 @@ class TrackTile extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              width: 100,
-              height: 60,
+              width: screenWidth * 0.15,
+              height: screenHeight * 0.08,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
@@ -38,23 +40,22 @@ class TrackTile extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: screenWidth * 0.05),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     track.name,
-                    style: const TextStyle(
-                      color: AppColors.white,
+                    style:  AppTextStyles.subheading(context).copyWith(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: screenHeight * 0.01),
                   Text(
                     track.description,
-                    style: TextStyle(
+                    style:  AppTextStyles.subheading(context).copyWith(
                       color: AppColors.white.withOpacity(0.7),
                       fontSize: 14,
                     ),

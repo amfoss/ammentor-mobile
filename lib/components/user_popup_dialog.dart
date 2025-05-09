@@ -17,6 +17,8 @@ class UserPopupDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     return AlertDialog(
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -26,13 +28,12 @@ class UserPopupDialog extends StatelessWidget {
             backgroundImage: NetworkImage(avatarUrl),
             radius: 30,
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: screenWidth * 0.03),
           Expanded(
             child: Text(
               name,
-              style: const TextStyle(
+              style: AppTextStyles.caption(context).copyWith(
                 color: AppColors.white,
-                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -42,15 +43,15 @@ class UserPopupDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Rank: #$rank', style: const TextStyle(color: AppColors.white)),
-          const SizedBox(height: 8),
-          Text('Points: $points', style: const TextStyle(color: AppColors.white)),
-          const SizedBox(height: 8),
+          Text('Rank: #$rank', style: AppTextStyles.caption(context).copyWith(color: AppColors.white)),
+          SizedBox(height: screenHeight * 0.01),
+          Text('Points: $points', style: AppTextStyles.caption(context).copyWith(color: AppColors.white)),
+          SizedBox(height: screenHeight * 0.01),
           Text(
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non erat nec nisi facilisis facilisis.',
-            style: const TextStyle(color: AppColors.white),
+             style: AppTextStyles.caption(context).copyWith(color: AppColors.white)
           ),
-          const SizedBox(height: 8),
+           SizedBox(height: screenHeight * 0.01),
           // ElevatedButton(
           //   onPressed: () {
           //     Navigator.of(context).pop();
@@ -62,7 +63,7 @@ class UserPopupDialog extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          child: const Text('Close', style: TextStyle(color: AppColors.primary)),
+          child: Text('Close', style: AppTextStyles.button(context).copyWith(color: AppColors.primary)),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ],

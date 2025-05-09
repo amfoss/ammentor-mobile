@@ -1,4 +1,5 @@
 
+import 'package:ammentor/components/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatefulWidget {
@@ -29,8 +30,10 @@ class _CustomButtonState extends State<CustomButton> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      width: 250,
+      width: screenWidth * 0.7,
       decoration: BoxDecoration(
         color: Colors.grey[800],
         borderRadius: BorderRadius.circular(12),
@@ -41,21 +44,21 @@ class _CustomButtonState extends State<CustomButton> {
           GestureDetector(
             onTap: () => setState(() => _expanded = !_expanded),
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(screenWidth * 0.05),
               child: Row(
                 children: [
-                  const CircleAvatar(backgroundColor: Color(0xFFF6C32E), radius: 12),
-                  const SizedBox(width: 10),
+                  CircleAvatar(backgroundColor: AppColors.primary, radius: 12),
+                  SizedBox(width: screenWidth * 0.02),
                   Expanded(
                     child: Text(
                       _selected,
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                      style: AppTextStyles.caption(context).copyWith(
+                          color: AppColors.white, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Icon(
                     _expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                    color: Colors.white,
+                    color: AppColors.white,
                   )
                 ],
               ),
@@ -71,16 +74,16 @@ class _CustomButtonState extends State<CustomButton> {
               padding: EdgeInsets.zero,
               children: widget.options.map((option) {
                 return ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                  contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
                   leading: CircleAvatar(
                     backgroundColor: Colors.black,
                     radius: 10,
                     child: option == _selected
-                        ? const Icon(Icons.check, color: Colors.black, size: 14)
+                        ? const Icon(Icons.check, color: AppColors.background, size: 14)
                         : null,
                   ),
                   title: Text(option,
-                      style: const TextStyle(color: Colors.white, fontSize: 14)),
+                      style:  AppTextStyles.caption(context).copyWith(color: AppColors.white)),
                   onTap: () {
                     setState(() {
                       _selected = option;

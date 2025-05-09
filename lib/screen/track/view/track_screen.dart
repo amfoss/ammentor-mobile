@@ -56,7 +56,7 @@ class TasksScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(track.name, style: const TextStyle(color: AppColors.white)),
+        title: Text(track.name, style: AppTextStyles.body(context).copyWith(color: AppColors.white)),
         backgroundColor: AppColors.background,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.white),
