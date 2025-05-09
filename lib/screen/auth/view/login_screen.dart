@@ -1,10 +1,10 @@
+import 'package:ammentor/components/otp_dialog.dart';
+import 'package:ammentor/screen/auth/model/auth_model.dart';
 import 'package:ammentor/screen/mentees/mentee_dashboard.dart';
 import 'package:ammentor/screen/mentor/mentor_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/custom_text_field.dart';
 import 'package:ammentor/components/theme.dart';
-import 'package:ammentor/screen/welcome/welcome_screen.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:page_animation_transition/animations/bottom_to_top_faded_transition.dart';
 
 import 'package:page_animation_transition/page_animation_transition.dart';
@@ -83,74 +83,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: screenWidth * 0.8,
                   ),
                   SizedBox (height : screenHeight * 0.02),
-                  ElevatedButton(
-                      onPressed:(){
-                      
-                      },
-                      child: (
-                      Text ("Get OTP")
-
-                      )
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  OtpTextField(
-                          numberOfFields: 4,
-                          borderColor: AppColors.surface,
-                          //set to true to show as box or false to show as dash
-                          showFieldAsBox: true,
-                          //runs when a code is typed in
-                          onCodeChanged: (String code) {
-                              //handle validation or checks here
-                          },
-                          //runs when every textfield is filled
-                          onSubmit: (String verificationCode){
-                              showDialog(
-                                  context: context,
-                                  builder: (context){
-                                  return AlertDialog(
-                                      title: Text("Verification Code"),
-                                      content: Text('Code entered is $verificationCode'),
-                                  );
-                                  }
-                              );
-                          }, // end onSubmit
-                      ),
-//                   CustomTextField(
-//                     controller: passwordController,
-//                     label: "Password",
-//                     hintText: "Enter your password",
-//                     isPassword: true,
-//                     width: screenWidth * 0.8,
-//                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  
                   ElevatedButton(
                     onPressed: () {
-                      final Widget targetPage = widget.userRole == UserRole.mentor
-                          ? const MentorHomePage()
-                          : const MenteeHomePage();
-
-                      Navigator.of(context).pushReplacement(
-                        PageAnimationTransition(
-                          page: targetPage,
-                          pageAnimationType: BottomToTopFadedTransition(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      padding: EdgeInsets.symmetric(horizontal: screenWidth*0.09, vertical: screenHeight*0.015),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: Text(
-                      "Login",
-                      style: AppTextStyles.caption(context).copyWith(
-                        color: Colors.white,
+                    showDialog(
+                         context: context,
+                          builder: (_) => OtpVerificationDialog(userRole: widget.userRole),
+                        );
+                      },
+                      child: Text('Get OTP',
+                      style: AppTextStyles.button(context).copyWith(
                         fontWeight: FontWeight.bold,
+                        color: AppColors.primary
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
