@@ -14,7 +14,7 @@ class TaskTile extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(screenWidth * 0.03),
       decoration: BoxDecoration(
-        color: task.isCompleted ? AppColors.primary : AppColors.cardBackground,
+        color:AppColors.cardBackground,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -26,23 +26,17 @@ class TaskTile extends StatelessWidget {
             child: Text(
               '${task.taskNumber}',
               style: TextStyle(
-                color: task.isCompleted ? Colors.black : AppColors.white,
+                color: AppColors.white,
                 fontSize: 16,
               ),
             ),
           ),
           const SizedBox(width: 12),
-          Icon(
-            task.icon,
-            color: task.isCompleted ? Colors.black : AppColors.white,
-            size: 20,
-          ),
-          const SizedBox(width: 12),
           Expanded(
             child: Text(
-              task.taskName,
+              task.title,
               style: TextStyle(
-                color: task.isCompleted ? Colors.black : AppColors.white,
+                color: AppColors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -52,7 +46,7 @@ class TaskTile extends StatelessWidget {
           Text(
             '${task.points} Points',
             style: TextStyle(
-              color: task.isCompleted ? Colors.black : Colors.grey,
+              color:Colors.grey,
               fontSize: 14,
             ),
           ),

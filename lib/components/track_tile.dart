@@ -24,21 +24,8 @@ class TrackTile extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              width: screenWidth * 0.15,
-              height: screenHeight * 0.08,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  track.imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey[300],
-                      child: const Center(child: Text('No Image')),
-                    );
-                  },
-                ),
-              ),
+              width: screenWidth * 0.01,
+              height: screenHeight * 0.1,
             ),
             SizedBox(width: screenWidth * 0.05),
             Expanded(
@@ -46,7 +33,7 @@ class TrackTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    track.name,
+                    track.title,
                     style:  AppTextStyles.subheading(context).copyWith(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -61,22 +48,6 @@ class TrackTile extends StatelessWidget {
                     ),
                   ),
                   ...[
-                    const SizedBox(height: 8),
-                    LinearProgressIndicator(
-                      value: track.progress / 100,
-                      backgroundColor: Colors.grey[700],
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${track.progress.toInt()}% Complete',
-                      style: TextStyle(
-                        color: AppColors.white.withOpacity(0.7),
-                        fontSize: 12,
-                      ),
-                    ),
                   ],
                 ],
               ),

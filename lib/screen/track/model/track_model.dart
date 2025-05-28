@@ -1,41 +1,45 @@
-import 'package:flutter/material.dart';
-
 class Track {
-  final String id;
-  final String name;
+  final int id;
+  final String title;
   final String description;
-  final String imageUrl;
-  final List<Task> tasks;
 
   Track({
     required this.id,
-    required this.name,
+    required this.title,
     required this.description,
-    required this.imageUrl,
-    this.tasks = const [],
   });
 
-  double get progress {
-    if (tasks.isEmpty) {
-      return 0.0;
-    }
-    final completedTasks = tasks.where((task) => task.isCompleted).length;
-    return completedTasks / tasks.length * 100;
+  factory Track.fromJson(Map<String, dynamic> json) {
+    return Track(
+      id: json['id'],
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+    );
   }
 }
 
 class Task {
   final int taskNumber;
-  final IconData icon;
-  final String taskName;
+  final String title;
+  final String description;
   final int points;
-  final bool isCompleted;
+  final int id;
 
   Task({
     required this.taskNumber,
-    required this.icon,
-    required this.taskName,
+    required this.title,
+    required this.description,
     required this.points,
-    this.isCompleted = false,
+    required this.id,
   });
+
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return Task(
+      taskNumber: json['task_no'],
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      points: json['points'] ?? 0,
+      id: json['id'],
+    );
+  }
 }

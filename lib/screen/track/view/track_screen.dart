@@ -11,9 +11,9 @@ class TracksScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tracks = ref.watch(tracksProvider);
+    final tracksAsync = ref.watch(tracksProvider);
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -23,22 +23,28 @@ class TracksScreen extends ConsumerWidget {
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: Padding(
-        padding: EdgeInsets.all(screenWidth*0.01),
-        child: ListView.builder(
-          itemCount: tracks.length,
-          itemBuilder: (context, index) {
-            final track = tracks[index];
-            return TrackTile(
-              track: track,
-              onTrackTap: (selectedTrack) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => TasksScreen(track: selectedTrack),
-                  ),
+        padding: EdgeInsets.all(screenWidth * 0.01),
+        child: tracksAsync.when(
+          data: (tracks) {
+            return ListView.builder(
+              itemCount: tracks.length,
+              itemBuilder: (context, index) {
+                final track = tracks[index];
+                return TrackTile(
+                  track: track,
+                  onTrackTap: (selectedTrack) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TasksScreen(track: selectedTrack),
+                      ),
+                    );
+                  },
                 );
               },
             );
           },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, _) => Center(child: Text('Error: $error')),
         ),
       ),
     );
@@ -51,25 +57,33 @@ class TasksScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<Task> tasks = track.tasks;
+    final tasksAsync = ref.watch(tasksProvider(track.id));
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(track.name, style: AppTextStyles.body(context).copyWith(color: AppColors.white)),
+        title: Text(track.title, style: AppTextStyles.body(context).copyWith(color: AppColors.white)),
         backgroundColor: AppColors.background,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: Padding(
-        padding:  EdgeInsets.all(MediaQuery.of(context).size.width*0.01),
-        child: ListView.separated(
-          itemCount: tasks.length,
-          separatorBuilder: (context, index) => SizedBox(height: MediaQuery.of(context).size.height*0.01),
-          itemBuilder: (context, index) {
-            final task = tasks[index];
-            return TaskTile(task: task);
+        padding: EdgeInsets.all(screenWidth * 0.01),
+        child: tasksAsync.when(
+          data: (tasks) {
+            return ListView.separated(
+              itemCount: tasks.length,
+              separatorBuilder: (context, index) => SizedBox(height: screenHeight * 0.01),
+              itemBuilder: (context, index) {
+                final task = tasks[index];
+                return TaskTile(task: task);
+              },
+            );
           },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, _) => Center(child: Text('Error: $error')),
         ),
       ),
     );
