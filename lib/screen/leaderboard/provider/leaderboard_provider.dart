@@ -1,18 +1,31 @@
-import 'package:ammentor/screen/leaderboard/model/leaderboard_model.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ammentor/screen/leaderboard/model/leaderboard_model.dart';
 
-final availableTracks = ['Vidyaratna', 'Ai', 'Mobile App Development', 'Web Development'];
+const baseUrl = 'http://4.240.104.190';
 
-final selectedTrackProvider = StateProvider<String>((ref) => availableTracks[0]);
+final trackListProvider = FutureProvider<List<Track>>((ref) async {
+  final response = await http.get(Uri.parse('$baseUrl/tracks'));
 
-final leaderboardProvider = FutureProvider.family<List<LeaderboardUser>, String>((ref, track) async {
-  await Future.delayed(const Duration(milliseconds: 300));
-  return List.generate(30, (index) {
-    return LeaderboardUser(
-      name: '$track User $index',
-      avatarUrl: 'https://robohash.org/$track-user$index.png',
-      weeklyPoints: (30 - index) * 10,
-      allTimePoints: (30 - index) * 15,
-    );
-  });
+  if (response.statusCode == 200) {
+    final List<dynamic> data = json.decode(response.body);
+    return data.map((t) => Track.fromJson(t)).toList();
+  } else {
+    throw Exception('Failed to fetch tracks');
+  }
+});
+
+final selectedTrackProvider = StateProvider<Track?>((ref) => null);
+
+final leaderboardProvider = FutureProvider.family<List<LeaderboardUser>, int>((ref, trackId) async {
+  final response = await http.get(Uri.parse('$baseUrl/leaderboard/$trackId'));
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    final List<dynamic> users = data['leaderboard'];
+    return users.map((u) => LeaderboardUser.fromJson(u)).toList();
+  } else {
+    throw Exception('Failed to fetch leaderboard');
+  }
 });
