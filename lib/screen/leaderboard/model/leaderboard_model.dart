@@ -1,24 +1,26 @@
 class LeaderboardUser {
   final String name;
   final String avatarUrl;
-  final int weeklyPoints;
   final int allTimePoints;
+  final int tasksCompleted;
 
   LeaderboardUser({
     required this.name,
     required this.avatarUrl,
-    required this.weeklyPoints,
     required this.allTimePoints,
+    required this.tasksCompleted,
   });
 
-  factory LeaderboardUser.fromJson(Map<String, dynamic> json) {
-    return LeaderboardUser(
-      name: json['name'],
-      avatarUrl: json['avatar_url'],
-      weeklyPoints: json['weekly_points'],
-      allTimePoints: json['all_time_points'],
-    );
-  }
+factory LeaderboardUser.fromJson(Map<String, dynamic> json) {
+  final menteeName = json['mentee_name'] ?? 'Unknown';
+  return LeaderboardUser(
+    name: menteeName,
+    avatarUrl: 'https://github.com/amfoss.png', // to be changed into user's github profile picture
+    allTimePoints: json['total_points'] ?? 0,
+    tasksCompleted: json['tasks_completed'] ?? 0,
+  );
+}
+
 }
 
 class Track {

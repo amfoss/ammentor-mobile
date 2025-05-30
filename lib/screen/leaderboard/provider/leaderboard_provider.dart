@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/screen/leaderboard/model/leaderboard_model.dart';
 
-const baseUrl = 'http://4.240.104.190';
+final baseUrl = dotenv.env['BACKEND_URL'];
 
 final trackListProvider = FutureProvider<List<Track>>((ref) async {
-  final response = await http.get(Uri.parse('$baseUrl/tracks'));
+  final response = await http.get(Uri.parse('$baseUrl/tracks/'));
 
   if (response.statusCode == 200) {
     final List<dynamic> data = json.decode(response.body);
@@ -18,7 +19,8 @@ final trackListProvider = FutureProvider<List<Track>>((ref) async {
 
 final selectedTrackProvider = StateProvider<Track?>((ref) => null);
 
-final leaderboardProvider = FutureProvider.family<List<LeaderboardUser>, int>((ref, trackId) async {
+final leaderboardProvider =
+    FutureProvider.family<List<LeaderboardUser>, int>((ref, trackId) async {
   final response = await http.get(Uri.parse('$baseUrl/leaderboard/$trackId'));
 
   if (response.statusCode == 200) {
