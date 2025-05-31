@@ -4,17 +4,18 @@ import 'package:ammentor/screen/auth/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/custom_text_field.dart';
 import 'package:ammentor/components/theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   final UserRole userRole;
 
   const LoginScreen({super.key, required this.userRole});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   bool isLoading = false;
 
@@ -35,6 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     setState(() => isLoading = true);
+
+    ref.read(userEmailProvider.notifier).state = email;
 
     final auth = AuthController();
     final response = await auth.sendOtp(email);
@@ -94,8 +97,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    widget.userRole == UserRole.mentor ? "Mentor Login" : "Mentee Login",
-                    style: AppTextStyles.subheading(context).copyWith(fontWeight: FontWeight.w900),
+                    widget.userRole == UserRole.mentor
+                        ? "Mentor Login"
+                        : "Mentee Login",
+                    style: AppTextStyles.subheading(context)
+                        .copyWith(fontWeight: FontWeight.w900),
                   ),
                   SizedBox(height: screenHeight * 0.02),
                   CustomTextField(
