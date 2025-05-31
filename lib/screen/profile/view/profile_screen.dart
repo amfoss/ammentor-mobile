@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:ammentor/screen/auth/provider/auth_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -137,6 +138,33 @@ class ProfileScreen extends ConsumerWidget {
                         style: AppTextStyles.body(context),
                       ),
                     ],
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03),
+
+                ElevatedButton(
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.remove('user_email');
+                    ref.read(userEmailProvider.notifier).state = null;
+                    Navigator.of(context).popUntil((route) => route.isFirst); 
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.errorDark,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.3,
+                      vertical: screenHeight * 0.015,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Text(
+                    'Logout',
+                    style: AppTextStyles.button(context).copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
