@@ -45,7 +45,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   @override
   Widget build(BuildContext context) {
     final selectedTrack = ref.watch(selectedTrackProvider);
-    final leaderboardAsync = ref.watch(leaderboardProvider(selectedTrack));
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -65,95 +64,104 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           return Column(
             children: [
               SizedBox(height: screenHeight * 0.02),
-              // Track Choice Chips
-              SizedBox(
-                height: screenHeight * 0.04,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
-                  itemCount: availableTracks.length,
-                  itemBuilder: (context, index) {
-                    final track = availableTracks[index];
-                    final isSelected = selectedTrack == track;
+              ref.watch(trackListProvider).when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (e, _) => Center(child: Text("Error: $e")),
+                data: (trackList) {
+                  if (selectedTrack == null && trackList.isNotEmpty) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      ref.read(selectedTrackProvider.notifier).state = trackList[0];
+                    });
+                  }
 
-                    return Padding(
-                      padding:  EdgeInsets.only(right: screenWidth * 0.02),
-                      child: ChoiceChip(
-                        label: Text(track),
-                        selected: isSelected,
-                        onSelected: (_) {
-                          ref.read(selectedTrackProvider.notifier).state = track;
-                        },
-                      ),
-                    );
-                  },
-                ),
+                  return SizedBox(
+                    height: screenHeight * 0.04,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
+                      itemCount: trackList.length,
+                      itemBuilder: (context, index) {
+                        final track = trackList[index];
+                        final isSelected = selectedTrack?.id == track.id;
+
+                        return Padding(
+                          padding: EdgeInsets.only(right: screenWidth * 0.02),
+                          child: ChoiceChip(
+                            label: Text(track.title),
+                            selected: isSelected,
+                            onSelected: (_) {
+                              ref.read(selectedTrackProvider.notifier).state = track;
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
               SizedBox(height: screenHeight * 0.01),
-              // Leaderboard List
-              leaderboardAsync.when(
-                loading: () => const Expanded(
-                  child: Center(child: CircularProgressIndicator()),
-                ),
-                error: (e, _) => Expanded(
-                  child: Center(child: Text("Error: $e")),
-                ),
-                data: (users) => Expanded(
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    padding:  EdgeInsets.symmetric(horizontal: screenWidth*0.01, vertical: screenHeight*0.01),
-                    itemCount: users.length,
-                    itemBuilder: (context, index) {
-                      final user = users[index];
-                      final scale = (_topContainerValue > index)
-                          ? (1 - (_topContainerValue - index)).clamp(0.7, 1.0)
-                          : 1.0;
+              if (selectedTrack != null)
+                ref.watch(leaderboardProvider(selectedTrack.id)).when(
+                  loading: () => const Expanded(child: Center(child: CircularProgressIndicator())),
+                  error: (e, _) => Expanded(child: Center(child: Text("Error: $e"))),
+                  data: (users) => Expanded(
+                    child: users.isEmpty
+                        ? const Center(child: Text("No data available."))
+                        : ListView.builder(
+                            controller: _scrollController,
+                            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01, vertical: screenHeight * 0.01),
+                            itemCount: users.length,
+                            itemBuilder: (context, index) {
+                              final user = users[index];
+                              final scale = (_topContainerValue > index)
+                                  ? (1 - (_topContainerValue - index)).clamp(0.7, 1.0)
+                                  : 1.0;
 
-                      return FadeTransition(
-                        opacity: Tween<double>(begin: 0, end: 1).animate(
-                          CurvedAnimation(
-                            parent: _animationController!,
-                            curve: Interval(index * 0.05, 1.0, curve: Curves.easeIn),
-                          ),
-                        ),
-                        child: SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(0.0, 0.2),
-                            end: Offset.zero,
-                          ).animate(
-                            CurvedAnimation(
-                              parent: _animationController!,
-                              curve: Interval(index * 0.05, 1.0, curve: Curves.easeIn),
-                            ),
-                          ),
-                          child: Transform.scale(
-                            scale: scale,
-                            alignment: Alignment.center,
-                            child: LeaderboardTile(
-                              rank: index + 1,
-                              name: user.name,
-                              avatarUrl: user.avatarUrl,
-                              points: user.allTimePoints,
-                              isCurrentUser: index == 2, // example
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => UserPopupDialog(
-                                    name: user.name,
-                                    avatarUrl: user.avatarUrl,
-                                    rank: index + 1,
-                                    points: user.allTimePoints,
+                              return FadeTransition(
+                                opacity: Tween<double>(begin: 0, end: 1).animate(
+                                  CurvedAnimation(
+                                    parent: _animationController!,
+                                    curve: Interval(index * 0.05, 1.0, curve: Curves.easeIn),
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                                child: SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(0.0, 0.2),
+                                    end: Offset.zero,
+                                  ).animate(
+                                    CurvedAnimation(
+                                      parent: _animationController!,
+                                      curve: Interval(index * 0.05, 1.0, curve: Curves.easeIn),
+                                    ),
+                                  ),
+                                  child: Transform.scale(
+                                    scale: scale,
+                                    alignment: Alignment.center,
+                                    child: LeaderboardTile(
+                                      rank: index + 1,
+                                      name: user.name,
+                                      avatarUrl: user.avatarUrl,
+                                      points: user.allTimePoints,
+                                      isCurrentUser: false,
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => UserPopupDialog(
+                                            name: user.name,
+                                            avatarUrl: user.avatarUrl,
+                                            rank: index + 1,
+                                            points: user.allTimePoints,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        ),
-                      );
-                    },
                   ),
                 ),
-              ),
             ],
           );
         },
