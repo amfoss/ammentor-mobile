@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Track {
   final String id;
   final String name;
@@ -15,6 +13,16 @@ class Track {
     this.tasks = const [],
   });
 
+  factory Track.fromJson(Map<String, dynamic> json) {
+    return Track(
+      id: json['id'].toString(),
+      name: json['title'],
+      description: json['description'],
+      imageUrl: 'https://placehold.co/150',
+      tasks: [],
+    );
+  }
+
   double get progress {
     if (tasks.isEmpty) {
       return 0.0;
@@ -25,17 +33,30 @@ class Track {
 }
 
 class Task {
+  final int trackId;
   final int taskNumber;
-  final IconData icon;
   final String taskName;
+  final String description;
   final int points;
   final bool isCompleted;
 
   Task({
+    required this.trackId,
     required this.taskNumber,
-    required this.icon,
     required this.taskName,
+    required this.description,
     required this.points,
     this.isCompleted = false,
   });
+
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return Task(
+      trackId: json['track_id'],
+      taskNumber: json['task_no'],
+      taskName: json['title'],
+      description: json['description'],
+      points: json['points'],
+      isCompleted: false,
+    );
+  }
 }
