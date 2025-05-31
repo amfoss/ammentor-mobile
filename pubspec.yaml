@@ -52,8 +52,8 @@ dependencies:
       url: https://github.com/Shahidbangash/intl_phone_number_input.git
       ref: develop  
   intl: ^0.19.0
-  http: ^1.4.0
   flutter_dotenv: ^5.2.1
+  http: ^1.4.0
 
 
 dev_dependencies:
