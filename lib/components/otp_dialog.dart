@@ -4,22 +4,32 @@ import 'package:flutter/material.dart';
 
 class OtpVerificationDialog extends StatelessWidget {
   final UserRole userRole;
+  final String email;
 
-  const OtpVerificationDialog({super.key, required this.userRole});
+  const OtpVerificationDialog({
+    super.key,
+    required this.userRole,
+    required this.email,
+  });
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+
     return Dialog(
       backgroundColor: Colors.black,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(56)),
-      insetPadding: EdgeInsets.symmetric(horizontal: screenWidth*0.01, vertical: screenHeight*0.026),
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.01,
+        vertical: screenHeight * 0.026,
+      ),
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(screenHeight*0.026),
+        padding: EdgeInsets.all(screenHeight * 0.026),
         child: IntrinsicHeight(
           child: OtpVerification(
-            userRole: userRole, 
+            userRole: userRole,
+            email: email,
           ),
         ),
       ),

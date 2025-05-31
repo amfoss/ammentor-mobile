@@ -1,14 +1,9 @@
 import 'package:ammentor/components/otp_dialog.dart';
 import 'package:ammentor/screen/auth/model/auth_model.dart';
-import 'package:ammentor/screen/mentees/mentee_dashboard.dart';
-import 'package:ammentor/screen/mentor/mentor_dashboard.dart';
+import 'package:ammentor/screen/auth/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/custom_text_field.dart';
 import 'package:ammentor/components/theme.dart';
-import 'package:page_animation_transition/animations/bottom_to_top_faded_transition.dart';
-
-import 'package:page_animation_transition/page_animation_transition.dart';
-
 
 class LoginScreen extends StatefulWidget {
   final UserRole userRole;
@@ -21,19 +16,52 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
 
   @override
   void dispose() {
     emailController.dispose();
-    passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> sendOtp() async {
+    final email = emailController.text.trim();
+
+    if (email.isEmpty || !email.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email')),
+      );
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    final auth = AuthController();
+    final response = await auth.sendOtp(email);
+
+    if (!mounted) return;
+
+    if (response.success) {
+      showDialog(
+        context: context,
+        builder: (_) => OtpVerificationDialog(
+          userRole: widget.userRole,
+          email: email,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response.message)),
+      );
+    }
+
+    setState(() => isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -46,16 +74,14 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         child: Stack(
           children: [
-            // Logo
             Positioned(
-              top: screenHeight*0.08,
+              top: screenHeight * 0.08,
               left: 0,
               right: 0,
-              child: Align(
-                alignment: Alignment.topCenter,
+              child: Center(
                 child: SizedBox(
-                  height: screenHeight*0.2,
-                  width: screenWidth*0.8,
+                  height: screenHeight * 0.2,
+                  width: screenWidth * 0.8,
                   child: Image.asset(
                     'assets/images/image.png',
                     fit: BoxFit.contain,
@@ -63,54 +89,46 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-
-            // Login Form
             Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     widget.userRole == UserRole.mentor ? "Mentor Login" : "Mentee Login",
-                    style:  AppTextStyles.subheading(context).copyWith(
-                      fontWeight: FontWeight.w900
-                    ),
+                    style: AppTextStyles.subheading(context).copyWith(fontWeight: FontWeight.w900),
                   ),
-                  SizedBox(height: screenHeight*0.02),
+                  SizedBox(height: screenHeight * 0.02),
                   CustomTextField(
                     controller: emailController,
                     label: "Email",
                     hintText: "Enter your email",
                     width: screenWidth * 0.8,
                   ),
-                  SizedBox (height : screenHeight * 0.02),
-                  
+                  SizedBox(height: screenHeight * 0.02),
                   ElevatedButton(
-                    onPressed: () {
-                    showDialog(
-                         context: context,
-                          builder: (_) => OtpVerificationDialog(userRole: widget.userRole),
-                        );
-                      },
-                      child: Text('Get OTP',
-                      style: AppTextStyles.button(context).copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary
-                      ),
-                    ),
-                  )
+                    onPressed: isLoading ? null : sendOtp,
+                    child: isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            'Get OTP',
+                            style: AppTextStyles.button(context).copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                  ),
                 ],
               ),
             ),
-                     
             Positioned(
-              bottom: screenHeight*-0.08,
-              right: screenHeight*-0.1,
+              bottom: screenHeight * -0.08,
+              right: screenHeight * -0.1,
               child: Transform.rotate(
                 angle: -0.5,
                 child: Image.asset(
                   'assets/images/amfoss_bulb_white.png',
-                  width: screenWidth*0.95,
-                  height: screenHeight*0.35,
+                  width: screenWidth * 0.95,
+                  height: screenHeight * 0.35,
                 ),
               ),
             ),

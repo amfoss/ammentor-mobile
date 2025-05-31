@@ -1,16 +1,25 @@
+import 'dart:convert';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/screen/auth/model/auth_model.dart';
+import 'package:ammentor/screen/auth/provider/auth_provider.dart';
 import 'package:ammentor/screen/mentees/mentee_dashboard.dart';
 import 'package:ammentor/screen/mentor/mentor_dashboard.dart';
-import 'package:ammentor/screen/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:page_animation_transition/animations/bottom_to_top_faded_transition.dart';
+import 'package:http/http.dart' as http;
 import 'package:page_animation_transition/page_animation_transition.dart';
+import 'package:page_animation_transition/animations/bottom_to_top_faded_transition.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class OtpVerification extends StatefulWidget {
   final UserRole userRole;
+  final String email;
 
-  const OtpVerification({super.key, required this.userRole});
+  const OtpVerification({
+    super.key,
+    required this.userRole,
+    required this.email,
+  });
 
   @override
   State<OtpVerification> createState() => _OtpVerificationState();
@@ -24,34 +33,77 @@ class _OtpVerificationState extends State<OtpVerification> {
   final pin3Controller = TextEditingController();
   final pin4Controller = TextEditingController();
 
-  void submitOtp() {
-    final otp = pin1Controller.text +
-        pin2Controller.text +
-        pin3Controller.text +
-        pin4Controller.text;
-    print("Submitted OTP: $otp");
+  bool isLoading = false;
 
-    // TODO: Call backend API with this `otp`
+ Future<void> submitOtp() async {
+  if (!_formKey.currentState!.validate()) return;
+
+  final otp = pin1Controller.text +
+      pin2Controller.text +
+      pin3Controller.text +
+      pin4Controller.text;
+
+  setState(() => isLoading = true);
+
+  final controller = AuthController();
+  final response = await controller.verifyOtp(widget.email, otp);
+  await controller.verifyOtp(widget.email, otp);
+  if (!mounted) return;
+
+  if (response.success) {
+    final Widget targetPage = widget.userRole == UserRole.mentor
+        ? const MentorHomePage()
+        : const MenteeHomePage();
+
+    Navigator.of(context).pushReplacement(
+      PageAnimationTransition(
+        page: targetPage,
+        pageAnimationType: BottomToTopFadedTransition(),
+      ),
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(response.message)),
+    );
+  }
+
+  setState(() => isLoading = false);
+}
+
+  String maskEmail(String email) {
+    final parts = email.split('@');
+    if (parts.length != 2 || parts[0].length < 2) return email;
+    final visible = parts[0].substring(0, 2);
+    return '$visible****@${parts[1]}';
+  }
+
+  bool isOtpComplete() {
+    return pin1Controller.text.isNotEmpty &&
+        pin2Controller.text.isNotEmpty &&
+        pin3Controller.text.isNotEmpty &&
+        pin4Controller.text.isNotEmpty;
   }
 
   Widget buildOtpBox(TextEditingController controller) {
-    final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: screenHeight*0.068,
-      width: screenHeight*0.064,
+      height: screenHeight * 0.068,
+      width: screenHeight * 0.064,
       child: TextFormField(
         controller: controller,
         onChanged: (value) {
           if (value.length == 1) {
             FocusScope.of(context).nextFocus();
           }
+          setState(() {}); // refresh button enable state
         },
         decoration: const InputDecoration(
           hintText: "0",
           hintStyle: TextStyle(color: AppColors.darkgrey),
         ),
-        style: AppTextStyles.input(context).copyWith(fontWeight: FontWeight.w600),
+        style: AppTextStyles.input(
+          context,
+        ).copyWith(fontWeight: FontWeight.w600),
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         inputFormatters: [
@@ -63,128 +115,99 @@ class _OtpVerificationState extends State<OtpVerification> {
     );
   }
 
-Widget buildTopSection() {
-  final double screenWidth = MediaQuery.of(context).size.width;
-  final double screenHeight = MediaQuery.of(context).size.height;
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.024),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Verification code",
-          style: AppTextStyles.heading(context).copyWith(
-            fontWeight: FontWeight.bold,
-
-          ),
-        ),
-        SizedBox(height: screenHeight * 0.008),
-        Text(
-          "We have sent the code verification to",
-          style: AppTextStyles.caption(context).copyWith(
-            color: AppColors.grey,
-
-          ),
-        ),
-        SizedBox(height: screenHeight * 0.004),
-        RichText(
-          text: TextSpan(
-            style: AppTextStyles.body(context).copyWith(fontSize: 14),
-            children:  [
-              TextSpan(
-                text: 'ga****57@gmail.com',
-                style: AppTextStyles.caption(context).copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: screenHeight * 0.01),
-        RichText(
-          text: TextSpan(
-            style: AppTextStyles.body(context).copyWith(fontSize: 14),
-            children:[
-              TextSpan(
-                text: 'Change mail id?',
-                style: AppTextStyles.caption(context).copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-@override
-Widget build(BuildContext context) {
-  final double screenWidth = MediaQuery.of(context).size.width;
-  final double screenHeight = MediaQuery.of(context).size.height;
-
-  return Form(
-    key: _formKey,
-    child: SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+  Widget buildTopSection() {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.024),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildTopSection(),
-          SizedBox(height: screenHeight * 0.04),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              buildOtpBox(pin1Controller),
-              const SizedBox(width: 12),
-              buildOtpBox(pin2Controller),
-              const SizedBox(width: 12),
-              buildOtpBox(pin3Controller),
-              const SizedBox(width: 12),
-              buildOtpBox(pin4Controller),
-            ],
+          Text(
+            "Verification code",
+            style: AppTextStyles.heading(
+              context,
+            ).copyWith(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: screenHeight * 0.04),
-          ElevatedButton(
-            onPressed: () {
-              final Widget targetPage = widget.userRole == UserRole.mentor
-                  ? const MentorHomePage()
-                  : const MenteeHomePage();
-
-              Navigator.of(context).pushReplacement(
-                PageAnimationTransition(
-                  page: targetPage,
-                  pageAnimationType: BottomToTopFadedTransition(),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.09,
-                vertical: screenHeight * 0.015,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            child: Text(
-              "Login",
-              style: AppTextStyles.caption(context).copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          SizedBox(height: screenHeight * 0.008),
+          Text(
+            "We have sent the verification code to",
+            style: AppTextStyles.caption(
+              context,
+            ).copyWith(color: AppColors.grey),
+          ),
+          SizedBox(height: screenHeight * 0.004),
+          Text(
+            maskEmail(widget.email),
+            style: AppTextStyles.caption(
+              context,
+            ).copyWith(fontWeight: FontWeight.bold, color: AppColors.white),
+          ),
+          SizedBox(height: screenHeight * 0.01),
+          Text(
+            'Change email?',
+            style: AppTextStyles.caption(
+              context,
+            ).copyWith(color: AppColors.primary, fontWeight: FontWeight.w500),
           ),
         ],
       ),
-    ),
-  );
-}
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            buildTopSection(),
+            SizedBox(height: screenHeight * 0.04),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                buildOtpBox(pin1Controller),
+                const SizedBox(width: 12),
+                buildOtpBox(pin2Controller),
+                const SizedBox(width: 12),
+                buildOtpBox(pin3Controller),
+                const SizedBox(width: 12),
+                buildOtpBox(pin4Controller),
+              ],
+            ),
+            SizedBox(height: screenHeight * 0.04),
+            ElevatedButton(
+              onPressed: isOtpComplete() && !isLoading ? submitOtp : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.09,
+                  vertical: screenHeight * 0.015,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child:
+                  isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : Text(
+                        "Login",
+                        style: AppTextStyles.caption(context).copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
