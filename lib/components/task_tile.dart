@@ -32,12 +32,6 @@ class TaskTile extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Icon(
-            task.icon,
-            color: task.isCompleted ? Colors.black : AppColors.white,
-            size: 20,
-          ),
-          const SizedBox(width: 12),
           Expanded(
             child: Text(
               task.taskName,
