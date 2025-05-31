@@ -1,10 +1,11 @@
 import 'package:ammentor/screen/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'components/theme.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load();
   runApp(const ProviderScope(child: MyApp()));
 }
 
