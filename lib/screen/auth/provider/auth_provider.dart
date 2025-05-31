@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' show StateProvider;
 import 'package:http/http.dart' as http;
 import 'package:ammentor/screen/auth/model/auth_model.dart';
 
+final userEmailProvider = StateProvider<String?>((ref) => null);
 class AuthController {
 
   Future<OtpResponse> sendOtp(String email) async {
