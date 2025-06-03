@@ -1,10 +1,20 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart' show StateProvider;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:ammentor/screen/auth/model/auth_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final userEmailProvider = StateProvider<String?>((ref) => null);
+final storage = FlutterSecureStorage();
+
+
+Future<void> initializeUserEmail(WidgetRef ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final email = prefs.getString('user_email');
+  ref.read(userEmailProvider.notifier).state = email;
+}
 class AuthController {
 
   Future<OtpResponse> sendOtp(String email) async {
@@ -20,13 +30,16 @@ class AuthController {
     }
   }
 
-  Future<OtpResponse> verifyOtp(String email, String otp) async {
+  Future<OtpResponse> verifyOtp(String email, String otp, UserRole role) async {
     final url = Uri.parse(
       '${dotenv.env['BACKEND_URL']}/auth/verify-otp/$email?otp=$otp',
     );
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
+        await storage.write(key: 'isLoggedIn', value: 'true');
+        await storage.write(key: 'userEmail', value: email);
+         await storage.write(key: 'userRole', value: role.name);
         return OtpResponse(message: "OTP verified", success: true);
       }
       final body = jsonDecode(response.body);
@@ -35,4 +48,5 @@ class AuthController {
       return OtpResponse(message: "Error verifying OTP", success: false);
     }
   }
+  
 }
