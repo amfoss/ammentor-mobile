@@ -1,4 +1,5 @@
 import 'package:ammentor/screen/profile/provider/user_provider.dart';
+import 'package:ammentor/screen/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/components/theme.dart';
@@ -140,14 +141,14 @@ class ProfileScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.03),
-
-                ElevatedButton(
+                SizedBox(height: screenHeight * 0.03),                ElevatedButton(
                   onPressed: () async {
-                    final prefs = await SharedPreferences.getInstance();
-                    await prefs.remove('user_email');
-                    ref.read(userEmailProvider.notifier).state = null;
-                    Navigator.of(context).popUntil((route) => route.isFirst); 
+                    await storage.deleteAll();
+                    ref.invalidate(userEmailProvider);
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (_) => const WelcomeScreen()),
+                      (route) => false,
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.errorDark,

@@ -49,7 +49,7 @@ class _OtpVerificationState extends ConsumerState<OtpVerification> {
     ref.read(userEmailProvider.notifier).state = widget.email;
 
     final controller = AuthController();
-    final response = await controller.verifyOtp(widget.email, otp);
+    final response = await controller.verifyOtp(widget.email, otp, widget.userRole);
     if (!mounted) return;
 
     if (response.success) {

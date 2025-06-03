@@ -25,7 +25,7 @@ class UserProfile {
       role: json['role'],
       avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=${json['name']}',
       badges: ['Leadership', 'Problem Solving', 'Top Performer'],
-      points: 120,
+      points: json['points'] ?? 0,
     );
   }
 }
