@@ -9,8 +9,7 @@ class TaskReviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final taskList = ref.watch(taskReviewControllerProvider);
-    final controller = ref.read(taskReviewControllerProvider.notifier);
+    final taskList = ref.watch(filteredReviewTasksProvider);
     final activeFilter = ref.watch(activeTaskFilterProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -35,9 +34,7 @@ class TaskReviewScreen extends ConsumerWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    controller.filterTasks('notreviewed');
-                    ref.read(activeTaskFilterProvider.notifier).state =
-                        'notreviewed';
+                    ref.read(activeTaskFilterProvider.notifier).state = 'notreviewed';
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
@@ -64,9 +61,7 @@ class TaskReviewScreen extends ConsumerWidget {
                 SizedBox(width: screenWidth * 0.02),
                 ElevatedButton(
                   onPressed: () {
-                    controller.filterTasks('reviewed');
-                    ref.read(activeTaskFilterProvider.notifier).state =
-                        'reviewed';
+                    ref.read(activeTaskFilterProvider.notifier).state = 'reviewed';
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
@@ -99,14 +94,18 @@ class TaskReviewScreen extends ConsumerWidget {
                 thickness: 1.0,
               ),),
             Expanded(
-              child: ListView.separated(
-                itemCount: taskList.length,
-                separatorBuilder:
-                    (context, index) =>  SizedBox(height: screenHeight * 0.018),
-                itemBuilder: (context, index) {
-                  final task = taskList[index];
-                  return ReviewTaskTile(task: task);
-                },
+              child: ref.watch(reviewTasksProvider).when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Failed to load tasks', style: AppTextStyles.caption(context))),
+                data: (_) => ListView.separated(
+                  itemCount: taskList.length,
+                  separatorBuilder:
+                      (context, index) =>  SizedBox(height: screenHeight * 0.018),
+                  itemBuilder: (context, index) {
+                    final task = taskList[index];
+                    return ReviewTaskTile(task: task);
+                  },
+                ),
               ),
             ),
           ],

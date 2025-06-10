@@ -67,8 +67,8 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                 //   style: AppTextStyles.label(context).copyWith(color: AppColors.white),
                 // ),
                 // SizedBox(width: screenWidth * 0.02),
-                Icon(widget.task.icon, color: AppColors.grey),
-                SizedBox(width: screenWidth * 0.02),
+                // Removed: Icon(widget.task.icon, color: AppColors.grey),
+                // Only show task name
                 Text(
                   widget.task.taskName,
                   style: AppTextStyles.heading(context).copyWith(
@@ -91,23 +91,25 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
               style: AppTextStyles.label(context).copyWith(color: AppColors.white70),
             ),
             SizedBox(height: screenHeight * 0.01),
-            _buildSubmissionDetail(
-              HugeIcons.strokeRoundedComment01,
-              'I have finished the work',
-            ),
+            // Removed: mentee's remarks (mentorFeedback) from submission details
+            // _buildSubmissionDetail(
+            //   HugeIcons.strokeRoundedComment01,
+            //   widget.task.mentorFeedback ?? "No remarks",
+            // ),
             _buildSubmissionDetail(
               HugeIcons.strokeRoundedSunrise,
-              '28/05/2025',
+              widget.task.startDate ?? "No start date",
             ),
             _buildSubmissionDetail(
               HugeIcons.strokeRoundedSunset,
-              '29/05/2025',
+              widget.task.submittedAt ?? "No submission date",
             ),
             _buildSubmissionDetail(
               HugeIcons.strokeRoundedLink01,
-              'https://www.github.com',
+              widget.task.referenceLink ?? "No link",
             ),
             SizedBox(height: screenHeight * 0.03),
+            // Mentor's remarks input field remains
             Row(
               children: [
                 Icon(
@@ -151,7 +153,7 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                     evaluationController.updateStatus(
                       EvaluationStatus.returned,
                     );
-                    evaluationController.submitEvaluation();
+                    evaluationController.submitEvaluation(status: "approved");
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
@@ -173,7 +175,7 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                 ElevatedButton(
                   onPressed: () {
                     evaluationController.updateStatus(EvaluationStatus.paused);
-                    evaluationController.submitEvaluation();
+                    evaluationController.submitEvaluation(status: "paused");
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(

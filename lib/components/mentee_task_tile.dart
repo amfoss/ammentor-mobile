@@ -45,8 +45,6 @@ class TaskTile extends ConsumerWidget {
               ),
             ),
             SizedBox(width: screenWidth * 0.03),
-            Icon(task.icon, color: Colors.white, size: 20.0),
-            SizedBox(width: screenWidth * 0.03),
             Expanded(
               child: Text(
                 task.taskName,
