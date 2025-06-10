@@ -128,6 +128,7 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
                       return TaskTile(
                         task: task,
                         onTaskEvaluated: _refreshTasks,
+                        menteeEmail: widget.mentee.id,
                       );
                     },
                   );
