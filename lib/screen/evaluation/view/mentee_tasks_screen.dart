@@ -3,7 +3,6 @@ import 'package:ammentor/components/theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/components/mentee_task_tile.dart';
 import 'package:ammentor/screen/evaluation/model/mentee_list_model.dart';
-import 'package:ammentor/screen/evaluation/model/mentee_tasks_model.dart';
 import 'package:ammentor/screen/evaluation/provider/mentee_tasks_provider.dart';
 
 class MenteeTasksScreen extends ConsumerStatefulWidget {
@@ -16,12 +15,15 @@ class MenteeTasksScreen extends ConsumerStatefulWidget {
 }
 
 class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
+  void _refreshTasks() {
+    final activeFilter = ref.read(menteeTaskFilterProvider);
+    ref.invalidate(menteeTasksControllerProvider('${widget.mentee.id}-$activeFilter'));
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Invalidate the provider so it always fetches fresh data when this screen is shown
-    final activeFilter = ref.read(menteeTaskFilterProvider);
-    ref.invalidate(menteeTasksControllerProvider('${widget.mentee.id}-$activeFilter'));
+    _refreshTasks();
   }
 
   @override
@@ -123,7 +125,10 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
                         (context, index) => SizedBox(height: screenHeight * 0.018),
                     itemBuilder: (context, index) {
                       final task = taskList[index];
-                      return TaskTile(task: task);
+                      return TaskTile(
+                        task: task,
+                        onTaskEvaluated: _refreshTasks,
+                      );
                     },
                   );
                 },

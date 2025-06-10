@@ -8,8 +8,9 @@ import 'package:ammentor/screen/evaluation/provider/evaluation_provider.dart';
 
 class TaskEvaluationScreen extends ConsumerStatefulWidget {
   final Task task;
+  final VoidCallback? onEvaluated;
 
-  const TaskEvaluationScreen({super.key, required this.task});
+  const TaskEvaluationScreen({super.key, required this.task, this.onEvaluated});
 
   @override
   ConsumerState<TaskEvaluationScreen> createState() =>
@@ -34,6 +35,23 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
   void dispose() {
     _remarksController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleEvaluation(BuildContext context, String status) async {
+    final evaluationController = ref.read(
+      taskEvaluationControllerProvider(widget.task).notifier,
+    );
+    if (status == "approved") {
+      evaluationController.updateStatus(EvaluationStatus.returned);
+    } else if (status == "paused") {
+      evaluationController.updateStatus(EvaluationStatus.paused);
+    }
+    await evaluationController.submitEvaluation(status: status);
+
+    if (widget.onEvaluated != null) {
+      widget.onEvaluated!();
+    }
+    Navigator.of(context).pop(true);
   }
 
   @override
@@ -91,11 +109,6 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
               style: AppTextStyles.label(context).copyWith(color: AppColors.white70),
             ),
             SizedBox(height: screenHeight * 0.01),
-            // Removed: mentee's remarks (mentorFeedback) from submission details
-            // _buildSubmissionDetail(
-            //   HugeIcons.strokeRoundedComment01,
-            //   widget.task.mentorFeedback ?? "No remarks",
-            // ),
             _buildSubmissionDetail(
               HugeIcons.strokeRoundedSunrise,
               widget.task.startDate ?? "No start date",
@@ -109,7 +122,6 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
               widget.task.referenceLink ?? "No link",
             ),
             SizedBox(height: screenHeight * 0.03),
-            // Mentor's remarks input field remains
             Row(
               children: [
                 Icon(
@@ -149,12 +161,8 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    evaluationController.updateStatus(
-                      EvaluationStatus.returned,
-                    );
-                    evaluationController.submitEvaluation(status: "approved");
-                    Navigator.of(context).pop();
+                  onPressed: () async {
+                    await _handleEvaluation(context, "approved");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
@@ -169,14 +177,12 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                   ),
                   child: Text(
                     'Evaluate and return',
-                    style: AppTextStyles.button(context).copyWith(fontSize: screenWidth * 0.04),
+                    style: AppTextStyles.button(context).copyWith(fontSize: MediaQuery.of(context).size.width * 0.04),
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    evaluationController.updateStatus(EvaluationStatus.paused);
-                    evaluationController.submitEvaluation(status: "paused");
-                    Navigator.of(context).pop();
+                  onPressed: () async {
+                    await _handleEvaluation(context, "paused");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.red,
@@ -191,7 +197,7 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                   ),
                   child: Text(
                     'Pause task',
-                    style: AppTextStyles.button(context).copyWith(fontSize: screenWidth * 0.04),
+                    style: AppTextStyles.button(context).copyWith(fontSize: MediaQuery.of(context).size.width * 0.04),
                   ),
                 ),
               ],

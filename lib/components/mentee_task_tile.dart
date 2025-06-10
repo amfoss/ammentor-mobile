@@ -6,21 +6,25 @@ import 'package:ammentor/screen/evaluation/model/mentee_tasks_model.dart';
 
 class TaskTile extends ConsumerWidget {
   final Task task;
+  final VoidCallback? onTaskEvaluated;
 
-  const TaskTile({super.key, required this.task});
+  const TaskTile({super.key, required this.task, this.onTaskEvaluated});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (task.status != TaskStatus.returned) {
-          Navigator.of(context).push(
+          final result = await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => TaskEvaluationScreen(task: task),
+              builder: (context) => TaskEvaluationScreen(task: task, onEvaluated: onTaskEvaluated),
             ),
           );
+          if (result == true && onTaskEvaluated != null) {
+            onTaskEvaluated!();
+          }
         }
       },
       child: Container(

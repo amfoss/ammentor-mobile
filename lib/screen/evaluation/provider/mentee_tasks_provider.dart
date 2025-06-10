@@ -27,7 +27,6 @@ Future<List<Task>> fetchMenteeTasks(
   final List<dynamic> data = jsonDecode(response.body);
   final submissions = data.map((e) => Submission.fromJson(e)).toList();
 
-  // For each task, pick the latest submission (by submittedAt) regardless of status
   final Map<int, Submission> latestSubmissions = {};
   for (final sub in submissions) {
     final existing = latestSubmissions[sub.taskId];
@@ -39,12 +38,10 @@ Future<List<Task>> fetchMenteeTasks(
     }
   }
 
-  // Map status to categories as per requirements
   final filtered = latestSubmissions.values.where((s) {
     if (filter == 'pending') {
       return s.status.trim().toLowerCase() == 'submitted';
     } else if (filter == 'returned') {
-      // Ensure both 'approved' and 'paused' are matched, case-insensitive and trimmed
       final status = s.status.trim().toLowerCase();
       return status == 'approved' || status == 'paused';
     }
@@ -64,15 +61,14 @@ Future<List<Task>> fetchMenteeTasks(
         deadline: null,
       ),
     );
-    return Task.fromSubmission(s, trackTask.title); // <-- Use updated factory
+    return Task.fromSubmission(s, trackTask.title);
   }).toList();
 }
 
 final menteeTasksControllerProvider = FutureProvider.family<List<Task>, String>((ref, key) async {
-  // key format: "$menteeId-$filter"
   final parts = key.split('-');
   final menteeId = parts.first;
-  final filter = parts.sublist(1).join('-'); // in case filter contains '-'
+  final filter = parts.sublist(1).join('-');
   final trackTasksAsync = await ref.watch(trackTasksProvider.future);
   return fetchMenteeTasks(menteeId, filter, trackTasksAsync);
 });

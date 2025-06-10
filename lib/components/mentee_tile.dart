@@ -22,7 +22,7 @@ class MenteeTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: screenHeight*0.008),
+        margin: EdgeInsets.symmetric(vertical: screenHeight * 0.008),
         padding: EdgeInsets.all(screenWidth * 0.03),
         decoration: BoxDecoration(
           color: AppColors.cardBackground,
@@ -32,7 +32,7 @@ class MenteeTile extends StatelessWidget {
           children: [
             Text(
               '$number',
-              style:  AppTextStyles.caption(context).copyWith(
+              style: AppTextStyles.caption(context).copyWith(
                 color: AppColors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -53,7 +53,17 @@ class MenteeTile extends StatelessWidget {
             Expanded(
               child: Text(
                 mentee.name,
-                style: AppTextStyles.caption(context).copyWith(color: AppColors.white , fontWeight: FontWeight.w700),
+                style: AppTextStyles.caption(context).copyWith(
+                  color: AppColors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            Text(
+              '${mentee.totalPoints} pts',
+              style: AppTextStyles.caption(context).copyWith(
+                color: AppColors.white.withOpacity(0.8),
+                fontWeight: FontWeight.w500,
               ),
             ),
             SizedBox(width: screenWidth * 0.03),

@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
-
 enum TaskStatus { pending, returned }
 
 class Task {
-  final int submissionId; // <-- Add this
+  final int submissionId;
   final int taskNumber;
   final String taskName;
   final TaskStatus status;
@@ -14,7 +12,7 @@ class Task {
   final String? mentorFeedback;
 
   Task({
-    required this.submissionId, // <-- Add this
+    required this.submissionId,
     required this.taskNumber,
     required this.taskName,
     required this.status,
@@ -25,10 +23,9 @@ class Task {
     this.mentorFeedback,
   });
 
-  // Update factory to not require icon
   factory Task.fromSubmission(Submission submission, String taskName) {
     return Task(
-      submissionId: submission.id, // <-- Set from submission.id
+      submissionId: submission.id,
       taskNumber: submission.taskId,
       taskName: taskName,
       status: submission.status == 'submitted' ? TaskStatus.pending : TaskStatus.returned,
