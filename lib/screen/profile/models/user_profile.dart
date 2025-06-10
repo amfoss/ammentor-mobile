@@ -5,7 +5,7 @@ class UserProfile {
   final String role;
   final String avatarUrl;
   final List<String> badges;
-  final int points;
+  final int total_points;
 
   UserProfile({
     required this.id,
@@ -14,7 +14,8 @@ class UserProfile {
     required this.role,
     required this.avatarUrl,
     required this.badges,
-    required this.points,
+    required this.total_points,
+    
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
@@ -25,7 +26,7 @@ class UserProfile {
       role: json['role'],
       avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=${json['name']}',
       badges: ['Leadership', 'Problem Solving', 'Top Performer'],
-      points: json['points'] ?? 0,
+      total_points: json['total_points'] ?? 0,
     );
   }
 }

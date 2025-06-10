@@ -6,7 +6,7 @@ import 'package:ammentor/components/theme.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:ammentor/screen/auth/provider/auth_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:ammentor/screen/leaderboard/model/leaderboard_model.dart';
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -135,7 +135,7 @@ class ProfileScreen extends ConsumerWidget {
                         style: AppTextStyles.body(context),
                       ),
                       Text(
-                        user.points.toString(),
+                        user.total_points.toString(),
                         style: AppTextStyles.body(context),
                       ),
                     ],
