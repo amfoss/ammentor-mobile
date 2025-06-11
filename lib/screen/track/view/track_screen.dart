@@ -35,6 +35,7 @@ class TracksScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final track = tracks[index];
                 return TrackTile(
+                  showImage: false,
                   track: track,
                   onTrackTap: (selectedTrack) async {
                     showDialog(
