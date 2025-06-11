@@ -15,6 +15,10 @@ class AppColors {
   static const border = Color(0xFF837E93);
   static const textDark = Color(0xFF393939);
   static const accent = Color(0xFF9F7BFF);
+  static const green = Colors.green;
+  static const orange = Colors.orange;
+
+
 }
 
 final inputDecorationTheme = InputDecorationTheme(
@@ -117,14 +121,14 @@ class AppTextStyles {
   }
 
   static TextStyle label(BuildContext context) {
-  final height = MediaQuery.of(context).size.height;
-  return TextStyle(
-    fontFamily: 'Poppins',
-    fontWeight: FontWeight.w500,
-    fontSize: height * 0.018, // ~14–15px
-    color: AppColors.white,
-  );
-}
+    final height = MediaQuery.of(context).size.height;
+    return TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.w500,
+      fontSize: height * 0.018, // ~14–15px
+      color: AppColors.white,
+    );
+  }
 
   static TextStyle button(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
