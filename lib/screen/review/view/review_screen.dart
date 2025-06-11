@@ -6,9 +6,10 @@ import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/components/review_task_tile.dart';
 import 'package:ammentor/screen/review/provider/review_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ammentor/screen/review/provider/review_provider.dart';
+
 class TaskReviewScreen extends ConsumerWidget {
-   TaskReviewScreen({super.key});
+  TaskReviewScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(taskReviewControllerProvider.notifier);
@@ -18,10 +19,6 @@ class TaskReviewScreen extends ConsumerWidget {
     final taskList = ref.watch(taskReviewControllerProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
-    final submissionTasks = selectedTrackId != null
-        ? ref.watch(submissionsProvider(selectedTrackId))
-        : const AsyncValue.loading();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -110,7 +107,7 @@ class TaskReviewScreen extends ConsumerWidget {
                     }).toList(),
                     onChanged: (selectedTrackId) {
                       ref.read(selectedTrackProvider.notifier).state = selectedTrackId;
-                      controller.fetchTasksForTrack(selectedTrackId!); // Fetch all tasks for new track
+                      controller.fetchTasksForTrack(selectedTrackId!);
                     },
                     hint: const Text('Select Track'),
                   ),
@@ -120,44 +117,35 @@ class TaskReviewScreen extends ConsumerWidget {
               ],
             ),
 
-            SizedBox(height: screenHeight * 0.04, child: Divider(color: AppColors.grey, thickness: 1.0)),
+            SizedBox(
+              height: screenHeight * 0.04,
+              child: Divider(color: AppColors.grey, thickness: 1.0),
+            ),
 
-            // TaskLiSt
-          Expanded(
-            child: activeFilter == 'submissions'
-                ? submissionTasks.when(
-                    data: (subList) => subList.isEmpty
-                        ? const Center(child: Text("No submissions found."))
-                        : ListView.separated(
-                            itemCount: subList.length,
-                            separatorBuilder: (_, __) => SizedBox(height: screenHeight * 0.018),
-                            itemBuilder: (_, index) {
-                              final item = subList[index];
-                              return SubmissionTile(submission: item);
-                            },
-                          ),
-                    loading: () => const Center(child: CircularProgressIndicator()),
-                    error: (e, _) => Center(child: Text("Error: $e")),
-                  )
-                : taskList.isEmpty
-                    ? const Center(child: Text("No tasks found."))
-                    : ListView.separated(
-                        itemCount: taskList.length,
-                        separatorBuilder: (_, __) => SizedBox(height: screenHeight * 0.018),
-                        itemBuilder: (_, index) {
-                          final item = taskList[index];
-                          if (item is ReviewTask) {
-                            return ReviewTaskTile(task: item);
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                      ),
-          )
+            // Task or Submission List
+            Expanded(
+              child: taskList.isEmpty
+                  ? const Center(child: Text("No data found."))
+                  : ListView.separated(
+                      itemCount: taskList.length,
+                      separatorBuilder: (_, __) =>
+                          SizedBox(height: screenHeight * 0.018),
+                      itemBuilder: (_, index) {
+                        final item = taskList[index];
+
+                        if (activeFilter == 'handin' && item is ReviewTask) {
+                          return ReviewTaskTile(task: item);
+                        } else if (activeFilter == 'submissions' && item is Submission) {
+                          return SubmissionTile(submission: item);
+                        }
+
+                        return const SizedBox();
+                      },
+                    ),
+            )
           ],
         ),
       ),
     );
   }
-
 }

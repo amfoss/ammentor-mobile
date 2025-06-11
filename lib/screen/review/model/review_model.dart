@@ -7,10 +7,12 @@ class ReviewTask {
   final String taskName;
   final TaskStatus status;
   final IconData? icon;
+  final int trackId;
 
   ReviewTask({
     required this.taskNumber,
     required this.taskName,
+    required this.trackId,
     required this.status,
     required this.icon,
   });
@@ -26,6 +28,7 @@ class ReviewTask {
     }
 
     return ReviewTask(
+      trackId: json['track_id'] ?? 0,
       taskNumber: json['task_no'] ?? 0,
       taskName: json['title']?.toString() ?? 'Untitled',
       status: status,
