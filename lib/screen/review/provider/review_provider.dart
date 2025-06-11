@@ -1,92 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:ammentor/screen/review/model/review_model.dart';
+import 'package:ammentor/screen/track/model/track_model.dart';
 
-// Could've used the previous track_provider, but ideally all of these will be fetched from the backend later.
+class ApiService {
+  final String _baseUrl = dotenv.env['BACKEND_URL']!;
 
-final List<ReviewTask> _allTasks = [
-  ReviewTask(
-    taskNumber: 0,
-    icon: Icons.code,
-    taskName: 'Codeforces',
-    status: TaskStatus.reviewed,
-  ),
-  ReviewTask(
-    taskNumber: 1,
-    icon: HugeIcons.strokeRoundedGithub,
-    taskName: 'Git',
-    status: TaskStatus.reviewed,
-  ),
-  ReviewTask(
-    taskNumber: 2,
-    icon: HugeIcons.strokeRoundedGlobe02,
-    taskName: 'Web Dev Basics',
-    status: TaskStatus.reviewed,
-  ),
-  ReviewTask(
-    taskNumber: 3,
-    icon: HugeIcons.strokeRoundedCpu,
-    taskName: 'Build a Simple Shell',
-    status: TaskStatus.reviewed,
-  ),
-  ReviewTask(
-    taskNumber: 4,
-    icon: HugeIcons.strokeRoundedDoc01,
-    taskName: 'Not a SRS Doc',
-    status: TaskStatus.notreviewed,
-  ),
-  ReviewTask(
-    taskNumber: 5,
-    icon: HugeIcons.strokeRoundedWebDesign01,
-    taskName: 'Wireframe the Skeleton',
-    status: TaskStatus.notreviewed,
-  ),
-  ReviewTask(
-    taskNumber: 6,
-    icon: HugeIcons.strokeRoundedFigma,
-    taskName: 'Figma Design Task',
-    status: TaskStatus.notreviewed,
-  ),
-  ReviewTask(
-    taskNumber: 7,
-    icon: HugeIcons.strokeRoundedChrome,
-    taskName: 'Frontend Development',
-    status: TaskStatus.notreviewed,
-  ),
-  ReviewTask(
-    taskNumber: 8,
-    icon: HugeIcons.strokeRoundedDatabase,
-    taskName: 'Backend Development',
-    status: TaskStatus.notreviewed,
-  ),
-  ReviewTask(
-    taskNumber: 9,
-    icon: HugeIcons.strokeRoundedPlayStore,
-    taskName: '	Flutter Development',
-    status: TaskStatus.notreviewed,
-  ),
-];
+  Future<List<Track>> fetchTracks() async {
+    try {
+      final response = await http.get(Uri.parse('$_baseUrl/tracks/'));
+
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((track) => Track.fromJson(track)).toList();
+      } else {
+        throw Exception('Failed to load tracks. Status Code: ${response.statusCode}, Body: ${response.body}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<ReviewTask>> fetchTasksForTrack(String trackId) async {
+    final url = '$_baseUrl/tracks/$trackId/tasks';
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((task) => ReviewTask(
+          taskNumber: task['id'],
+          icon: null, // Replace with appropriate icon logic if needed
+          taskName: task['name'],
+          status: TaskStatus.notreviewed, // Default status
+        )).toList();
+      } else {
+        throw Exception('Failed to load tasks for track $trackId. Status Code: ${response.statusCode}, Body: ${response.body}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+}
+
+final apiServiceProvider = Provider((ref) => ApiService());
+
+final tracksProvider = FutureProvider<List<Track>>((ref) async {
+  final apiService = ref.read(apiServiceProvider);
+  return await apiService.fetchTracks();
+});
+
+final selectedTrackProvider = StateProvider<String?>((ref) => null);
+
+final tasksProvider = FutureProvider.family<List<ReviewTask>, String>((ref, trackId) async {
+  final apiService = ref.read(apiServiceProvider);
+  return await apiService.fetchTasksForTrack(trackId);
+});
 
 class TaskReviewController extends StateNotifier<List<ReviewTask>> {
-  TaskReviewController(Ref ref) : super(_allTasks) {
-    final initialFilter = ref.read(activeTaskFilterProvider);
-    filterTasks(initialFilter);
+  final Ref ref;
+
+  TaskReviewController(this.ref) : super([]) {
+    ref.listen<String?>(selectedTrackProvider, (previous, next) {
+      if (next != null) {
+        fetchTasksForTrack(next);
+      }
+    });
+  }
+
+  Future<void> fetchTasksForTrack(String trackId) async {
+    final apiService = ref.read(apiServiceProvider);
+    final tasks = await apiService.fetchTasksForTrack(trackId);
+    state = tasks;
   }
 
   void filterTasks(String status) {
     if (status == 'notreviewed') {
-      state =
-          _allTasks
-              .where((task) => task.status == TaskStatus.notreviewed)
-              .toList();
+      state = state.where((task) => task.status == TaskStatus.notreviewed).toList();
     } else if (status == 'reviewed') {
-      state =
-          _allTasks
-              .where((task) => task.status == TaskStatus.reviewed)
-              .toList();
-    } else {
-      state = _allTasks;
+      state = state.where((task) => task.status == TaskStatus.reviewed).toList();
     }
   }
 }

@@ -12,6 +12,8 @@ class TaskReviewScreen extends ConsumerWidget {
     final taskList = ref.watch(taskReviewControllerProvider);
     final controller = ref.read(taskReviewControllerProvider.notifier);
     final activeFilter = ref.watch(activeTaskFilterProvider);
+    final tracks = ref.watch(tracksProvider); // Fetch tracks from backend
+    final selectedTrack = ref.watch(selectedTrackProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -19,7 +21,7 @@ class TaskReviewScreen extends ConsumerWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
-          'Task review',
+          'Submit Task',
           style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
         ),
         backgroundColor: AppColors.background,
@@ -87,9 +89,27 @@ class TaskReviewScreen extends ConsumerWidget {
                         const Icon(Icons.check, color: Colors.black),
                       if (activeFilter == 'reviewed')
                        SizedBox(width:screenWidth * 0.01),
-                      const Text('Reviewed'),
+                      const Text('Submissions'),
                     ],
                   ),
+                ),
+                SizedBox(width: screenWidth * 0.02),
+                tracks.when(
+                  data: (trackList) => DropdownButton<String>(
+                    value: selectedTrack,
+                    items: trackList.map((track) {
+                      return DropdownMenuItem<String>(
+                        value: track.id, // Use track ID (String) for selection
+                        child: Text(track.name), // Display track name
+                      );
+                    }).toList(),
+                    onChanged: (selectedTrackId) {
+                      ref.read(selectedTrackProvider.notifier).state = selectedTrackId;
+                    },
+                    hint: const Text('Select Track'),
+                  ),
+                  loading: () => const CircularProgressIndicator(),
+                  error: (error, stackTrace) => const Text('Error loading tracks'),
                 ),
               ],
             ),
@@ -117,3 +137,4 @@ class TaskReviewScreen extends ConsumerWidget {
 }
 
 final activeTaskFilterProvider = StateProvider<String>((ref) => 'notreviewed');
+final selectedTrackProvider = StateProvider<String?>((ref) => null);
