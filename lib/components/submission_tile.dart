@@ -53,7 +53,7 @@ class SubmissionTile extends StatelessWidget {
                 color: Colors.grey[800],
               ),
               child: Text(
-                '${submission.taskId}',
+                '${submission.taskNo}',
                 style: AppTextStyles.caption(context).copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -66,7 +66,7 @@ class SubmissionTile extends StatelessWidget {
               child: Text(
                 submission.taskName.isNotEmpty
                     ? submission.taskName
-                    : "Task ${submission.taskId}",
+                    : "Task ${submission.taskNo}",
                 style: AppTextStyles.caption(context).copyWith(
                   color: AppColors.white,
                   fontWeight: FontWeight.w500,
