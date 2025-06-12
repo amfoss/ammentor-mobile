@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/components/mentee_task_tile.dart';
 import 'package:ammentor/screen/evaluation/model/mentee_list_model.dart';
 import 'package:ammentor/screen/evaluation/provider/mentee_tasks_provider.dart';
+import 'package:ammentor/screen/track/provider/track_provider.dart';
+import 'package:ammentor/screen/track/model/track_model.dart';
 
 class MenteeTasksScreen extends ConsumerStatefulWidget {
   final Mentee mentee;
@@ -15,24 +17,41 @@ class MenteeTasksScreen extends ConsumerStatefulWidget {
 }
 
 class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
+  Track? selectedTrack;
+
   void _refreshTasks() {
     final activeFilter = ref.read(menteeTaskFilterProvider);
-    ref.invalidate(menteeTasksControllerProvider('${widget.mentee.id}-$activeFilter'));
+    final trackId = selectedTrack?.id ?? '';
+    ref.invalidate(menteeTasksControllerProvider('${widget.mentee.id}-$activeFilter-$trackId'));
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final tracksAsync = ref.read(tracksProvider);
+    tracksAsync.whenData((tracks) {
+      if (selectedTrack == null && tracks.isNotEmpty) {
+        setState(() {
+          selectedTrack = tracks[0];
+        });
+      }
+    });
     _refreshTasks();
   }
 
   @override
   Widget build(BuildContext context) {
     final activeFilter = ref.watch(menteeTaskFilterProvider);
+    final tracksAsync = ref.watch(tracksProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final tasksAsync = ref.watch(menteeTasksControllerProvider('${widget.mentee.id}-$activeFilter'));
+    final trackId = selectedTrack?.id ?? tracksAsync.maybeWhen(
+      data: (tracks) => tracks.isNotEmpty ? tracks[0].id : '',
+      orElse: () => '',
+    );
+
+    final tasksAsync = ref.watch(menteeTasksControllerProvider('${widget.mentee.id}-$activeFilter-$trackId'));
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -49,13 +68,46 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
         padding: EdgeInsets.all(screenHeight * 0.018),
         child: Column(
           children: [
+            tracksAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(child: Text("Error: $e")),
+              data: (trackList) {
+                if (trackList.isEmpty) return const SizedBox.shrink();
+                return SizedBox(
+                  height: screenHeight * 0.04,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
+                    itemCount: trackList.length,
+                    itemBuilder: (context, index) {
+                      final track = trackList[index];
+                      final isSelected = selectedTrack?.id == track.id;
+                      return Padding(
+                        padding: EdgeInsets.only(right: screenWidth * 0.02),
+                        child: ChoiceChip(
+                          label: Text(track.name),
+                          selected: isSelected,
+                          onSelected: (_) {
+                            setState(() {
+                              selectedTrack = track;
+                            });
+                            _refreshTasks();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            SizedBox(height: screenHeight * 0.02),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   onPressed: () {
                     ref.read(menteeTaskFilterProvider.notifier).state = 'pending';
-                    ref.invalidate(menteeTasksControllerProvider('${widget.mentee.id}-pending'));
+                    _refreshTasks();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
@@ -81,7 +133,7 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
                 ElevatedButton(
                   onPressed: () {
                     ref.read(menteeTaskFilterProvider.notifier).state = 'returned';
-                    ref.invalidate(menteeTasksControllerProvider('${widget.mentee.id}-returned'));
+                    _refreshTasks();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
