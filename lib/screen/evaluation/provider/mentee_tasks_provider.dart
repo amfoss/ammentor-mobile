@@ -4,8 +4,8 @@ import 'package:ammentor/screen/evaluation/model/mentee_tasks_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final trackTasksProvider = FutureProvider<List<TrackTask>>((ref) async {
-  final url = Uri.parse('${dotenv.env['BACKEND_URL']}/tracks/1/tasks');
+final trackTasksProvider = FutureProvider.family<List<TrackTask>, int>((ref, trackId) async {
+  final url = Uri.parse('${dotenv.env['BACKEND_URL']}/tracks/$trackId/tasks');
   final response = await http.get(url);
   if (response.statusCode != 200) {
     throw Exception('Failed to load track tasks');
@@ -17,13 +17,15 @@ final trackTasksProvider = FutureProvider<List<TrackTask>>((ref) async {
 Future<List<Task>> fetchMenteeTasks(
   String menteeEmail,
   String filter,
+  int trackId,
   List<TrackTask> trackTasks,
 ) async {
-  final url = Uri.parse('${dotenv.env['BACKEND_URL']}/submissions/?email=$menteeEmail&track_id=1');
+  final url = Uri.parse('${dotenv.env['BACKEND_URL']}/submissions/?email=$menteeEmail&track_id=$trackId');
   final response = await http.get(url);
   if (response.statusCode != 200) {
     throw Exception('Failed to load submissions');
   }
+
   final List<dynamic> data = jsonDecode(response.body);
   final submissions = data.map((e) => Submission.fromJson(e)).toList();
 
@@ -32,19 +34,16 @@ Future<List<Task>> fetchMenteeTasks(
     final existing = latestSubmissions[sub.taskId];
     if (existing == null ||
         (sub.submittedAt != null &&
-         (existing.submittedAt == null ||
-          DateTime.tryParse(sub.submittedAt!)?.isAfter(DateTime.tryParse(existing.submittedAt ?? '') ?? DateTime(1970)) == true))) {
+            (existing.submittedAt == null ||
+             DateTime.tryParse(sub.submittedAt!)?.isAfter(DateTime.tryParse(existing.submittedAt ?? '') ?? DateTime(1970)) == true))) {
       latestSubmissions[sub.taskId] = sub;
     }
   }
 
   final filtered = latestSubmissions.values.where((s) {
-    if (filter == 'pending') {
-      return s.status.trim().toLowerCase() == 'submitted';
-    } else if (filter == 'returned') {
-      final status = s.status.trim().toLowerCase();
-      return status == 'approved' || status == 'paused';
-    }
+    final status = s.status.trim().toLowerCase();
+    if (filter == 'pending') return status == 'submitted';
+    if (filter == 'returned') return status == 'approved' || status == 'paused';
     return false;
   }).toList();
 
@@ -53,7 +52,7 @@ Future<List<Task>> fetchMenteeTasks(
       (t) => t.id == s.taskId,
       orElse: () => TrackTask(
         id: s.taskId,
-        trackId: 1,
+        trackId: trackId,
         taskNo: -1,
         title: 'Task ${s.taskId}',
         description: '',
@@ -65,12 +64,9 @@ Future<List<Task>> fetchMenteeTasks(
   }).toList();
 }
 
-final menteeTasksControllerProvider = FutureProvider.family<List<Task>, String>((ref, key) async {
-  final parts = key.split('-');
-  final menteeId = parts.first;
-  final filter = parts.sublist(1).join('-');
-  final trackTasksAsync = await ref.watch(trackTasksProvider.future);
-  return fetchMenteeTasks(menteeId, filter, trackTasksAsync);
+final menteeTasksControllerProvider = FutureProvider.family<List<Task>, ({String email, String filter, int trackId})>((ref, input) async {
+  final trackTasks = await ref.watch(trackTasksProvider(input.trackId).future);
+  return fetchMenteeTasks(input.email, input.filter, input.trackId, trackTasks);
 });
 
 final menteeTaskFilterProvider = StateProvider<String>((ref) => 'pending');

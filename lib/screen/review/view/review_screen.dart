@@ -12,7 +12,6 @@ class TaskReviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final controller = ref.read(taskReviewControllerProvider.notifier);
     final activeFilter = ref.watch(activeTaskFilterProvider);
     final tracks = ref.watch(tracksProvider);
@@ -26,7 +25,9 @@ class TaskReviewScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           'Submit Task',
-          style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
+          style: AppTextStyles.subheading(
+            context,
+          ).copyWith(color: AppColors.white),
         ),
         backgroundColor: AppColors.background,
         elevation: 0,
@@ -43,15 +44,16 @@ class TaskReviewScreen extends ConsumerWidget {
                 // Hand in Button
                 ElevatedButton(
                   onPressed: () {
-                    ref.read(activeTaskFilterProvider.notifier).state = 'handin';
+                    ref.read(activeTaskFilterProvider.notifier).state =
+                        'handin';
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: activeFilter == 'handin'
-                        ? AppColors.primary
-                        : AppColors.surface,
-                    foregroundColor: activeFilter == 'handin'
-                        ? Colors.black
-                        : Colors.white,
+                    backgroundColor:
+                        activeFilter == 'handin'
+                            ? AppColors.primary
+                            : AppColors.surface,
+                    foregroundColor:
+                        activeFilter == 'handin' ? Colors.black : Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -71,15 +73,18 @@ class TaskReviewScreen extends ConsumerWidget {
                 // Submissions Button
                 ElevatedButton(
                   onPressed: () {
-                    ref.read(activeTaskFilterProvider.notifier).state = 'submissions';
+                    ref.read(activeTaskFilterProvider.notifier).state =
+                        'submissions';
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: activeFilter == 'submissions'
-                        ? AppColors.primary
-                        : AppColors.surface,
-                    foregroundColor: activeFilter == 'submissions'
-                        ? Colors.black
-                        : Colors.white,
+                    backgroundColor:
+                        activeFilter == 'submissions'
+                            ? AppColors.primary
+                            : AppColors.surface,
+                    foregroundColor:
+                        activeFilter == 'submissions'
+                            ? Colors.black
+                            : Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -98,20 +103,23 @@ class TaskReviewScreen extends ConsumerWidget {
 
                 // Track Dropdown
                 tracks.when(
-                  data: (trackList) => DropdownButton<String>(
-                    value: selectedTrackId,
-                    items: trackList.map((track) {
-                      return DropdownMenuItem<String>(
-                        value: track.id,
-                        child: Text(track.name),
-                      );
-                    }).toList(),
-                    onChanged: (selectedTrackId) {
-                      ref.read(selectedTrackProvider.notifier).state = selectedTrackId;
-                      controller.fetchTasksForTrack(selectedTrackId!);
-                    },
-                    hint: const Text('Select Track'),
-                  ),
+                  data:
+                      (trackList) => DropdownButton<String>(
+                        value: selectedTrackId,
+                        items:
+                            trackList.map((track) {
+                              return DropdownMenuItem<String>(
+                                value: track.id,
+                                child: Text(track.name),
+                              );
+                            }).toList(),
+                        onChanged: (selectedTrackId) {
+                          ref.read(selectedTrackProvider.notifier).state =
+                              selectedTrackId;
+                          controller.fetchTasksForTrack(selectedTrackId!);
+                        },
+                        hint: const Text('Select Track'),
+                      ),
                   loading: () => const CircularProgressIndicator(),
                   error: (_, __) => const Text('Error loading tracks'),
                 ),
@@ -124,25 +132,27 @@ class TaskReviewScreen extends ConsumerWidget {
 
             // Task or Submission List
             Expanded(
-              child: taskList.isEmpty
-                  ? const Center(child: Text("No data found."))
-                  : ListView.separated(
-                      itemCount: taskList.length,
-                      separatorBuilder: (_, __) =>
-                          SizedBox(height: screenHeight * 0.018),
-                      itemBuilder: (_, index) {
-                        final item = taskList[index];
+              child:
+                  taskList.isEmpty
+                      ? const Center(child: Text("No data found."))
+                      : ListView.separated(
+                        itemCount: taskList.length,
+                        separatorBuilder:
+                            (_, __) => SizedBox(height: screenHeight * 0.018),
+                        itemBuilder: (_, index) {
+                          final item = taskList[index];
 
-                        if (activeFilter == 'handin' && item is ReviewTask) {
-                          return ReviewTaskTile(task: item);
-                        } else if (activeFilter == 'submissions' && item is Submission) {
-                          return SubmissionTile(submission: item);
-                        }
+                          if (activeFilter == 'handin' && item is ReviewTask) {
+                            return ReviewTaskTile(task: item);
+                          } else if (activeFilter == 'submissions' &&
+                              item is Submission) {
+                            return SubmissionTile(submission: item);
+                          }
 
-                        return const SizedBox();
-                      },
-                    ),
-            )
+                          return const SizedBox();
+                        },
+                      ),
+            ),
           ],
         ),
       ),

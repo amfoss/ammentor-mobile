@@ -5,7 +5,6 @@ enum TaskStatus { approved, paused, submitted }
 class ReviewTask {
   final int taskNumber;
   final String taskName;
-  final dynamic icon; // keep as dynamic or remove if not needed
   final TaskStatus status;
   final IconData? icon;
   final int trackId;
