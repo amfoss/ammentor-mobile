@@ -6,7 +6,6 @@ class ReviewTask {
   final int taskNumber;
   final String taskName;
   final TaskStatus status;
-  final IconData? icon;
   final int trackId;
 
   ReviewTask({
@@ -14,7 +13,7 @@ class ReviewTask {
     required this.taskName,
     required this.trackId,
     required this.status,
-    required this.icon,
+
   });
 
   factory ReviewTask.fromJson(Map<String, dynamic> json) {
@@ -32,10 +31,6 @@ class ReviewTask {
       taskNumber: json['task_no'] ?? 0,
       taskName: json['title']?.toString() ?? 'Untitled',
       status: status,
-      icon:
-          json['icon'] != null
-              ? IconData(json['icon'], fontFamily: 'MaterialIcons')
-              : null,
     );
   }
 }

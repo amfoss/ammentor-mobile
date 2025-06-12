@@ -54,11 +54,6 @@ class ReviewTaskTile extends ConsumerWidget {
 
             SizedBox(width: screenWidth * 0.03),
 
-            // Icon (if present)
-            if (task.icon != null)
-              Icon(task.icon, color: Colors.white, size: 20.0),
-
-            SizedBox(width: screenWidth * 0.03),
 
             // Task Title
             Expanded(

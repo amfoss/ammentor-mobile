@@ -83,9 +83,6 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
             Row(
               children: [
                 SizedBox(width: screenWidth * 0.02),
-                if (widget.task.icon != null)
-                  Icon(widget.task.icon, color: Colors.white, size: 20.0),
-                SizedBox(width: screenWidth * 0.02),
                 Expanded(
                   child: Text(
                     widget.task.taskName,
