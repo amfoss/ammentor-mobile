@@ -1,483 +1,76 @@
-import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/screen/evaluation/model/mentee_tasks_model.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class MenteeTasksController extends StateNotifier<List<Task>> {
-  final String menteeId;
+final trackTasksProvider = FutureProvider<List<TrackTask>>((ref) async {
+  final url = Uri.parse('${dotenv.env['BACKEND_URL']}/tracks/1/tasks');
+  final response = await http.get(url);
+  if (response.statusCode != 200) {
+    throw Exception('Failed to load track tasks');
+  }
+  final List<dynamic> data = jsonDecode(response.body);
+  return data.map((e) => TrackTask.fromJson(e)).toList();
+});
 
-  MenteeTasksController(this.menteeId)
-    : super(
-        _getDummyTasks(
-          menteeId,
-        ).where((task) => task.status == TaskStatus.pending).toList(),
-      );
+Future<List<Task>> fetchMenteeTasks(
+  String menteeEmail,
+  String filter,
+  List<TrackTask> trackTasks,
+) async {
+  final url = Uri.parse('${dotenv.env['BACKEND_URL']}/submissions/?email=$menteeEmail&track_id=1');
+  final response = await http.get(url);
+  if (response.statusCode != 200) {
+    throw Exception('Failed to load submissions');
+  }
+  final List<dynamic> data = jsonDecode(response.body);
+  final submissions = data.map((e) => Submission.fromJson(e)).toList();
 
-  // Long list of static data for experimental purposes.
-  static List<Task> _getDummyTasks(String menteeId) {
-    if (menteeId == '1') {
-      return [
-        Task(
-          taskNumber: 0,
-          icon: Icons.code,
-          taskName: 'Codeforces',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 1,
-          icon: HugeIcons.strokeRoundedGithub,
-          taskName: 'Git',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 2,
-          icon: HugeIcons.strokeRoundedGlobe02,
-          taskName: 'Web Dev Basics',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 3,
-          icon: HugeIcons.strokeRoundedCpu,
-          taskName: 'Build a Simple Shell',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 4,
-          icon: HugeIcons.strokeRoundedDoc01,
-          taskName: 'Not a SRS Doc',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 5,
-          icon: HugeIcons.strokeRoundedWebDesign01,
-          taskName: 'Wireframe the Skeleton',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 6,
-          icon: HugeIcons.strokeRoundedFigma,
-          taskName: 'Figma Design Task',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 7,
-          icon: HugeIcons.strokeRoundedChrome,
-          taskName: 'Frontend Development',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 8,
-          icon: HugeIcons.strokeRoundedDatabase,
-          taskName: 'Backend Development',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 9,
-          icon: HugeIcons.strokeRoundedPlayStore,
-          taskName: '	Flutter Development',
-          status: TaskStatus.pending,
-        ),
-      ];
-    } else if (menteeId == '2') {
-      return [
-        Task(
-          taskNumber: 0,
-          icon: Icons.code,
-          taskName: 'Codeforces',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 1,
-          icon: HugeIcons.strokeRoundedGithub,
-          taskName: 'Git',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 2,
-          icon: HugeIcons.strokeRoundedGlobe02,
-          taskName: 'Web Dev Basics',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 3,
-          icon: HugeIcons.strokeRoundedCpu,
-          taskName: 'Build a Simple Shell',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 4,
-          icon: HugeIcons.strokeRoundedDoc01,
-          taskName: 'Not a SRS Doc',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 5,
-          icon: HugeIcons.strokeRoundedWebDesign01,
-          taskName: 'Wireframe the Skeleton',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 6,
-          icon: HugeIcons.strokeRoundedFigma,
-          taskName: 'Figma Design Task',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 7,
-          icon: HugeIcons.strokeRoundedChrome,
-          taskName: 'Frontend Development',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 8,
-          icon: HugeIcons.strokeRoundedDatabase,
-          taskName: 'Backend Development',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 9,
-          icon: HugeIcons.strokeRoundedPlayStore,
-          taskName: '	Flutter Development',
-          status: TaskStatus.pending,
-        ),
-      ];
-    } else if (menteeId == '3') {
-      return [
-        Task(
-          taskNumber: 0,
-          icon: Icons.code,
-          taskName: 'Codeforces',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 1,
-          icon: HugeIcons.strokeRoundedGithub,
-          taskName: 'Git',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 2,
-          icon: HugeIcons.strokeRoundedGlobe02,
-          taskName: 'Web Dev Basics',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 3,
-          icon: HugeIcons.strokeRoundedCpu,
-          taskName: 'Build a Simple Shell',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 4,
-          icon: HugeIcons.strokeRoundedDoc01,
-          taskName: 'Not a SRS Doc',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 5,
-          icon: HugeIcons.strokeRoundedWebDesign01,
-          taskName: 'Wireframe the Skeleton',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 6,
-          icon: HugeIcons.strokeRoundedFigma,
-          taskName: 'Figma Design Task',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 7,
-          icon: HugeIcons.strokeRoundedChrome,
-          taskName: 'Frontend Development',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 8,
-          icon: HugeIcons.strokeRoundedDatabase,
-          taskName: 'Backend Development',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 9,
-          icon: HugeIcons.strokeRoundedPlayStore,
-          taskName: '	Flutter Development',
-          status: TaskStatus.pending,
-        ),
-      ];
-    } else if (menteeId == '4') {
-      return [
-        Task(
-          taskNumber: 0,
-          icon: Icons.code,
-          taskName: 'Codeforces',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 1,
-          icon: HugeIcons.strokeRoundedGithub,
-          taskName: 'Git',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 2,
-          icon: HugeIcons.strokeRoundedGlobe02,
-          taskName: 'Web Dev Basics',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 3,
-          icon: HugeIcons.strokeRoundedCpu,
-          taskName: 'Build a Simple Shell',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 4,
-          icon: HugeIcons.strokeRoundedDoc01,
-          taskName: 'Not a SRS Doc',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 5,
-          icon: HugeIcons.strokeRoundedWebDesign01,
-          taskName: 'Wireframe the Skeleton',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 6,
-          icon: HugeIcons.strokeRoundedFigma,
-          taskName: 'Figma Design Task',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 7,
-          icon: HugeIcons.strokeRoundedChrome,
-          taskName: 'Frontend Development',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 8,
-          icon: HugeIcons.strokeRoundedDatabase,
-          taskName: 'Backend Development',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 9,
-          icon: HugeIcons.strokeRoundedPlayStore,
-          taskName: '	Flutter Development',
-          status: TaskStatus.pending,
-        ),
-      ];
-    } else if (menteeId == '5') {
-      return [
-        Task(
-          taskNumber: 0,
-          icon: Icons.code,
-          taskName: 'Codeforces',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 1,
-          icon: HugeIcons.strokeRoundedGithub,
-          taskName: 'Git',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 2,
-          icon: HugeIcons.strokeRoundedGlobe02,
-          taskName: 'Web Dev Basics',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 3,
-          icon: HugeIcons.strokeRoundedCpu,
-          taskName: 'Build a Simple Shell',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 4,
-          icon: HugeIcons.strokeRoundedDoc01,
-          taskName: 'Not a SRS Doc',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 5,
-          icon: HugeIcons.strokeRoundedWebDesign01,
-          taskName: 'Wireframe the Skeleton',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 6,
-          icon: HugeIcons.strokeRoundedFigma,
-          taskName: 'Figma Design Task',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 7,
-          icon: HugeIcons.strokeRoundedChrome,
-          taskName: 'Frontend Development',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 8,
-          icon: HugeIcons.strokeRoundedDatabase,
-          taskName: 'Backend Development',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 9,
-          icon: HugeIcons.strokeRoundedPlayStore,
-          taskName: '	Flutter Development',
-          status: TaskStatus.pending,
-        ),
-      ];
-    } else if (menteeId == '6') {
-      return [
-        Task(
-          taskNumber: 0,
-          icon: Icons.code,
-          taskName: 'Codeforces',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 1,
-          icon: HugeIcons.strokeRoundedGithub,
-          taskName: 'Git',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 2,
-          icon: HugeIcons.strokeRoundedGlobe02,
-          taskName: 'Web Dev Basics',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 3,
-          icon: HugeIcons.strokeRoundedCpu,
-          taskName: 'Build a Simple Shell',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 4,
-          icon: HugeIcons.strokeRoundedDoc01,
-          taskName: 'Not a SRS Doc',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 5,
-          icon: HugeIcons.strokeRoundedWebDesign01,
-          taskName: 'Wireframe the Skeleton',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 6,
-          icon: HugeIcons.strokeRoundedFigma,
-          taskName: 'Figma Design Task',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 7,
-          icon: HugeIcons.strokeRoundedChrome,
-          taskName: 'Frontend Development',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 8,
-          icon: HugeIcons.strokeRoundedDatabase,
-          taskName: 'Backend Development',
-          status: TaskStatus.pending,
-        ),
-        Task(
-          taskNumber: 9,
-          icon: HugeIcons.strokeRoundedPlayStore,
-          taskName: '	Flutter Development',
-          status: TaskStatus.pending,
-        ),
-      ];
-    } else if (menteeId == '7') {
-      return [
-        Task(
-          taskNumber: 0,
-          icon: Icons.code,
-          taskName: 'Codeforces',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 1,
-          icon: HugeIcons.strokeRoundedGithub,
-          taskName: 'Git',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 2,
-          icon: HugeIcons.strokeRoundedGlobe02,
-          taskName: 'Web Dev Basics',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 3,
-          icon: HugeIcons.strokeRoundedCpu,
-          taskName: 'Build a Simple Shell',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 4,
-          icon: HugeIcons.strokeRoundedDoc01,
-          taskName: 'Not a SRS Doc',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 5,
-          icon: HugeIcons.strokeRoundedWebDesign01,
-          taskName: 'Wireframe the Skeleton',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 6,
-          icon: HugeIcons.strokeRoundedFigma,
-          taskName: 'Figma Design Task',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 7,
-          icon: HugeIcons.strokeRoundedChrome,
-          taskName: 'Frontend Development',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 8,
-          icon: HugeIcons.strokeRoundedDatabase,
-          taskName: 'Backend Development',
-          status: TaskStatus.returned,
-        ),
-        Task(
-          taskNumber: 9,
-          icon: HugeIcons.strokeRoundedPlayStore,
-          taskName: '	Flutter Development',
-          status: TaskStatus.pending,
-        ),
-      ];
+  final Map<int, Submission> latestSubmissions = {};
+  for (final sub in submissions) {
+    final existing = latestSubmissions[sub.taskId];
+    if (existing == null ||
+        (sub.submittedAt != null &&
+         (existing.submittedAt == null ||
+          DateTime.tryParse(sub.submittedAt!)?.isAfter(DateTime.tryParse(existing.submittedAt ?? '') ?? DateTime(1970)) == true))) {
+      latestSubmissions[sub.taskId] = sub;
     }
-    return [];
   }
 
-  void filterTasks(TaskStatus status) {
-    state =
-        _getDummyTasks(
-          menteeId,
-        ).where((task) => task.status == status).toList();
-  }
+  final filtered = latestSubmissions.values.where((s) {
+    if (filter == 'pending') {
+      return s.status.trim().toLowerCase() == 'submitted';
+    } else if (filter == 'returned') {
+      final status = s.status.trim().toLowerCase();
+      return status == 'approved' || status == 'paused';
+    }
+    return false;
+  }).toList();
 
-  void showAllTasks() {
-    state = _getDummyTasks(menteeId);
-  }
+  return filtered.map((s) {
+    final trackTask = trackTasks.firstWhere(
+      (t) => t.id == s.taskId,
+      orElse: () => TrackTask(
+        id: s.taskId,
+        trackId: 1,
+        taskNo: -1,
+        title: 'Task ${s.taskId}',
+        description: '',
+        points: 0,
+        deadline: null,
+      ),
+    );
+    return Task.fromSubmission(s, trackTask.title);
+  }).toList();
 }
 
-final menteeTasksControllerProvider =
-    StateNotifierProvider.family<MenteeTasksController, List<Task>, String>((
-      ref,
-      menteeId,
-    ) {
-      return MenteeTasksController(menteeId);
-    });
+final menteeTasksControllerProvider = FutureProvider.family<List<Task>, String>((ref, key) async {
+  final parts = key.split('-');
+  final menteeId = parts.first;
+  final filter = parts.sublist(1).join('-');
+  final trackTasksAsync = await ref.watch(trackTasksProvider.future);
+  return fetchMenteeTasks(menteeId, filter, trackTasksAsync);
+});
 
 final menteeTaskFilterProvider = StateProvider<String>((ref) => 'pending');

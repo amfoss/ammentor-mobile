@@ -12,6 +12,7 @@ class TaskReviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final controller = ref.read(taskReviewControllerProvider.notifier);
     final activeFilter = ref.watch(activeTaskFilterProvider);
     final tracks = ref.watch(tracksProvider);
@@ -116,7 +117,6 @@ class TaskReviewScreen extends ConsumerWidget {
                 ),
               ],
             ),
-
             SizedBox(
               height: screenHeight * 0.04,
               child: Divider(color: AppColors.grey, thickness: 1.0),

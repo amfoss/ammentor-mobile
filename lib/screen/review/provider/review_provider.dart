@@ -22,6 +22,9 @@ class ApiService {
       throw Exception('Failed to load tracks');
     }
   }
+  final List<dynamic> data = jsonDecode(response.body);
+  return data.map((e) => ReviewTask.fromJson(e)).toList();
+});
 
   Future<List<ReviewTask>> fetchTasksForTrack(String trackId) async {
     final response = await http.get(Uri.parse('$_baseUrl/tracks/$trackId/tasks'));

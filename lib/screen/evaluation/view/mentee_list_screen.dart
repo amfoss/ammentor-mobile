@@ -33,15 +33,15 @@ class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
 
   @override
   Widget build(BuildContext context) {
-    final mentees = ref.watch(menteeListControllerProvider);
+    final menteesAsync = ref.watch(menteeListControllerProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text(
-          'Task review',
-          style: TextStyle(color: AppColors.white),
+        title: Text(
+          'Task Review',
+          style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
         ),
         backgroundColor: AppColors.background,
         elevation: 0,
@@ -63,56 +63,65 @@ class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
                 thickness: 1.0,
               ),),
             Expanded(
-              child: AnimatedBuilder(
-                animation: _animationController!,
-                builder: (context, child) {
-                  return ListView.builder(
-                    itemCount: mentees.length,
-                    itemBuilder: (context, index) {
-                      final mentee = mentees[index];
-                      return FadeTransition(
-                        opacity: Tween<double>(begin: 0, end: 1).animate(
-                          CurvedAnimation(
-                            parent: _animationController!,
-                            curve: Interval(
-                              index * 0.05,
-                              1.0,
-                              curve: Curves.easeIn,
-                            ),
-                          ),
-                        ),
-                        child: SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(0.0, 0.2),
-                            end: Offset.zero,
-                          ).animate(
-                            CurvedAnimation(
-                              parent: _animationController!,
-                              curve: Interval(
-                                index * 0.05,
-                                1.0,
-                                curve: Curves.easeIn,
+              child: menteesAsync.when(
+                data: (mentees) {
+                  if (mentees.isEmpty) {
+                    return Center(child: Text('No mentees found', style: AppTextStyles.caption(context)));
+                  }
+                  return AnimatedBuilder(
+                    animation: _animationController!,
+                    builder: (context, child) {
+                      return ListView.builder(
+                        itemCount: mentees.length,
+                        itemBuilder: (context, index) {
+                          final mentee = mentees[index];
+                          return FadeTransition(
+                            opacity: Tween<double>(begin: 0, end: 1).animate(
+                              CurvedAnimation(
+                                parent: _animationController!,
+                                curve: Interval(
+                                  index * 0.05,
+                                  1.0,
+                                  curve: Curves.easeIn,
+                                ),
                               ),
                             ),
-                          ),
-                          child: MenteeTile(
-                            number: index + 1,
-                            mentee: mentee,
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                          MenteeTasksScreen(mentee: mentee),
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(0.0, 0.2),
+                                end: Offset.zero,
+                              ).animate(
+                                CurvedAnimation(
+                                  parent: _animationController!,
+                                  curve: Interval(
+                                    index * 0.05,
+                                    1.0,
+                                    curve: Curves.easeIn,
+                                  ),
                                 ),
-                              );
-                            },
-                          ),
-                        ),
+                              ),
+                              child: MenteeTile(
+                                number: index + 1,
+                                mentee: mentee,
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) =>
+                                              MenteeTasksScreen(mentee: mentee),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   );
                 },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Failed to load mentees', style: AppTextStyles.caption(context))),
               ),
             ),
           ],

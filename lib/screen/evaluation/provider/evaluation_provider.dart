@@ -1,6 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/screen/evaluation/model/evaluation_model.dart';
 import 'package:ammentor/screen/evaluation/model/mentee_tasks_model.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
 
 class TaskEvaluationController extends StateNotifier<Evaluation?> {
   final Task task;
@@ -22,7 +26,26 @@ class TaskEvaluationController extends StateNotifier<Evaluation?> {
     state = state?.copyWith(status: status) ?? Evaluation(status: status);
   }
 
-  Future<void> submitEvaluation() async {}
+  Future<void> submitEvaluation({String status = "approved"}) async {
+    final storage = FlutterSecureStorage();
+    final mentorEmail = await storage.read(key: 'userEmail');
+    final feedback = state?.feedback ?? '';
+    final submissionId = task.submissionId;
+
+    final url = Uri.parse('${dotenv.env['BACKEND_URL']}/progress/approve-task');
+    final body = jsonEncode({
+      "submission_id": submissionId,
+      "mentor_email": mentorEmail,
+      "status": status,
+      "mentor_feedback": feedback,
+    });
+
+    await http.patch(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+  }
 }
 
 final taskEvaluationControllerProvider =

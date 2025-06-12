@@ -2,25 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/screen/evaluation/view/evaluation_screen.dart';
+import 'package:ammentor/screen/evaluation/view/evaluation_view_screen.dart';
 import 'package:ammentor/screen/evaluation/model/mentee_tasks_model.dart';
 
 class TaskTile extends ConsumerWidget {
   final Task task;
+  final VoidCallback? onTaskEvaluated;
+  final String? menteeEmail; // <-- Add this
 
-  const TaskTile({super.key, required this.task});
+  const TaskTile({super.key, required this.task, this.onTaskEvaluated, this.menteeEmail});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: () {
-        if (task.status != TaskStatus.returned) {
-          Navigator.of(context).push(
+      onTap: () async {
+        if (task.status == TaskStatus.returned) {
+          final result = await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => TaskEvaluationScreen(task: task),
+              builder: (context) => TaskEvaluationViewScreen(
+                task: task,
+                menteeEmail: menteeEmail ?? "",
+                onTaskEvaluated: onTaskEvaluated,
+              ),
             ),
           );
+          if (result == true && onTaskEvaluated != null) {
+            onTaskEvaluated!();
+          }
+        } else {
+          final result = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => TaskEvaluationScreen(task: task, onEvaluated: onTaskEvaluated),
+            ),
+          );
+          if (result == true && onTaskEvaluated != null) {
+            onTaskEvaluated!();
+          }
         }
       },
       child: Container(
@@ -44,8 +63,6 @@ class TaskTile extends ConsumerWidget {
                 style: const TextStyle(color: Colors.white, fontSize: 16.0),
               ),
             ),
-            SizedBox(width: screenWidth * 0.03),
-            Icon(task.icon, color: Colors.white, size: 20.0),
             SizedBox(width: screenWidth * 0.03),
             Expanded(
               child: Text(

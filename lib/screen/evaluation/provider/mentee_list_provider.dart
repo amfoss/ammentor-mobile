@@ -1,50 +1,42 @@
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/screen/evaluation/model/mentee_list_model.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class MenteeListController extends StateNotifier<List<Mentee>> {
-  MenteeListController() : super(_mentees);
-
-  // Static data, again to be fetched from the database.
-  static final List<Mentee> _mentees = [
-    Mentee(
-      id: '1',
-      name: 'Mentee 0',
-      imageUrl: 'https://avatar.iran.liara.run/public/8',
-    ),
-    Mentee(
-      id: '2',
-      name: 'Mentee 1',
-      imageUrl: 'https://avatar.iran.liara.run/public/32',
-    ),
-    Mentee(
-      id: '3',
-      name: 'Mentee 2',
-      imageUrl: 'https://avatar.iran.liara.run/public/4',
-    ),
-    Mentee(
-      id: '4',
-      name: 'Mentee 3',
-      imageUrl: 'https://avatar.iran.liara.run/public/27',
-    ),
-    Mentee(
-      id: '5',
-      name: 'Mentee 4',
-      imageUrl: 'https://avatar.iran.liara.run/public/18',
-    ),
-    Mentee(
-      id: '6',
-      name: 'Mentee 5',
-      imageUrl: 'https://avatar.iran.liara.run/public/42',
-    ),
-    Mentee(
-      id: '7',
-      name: 'Mentee 6',
-      imageUrl: 'https://avatar.iran.liara.run/public/13',
-    ),
-  ];
+Future<int> fetchMenteePoints(String email) async {
+  final url = Uri.parse('${dotenv.env['BACKEND_URL']}/auth/user/$email');
+  final response = await http.get(url);
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    return data['total_points'] ?? 0;
+  }
+  return 0;
 }
 
-final menteeListControllerProvider =
-    StateNotifierProvider<MenteeListController, List<Mentee>>((ref) {
-      return MenteeListController();
-    });
+final menteeListControllerProvider = FutureProvider<List<Mentee>>((ref) async {
+  final storage = FlutterSecureStorage();
+  final mentorEmail = await storage.read(key: 'userEmail');
+  if (mentorEmail == null) {
+    return [];
+  }
+  final url = Uri.parse('${dotenv.env['BACKEND_URL']}/mentors/$mentorEmail/mentees');
+  final response = await http.get(url);
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    final menteesRaw = (data['mentees'] as List);
+    final mentees = await Future.wait(menteesRaw.map((e) async {
+      final points = await fetchMenteePoints(e['email']);
+      return Mentee(
+        id: e['email'],
+        name: e['name'],
+        imageUrl: 'https://github.com/amfoss.png',
+        totalPoints: points,
+      );
+    }));
+    return mentees;
+  } else {
+    throw Exception('Failed to load mentees');
+  }
+});
