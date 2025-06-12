@@ -1,33 +1,42 @@
 import 'package:flutter/material.dart';
 
-enum TaskStatus { reviewed, notreviewed }
+enum TaskStatus { approved, paused, submitted }
 
 class ReviewTask {
   final int taskNumber;
   final String taskName;
   final dynamic icon; // keep as dynamic or remove if not needed
   final TaskStatus status;
+  final IconData? icon;
+  final int trackId;
 
   ReviewTask({
     required this.taskNumber,
     required this.taskName,
-    this.icon,
+    required this.trackId,
     required this.status,
+    required this.icon,
   });
 
   factory ReviewTask.fromJson(Map<String, dynamic> json) {
+    final statusStr = (json['status'] ?? '').toString().toLowerCase();
+    TaskStatus status = TaskStatus.submitted;
+
+    if (statusStr == 'approved') {
+      status = TaskStatus.approved;
+    } else if (statusStr == 'paused') {
+      status = TaskStatus.paused;
+    }
+
     return ReviewTask(
+      trackId: json['track_id'] ?? 0,
       taskNumber: json['task_no'] ?? 0,
-      taskName: json['title'] ?? '',
-      icon: json['icon'], // or null if not present
-      status: _parseStatus(json['status']),
+      taskName: json['title']?.toString() ?? 'Untitled',
+      status: status,
+      icon:
+          json['icon'] != null
+              ? IconData(json['icon'], fontFamily: 'MaterialIcons')
+              : null,
     );
   }
-}
-
-TaskStatus _parseStatus(dynamic status) {
-  if (status == null) return TaskStatus.notreviewed;
-  final s = status.toString().toLowerCase();
-  if (s == 'reviewed' || s == 'approved') return TaskStatus.reviewed;
-  return TaskStatus.notreviewed;
 }
