@@ -24,7 +24,7 @@ class UserProfile {
       name: json['name'],
       email: json['email'],
       role: json['role'],
-      avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=${json['name']}',
+      avatarUrl: 'https://github.com/amfoss.png',
       badges: ['Leadership', 'Problem Solving', 'Top Performer'],
       total_points: json['total_points'] ?? 0,
     );
