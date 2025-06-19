@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ammentor/components/theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/components/mentee_task_tile.dart';
 import 'package:ammentor/screen/evaluation/model/mentee_list_model.dart';
 import 'package:ammentor/screen/evaluation/provider/mentee_tasks_provider.dart';
@@ -34,8 +34,6 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
   @override
   void initState() {
     super.initState();
-
-    // Load tracks and select the first one before fetching tasks
     Future.microtask(() async {
       final tracksAsync = ref.read(tracksProvider);
       tracksAsync.whenData((tracks) {
@@ -50,184 +48,76 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Do nothing — logic moved to initState to prevent race condition
-  }
-
-  @override
   Widget build(BuildContext context) {
-  final activeFilter = ref.watch(menteeTaskFilterProvider);
-  final tracksAsync = ref.watch(tracksProvider);
-  final screenHeight = MediaQuery.of(context).size.height;
+    final activeFilter = ref.watch(menteeTaskFilterProvider);
+    final tracksAsync = ref.watch(tracksProvider);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-  final trackId = selectedTrack?.id;
+    final trackId = selectedTrack?.id;
+    final tasksAsync = trackId != null
+        ? ref.watch(menteeTasksControllerProvider((
+            email: widget.mentee.id,
+            filter: activeFilter,
+            trackId: int.parse(trackId),
+          )))
+        : const AsyncValue.loading();
 
-  final tasksAsync = trackId != null
-      ? ref.watch(menteeTasksControllerProvider((
-          email: widget.mentee.id,
-          filter: activeFilter,
-          trackId: int.parse(trackId),
-        )))
-      : const AsyncValue.loading();
-
-  tracksAsync.when(
-    data: (trackList) {
-      if (selectedTrack == null && trackList.isNotEmpty) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          setState(() {
-            selectedTrack = trackList[0];
+    tracksAsync.when(
+      data: (trackList) {
+        if (selectedTrack == null && trackList.isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              selectedTrack = trackList[0];
+            });
+            _refreshTasks();
           });
-          _refreshTasks();
-        });
-      }
-    },
-    loading: () {},
-    error: (_, __) {},
-  );
+        }
+      },
+      loading: () {},
+      error: (_, __) {},
+    );
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        
         title: Text(
           widget.mentee.name,
           style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
         ),
         backgroundColor: AppColors.background,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.white),
+        iconTheme: IconThemeData(color: AppColors.white),
       ),
       body: Padding(
         padding: EdgeInsets.all(screenHeight * 0.018),
         child: Column(
           children: [
-            // Filter buttons and dropdown
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  // Pending button
-                  SizedBox(
-                    height: 36,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        ref.read(menteeTaskFilterProvider.notifier).state = 'pending';
-                        _refreshTasks();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        backgroundColor: activeFilter == 'pending'
-                            ? AppColors.primary
-                            : AppColors.surface,
-                        foregroundColor: activeFilter == 'pending'
-                            ? Colors.black
-                            : Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          if (activeFilter == 'pending')
-                            const Icon(Icons.check, color: Colors.black, size: 16),
-                          const SizedBox(width: 4),
-                          const Text('Pending', style: TextStyle(fontSize: 13)),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
-                  // Returned button
-                  SizedBox(
-                    height: 36,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        ref.read(menteeTaskFilterProvider.notifier).state = 'returned';
-                        _refreshTasks();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        backgroundColor: activeFilter == 'returned'
-                            ? AppColors.primary
-                            : AppColors.surface,
-                        foregroundColor: activeFilter == 'returned'
-                            ? Colors.black
-                            : Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          if (activeFilter == 'returned')
-                            const Icon(Icons.check, color: Colors.black, size: 16),
-                          const SizedBox(width: 4),
-                          const Text('Returned', style: TextStyle(fontSize: 13)),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
-                  // Track Dropdown
+                  _buildFilterChip("pending", activeFilter, context, screenWidth, screenHeight),
+                  SizedBox(width: screenWidth * 0.02),
+                  _buildFilterChip("returned", activeFilter, context, screenWidth, screenHeight),
+                  SizedBox(width: screenWidth * 0.02),
                   tracksAsync.when(
-                    loading: () => const Padding(
-                      padding: EdgeInsets.only(left: 12),
-                      child: SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
+                    loading: () => SizedBox(
+                      width: screenWidth * 0.05,
+                      height: screenWidth * 0.05,
+                      child: CircularProgressIndicator(strokeWidth: 2),
                     ),
-                    error: (_, __) => const Text("Error"),
+                    error: (_, __) => Text("Error", style: AppTextStyles.caption(context)),
                     data: (trackList) {
-                      return Container(
-                        height: 36,
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: Colors.white24),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<Track>(
-                            value: selectedTrack,
-                            dropdownColor: AppColors.surface,
-                            style: AppTextStyles.input(context),
-                            iconEnabledColor: Colors.white,
-                            onChanged: (Track? newTrack) {
-                              if (newTrack != null) {
-                                setState(() {
-                                  selectedTrack = newTrack;
-                                });
-                                _refreshTasks();
-                              }
-                            },
-                            items: trackList.map<DropdownMenuItem<Track>>((Track track) {
-                              return DropdownMenuItem<Track>(
-                                value: track,
-                                child: Text(
-                                  track.name,
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      );
+                      return _buildTrackDropdown(trackList, context, screenWidth, screenHeight);
                     },
                   ),
                 ],
               ),
             ),
-
-            SizedBox(
-              height: screenHeight * 0.04,
-              child: const Divider(color: AppColors.grey, thickness: 1.0),
-            ),
-
-            // Task list
+            SizedBox(height: screenHeight * 0.02),
+            Divider(color: AppColors.grey, thickness: 1.0),
+            SizedBox(height: screenHeight * 0.02),
             Expanded(
               child: tasksAsync.when(
                 data: (taskList) {
@@ -238,8 +128,7 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
                   }
                   return ListView.separated(
                     itemCount: taskList.length,
-                    separatorBuilder: (context, index) =>
-                        SizedBox(height: screenHeight * 0.018),
+                    separatorBuilder: (context, index) => SizedBox(height: screenHeight * 0.018),
                     itemBuilder: (context, index) {
                       final task = taskList[index];
                       return TaskTile(
@@ -250,13 +139,112 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
                     },
                   );
                 },
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: () => Center(child: CircularProgressIndicator()),
                 error: (err, stack) => Center(
-                  child: Text('Failed to load tasks',
-                      style: AppTextStyles.caption(context)),
+                  child: Text('Failed to load tasks', style: AppTextStyles.caption(context)),
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(String label, String activeFilter, BuildContext context, double w, double h) {
+    final isSelected = activeFilter == label;
+    return GestureDetector(
+      onTap: () {
+        ref.read(menteeTaskFilterProvider.notifier).state = label;
+        _refreshTasks();
+      },
+      child: Container(
+        height: h * 0.045,
+        padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : Colors.transparent,
+          border: Border.all(color: isSelected ? AppColors.primary : Colors.white24),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          label[0].toUpperCase() + label.substring(1),
+          style: AppTextStyles.caption(context).copyWith(
+            color: isSelected ? Colors.black : Colors.white70,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTrackDropdown(List<Track> trackList, BuildContext context, double w, double h) {
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: AppColors.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: h * 0.025, horizontal: w * 0.05),
+              child: Wrap(
+                spacing: w * 0.03,
+                runSpacing: h * 0.015,
+                children: trackList.map((track) {
+                  final isSelected = selectedTrack?.id == track.id;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedTrack = track;
+                      });
+                      Navigator.pop(context);
+                      _refreshTasks();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: h * 0.008, horizontal: w * 0.045),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.primary : Colors.transparent,
+                        border: Border.all(
+                          color: isSelected ? AppColors.primary : Colors.white24,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        track.name,
+                        style: AppTextStyles.caption(context).copyWith(
+                          color: isSelected ? Colors.black : Colors.white70,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            );
+          },
+        );
+      },
+      child: Container(
+        height: h * 0.045,
+        padding: EdgeInsets.symmetric(horizontal: w * 0.035),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white24),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              selectedTrack?.name ?? "Select Track",
+              style: AppTextStyles.caption(context),
+            ),
+            SizedBox(width: w * 0.015),
+            Icon(Icons.expand_more_rounded, color: Colors.white60, size: 18),
           ],
         ),
       ),
