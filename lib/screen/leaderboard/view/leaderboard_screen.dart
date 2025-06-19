@@ -75,9 +75,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                 data: (trackList) {
                   final fullTrackList = [overallTrack, ...trackList];
 
-                  if (selectedTrack == null && fullTrackList.isNotEmpty) {
+                  if (selectedTrack == null && trackList.isNotEmpty) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      ref.read(selectedTrackProvider.notifier).state = overallTrack;
+                      ref.read(selectedTrackProvider.notifier).state = trackList.first;
                     });
                   }
 
