@@ -16,13 +16,46 @@ class LoginScreen extends ConsumerStatefulWidget {
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final TextEditingController emailController = TextEditingController();
+
+  late final AnimationController _controller;
+  late final Animation<Offset> _slideAnimation;
+  late final Animation<double> _fadeAnimation;
+
   bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, -1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutBack,
+    ));
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
+    _controller.forward();
+  }
 
   @override
   void dispose() {
     emailController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -95,40 +128,79 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
             ),
+
+            // ✨ Animated Login Form
             Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    widget.userRole == UserRole.mentor
-                        ? "Mentor Login"
-                        : "Mentee Login",
-                    style: AppTextStyles.subheading(context)
-                        .copyWith(fontWeight: FontWeight.w900),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  CustomTextField(
-                    controller: emailController,
-                    label: "Email",
-                    hintText: "Enter your email",
-                    width: screenWidth * 0.8,
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  ElevatedButton(
-                    onPressed: isLoading ? null : sendOtp,
-                    child: isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : Text(
-                            'Get OTP',
-                            style: AppTextStyles.button(context).copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary,
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.userRole == UserRole.mentor
+                            ? "Mentor Login"
+                            : "Mentee Login",
+                        style: AppTextStyles.subheading(context)
+                            .copyWith(fontWeight: FontWeight.w900),
+                      ),
+                      SizedBox(height: screenHeight * 0.02),
+                      CustomTextField(
+                        controller: emailController,
+                        label: "Email",
+                        hintText: "Enter your email",
+                        width: screenWidth * 0.8,
+                      ),
+                      SizedBox(height: screenHeight * 0.02),
+                      ElevatedButton(
+                        onPressed: isLoading ? null : sendOtp,
+                        child: isLoading
+                            ? const CircularProgressIndicator(color: Colors.white)
+                            : Text(
+                                'Get OTP',
+                                style: AppTextStyles.button(context).copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                      ),
+                      SizedBox(height: screenHeight * 0.015),
+
+                      /// 🔁 Role Switch Text
+                      TextButton(
+                        onPressed: () async {
+                          await _controller.reverse(); // Fade + slide out
+                          if (!mounted) return;
+                          final oppositeRole = widget.userRole == UserRole.mentor
+                              ? UserRole.mentee
+                              : UserRole.mentor;
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  LoginScreen(userRole: oppositeRole),
                             ),
+                          );
+                        },
+                        child: Text(
+                          widget.userRole == UserRole.mentor
+                              ? "Not a mentor? Switch to Mentee"
+                              : "Not a mentee? Switch to Mentor",
+                          style: AppTextStyles.caption(context).copyWith(
+                            decoration: TextDecoration.underline,
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w500,
                           ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
+
+            // 🔦 Footer Bulb
             Positioned(
               bottom: screenHeight * -0.08,
               right: screenHeight * -0.1,
