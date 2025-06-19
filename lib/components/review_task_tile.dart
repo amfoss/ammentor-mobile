@@ -11,61 +11,75 @@ class ReviewTaskTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
 
-    return GestureDetector(
-      onTap: () {
-        if (task.status == TaskStatus.submitted) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => TaskSubmissionScreen(task: task),
-            ),
-          );
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.all(screenWidth * 0.03),
-        decoration: BoxDecoration(
-          color: task.status == TaskStatus.approved
-              ? AppColors.surface // Optional: grey out approved tasks
-              : AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Row(
-          children: [
-            // Task Number Badge
-            Container(
-              width: screenWidth * 0.1,
-              height: screenHeight * 0.03,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6.0),
-                color: Colors.grey[800],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: w * 0.025, vertical: h * 0.008),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          if (task.status == TaskStatus.submitted) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => TaskSubmissionScreen(task: task),
               ),
-              child: Text(
-                '${task.taskNumber}',
-                style: AppTextStyles.caption(context).copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
+            );
+          }
+        },
+        splashColor: Colors.white.withOpacity(0.04),
+        highlightColor: Colors.white.withOpacity(0.02),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.02),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.025),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.white.withOpacity(0.07), width: 0.8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.07),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              // Task Number Badge
+              Container(
+                width: w * 0.1,
+                height: w * 0.1,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.12),
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  '${task.taskNumber}',
+                  style: AppTextStyles.body(context).copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.white,
+                    fontSize: 14,
+                  ),
                 ),
               ),
-            ),
 
-            SizedBox(width: screenWidth * 0.03),
+              SizedBox(width: w * 0.04),
 
-
-            // Task Title
-            Expanded(
-              child: Text(
-                task.taskName,
-                style: AppTextStyles.caption(context).copyWith(
-                  color: AppColors.white,
-                  fontWeight: FontWeight.w500,
+              // Task Title
+              Expanded(
+                child: Text(
+                  task.taskName,
+                  style: AppTextStyles.subheading(context).copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.white,
+                    fontSize: 16,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
