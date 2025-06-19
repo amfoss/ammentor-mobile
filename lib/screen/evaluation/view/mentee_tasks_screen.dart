@@ -71,7 +71,6 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
         )))
       : const AsyncValue.loading();
 
-  // ✅ Auto-select first track once it's available and not already selected
   tracksAsync.when(
     data: (trackList) {
       if (selectedTrack == null && trackList.isNotEmpty) {
@@ -89,7 +88,7 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        
         title: Text(
           widget.mentee.name,
           style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
