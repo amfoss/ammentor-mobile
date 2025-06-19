@@ -24,12 +24,9 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Profile', style: AppTextStyles.subheading(context)),
         backgroundColor: AppColors.background,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
       body: userAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),

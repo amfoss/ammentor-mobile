@@ -89,6 +89,7 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           widget.mentee.name,
           style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),

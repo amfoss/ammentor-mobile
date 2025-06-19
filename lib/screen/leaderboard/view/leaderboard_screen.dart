@@ -50,6 +50,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Leaderboard',
           style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),

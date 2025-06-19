@@ -23,6 +23,7 @@ class TaskReviewScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Submit Task',
           style: AppTextStyles.subheading(

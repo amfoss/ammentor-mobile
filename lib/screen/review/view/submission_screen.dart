@@ -67,6 +67,7 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Submission',
           style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
