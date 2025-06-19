@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart'; // Don't forget to add to pubspec.yaml
+import 'package:url_launcher/url_launcher.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/screen/review/model/submission_model.dart';
 
@@ -22,41 +22,65 @@ class SubmissionDetailsScreen extends StatelessWidget {
     bool isLink = false,
     bool isStatus = false,
   }) {
+    final Color cardColor = Colors.white.withOpacity(0.025);
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.white.withOpacity(0.05)),
+        color: cardColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: AppColors.primary, size: 22),
+          Container(
+            margin: const EdgeInsets.only(top: 2),
+            child: Icon(icon, color: Colors.white70, size: 20),
+          ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: AppTextStyles.caption(context)
-                        .copyWith(color: Colors.grey[400])),
+                Text(
+                  title,
+                  style: AppTextStyles.caption(context).copyWith(
+                    color: Colors.white70,
+                    fontSize: 13,
+                  ),
+                ),
                 const SizedBox(height: 6),
                 isStatus
                     ? Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: value.toLowerCase() == 'approved'
-                              ? Colors.green
-                              : Colors.orange,
-                          borderRadius: BorderRadius.circular(6),
+                          gradient: LinearGradient(
+                            colors: value.toLowerCase() == 'approved'
+                                ? [Colors.greenAccent.withOpacity(0.3), Colors.green]
+                                : value.toLowerCase() == 'submitted'
+                                    ? [Colors.yellow.shade100, Colors.yellow.shade600]
+                                    : [Colors.redAccent.withOpacity(0.3), Colors.red],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           value.capitalize(),
                           style: AppTextStyles.caption(context).copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                            color: value.toLowerCase() == 'submitted'
+                                ? Colors.black
+                                : Colors.white,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       )
@@ -70,7 +94,7 @@ class SubmissionDetailsScreen extends StatelessWidget {
                             },
                             child: Text(
                               value,
-                              style: AppTextStyles.link(context),
+                              style: AppTextStyles.link(context).copyWith(fontWeight: FontWeight.w500),
                             ),
                           )
                         : Text(
@@ -128,6 +152,5 @@ class SubmissionDetailsScreen extends StatelessWidget {
 }
 
 extension StringExtension on String {
-  String capitalize() =>
-      isEmpty ? this : this[0].toUpperCase() + substring(1).toLowerCase();
+  String capitalize() => isEmpty ? this : this[0].toUpperCase() + substring(1).toLowerCase();
 }

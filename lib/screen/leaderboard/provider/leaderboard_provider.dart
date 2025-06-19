@@ -31,3 +31,28 @@ final leaderboardProvider =
     throw Exception('Failed to fetch leaderboard');
   }
 });
+final overallLeaderboardProvider = FutureProvider<List<LeaderboardUser>>((ref) async {
+  final tracks = await ref.watch(trackListProvider.future);
+  final Map<String, LeaderboardUser> userMap = {};
+
+  for (final track in tracks) {
+    final users = await ref.watch(leaderboardProvider(track.id).future);
+    for (final user in users) {
+      if (userMap.containsKey(user.name)) {
+        final existingUser = userMap[user.name]!;
+        userMap[user.name] = LeaderboardUser(
+          name: existingUser.name,
+          avatarUrl: existingUser.avatarUrl,
+          allTimePoints: existingUser.allTimePoints + user.allTimePoints,
+          tasksCompleted: existingUser.tasksCompleted + user.tasksCompleted,
+        );
+      } else {
+        userMap[user.name] = user;
+      }
+    }
+  }
+
+  final leaderboard = userMap.values.toList();
+  leaderboard.sort((a, b) => b.allTimePoints.compareTo(a.allTimePoints));
+  return leaderboard;
+});

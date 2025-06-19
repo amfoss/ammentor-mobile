@@ -39,6 +39,7 @@ class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Task Review',
           style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
