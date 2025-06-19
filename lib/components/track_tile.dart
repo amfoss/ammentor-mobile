@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/screen/track/model/track_model.dart';
@@ -6,12 +5,11 @@ import 'package:ammentor/screen/track/model/track_model.dart';
 class TrackTile extends StatelessWidget {
   final Track track;
   final void Function(Track) onTrackTap;
-
   final bool showDescription;
   final bool showProgress;
   final bool showImage;
 
-  const TrackTile({
+  TrackTile({
     super.key,
     required this.track,
     required this.onTrackTap,
@@ -22,120 +20,120 @@ class TrackTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+      padding: EdgeInsets.symmetric(
+        vertical: screenHeight * 0.012,
+        horizontal: screenWidth * 0.035,
+      ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         child: InkWell(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(20),
           onTap: () => onTrackTap(track),
-          splashColor: Colors.white.withOpacity(0.1),
-          highlightColor: Colors.white.withOpacity(0.05),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Colors.white.withOpacity(0.05),
-                      Colors.white.withOpacity(0.015),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white.withOpacity(0.06)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.07),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+          splashColor: AppColors.white.withOpacity(0.05),
+          child: Container(
+            padding: EdgeInsets.all(screenWidth * 0.04),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.03),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 14,
+                  offset: Offset(0, 6),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-            
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (showImage)
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Container(
-                              width: 48,
-                              height: 48,
-                              color: Colors.grey[900],
-                              child: Image.network(
-                                track.imageUrl,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => const Icon(
-                                  Icons.auto_graph_rounded,
-                                  color: AppColors.primary,
+              ],
+              border: Border.all(
+                color: Colors.white.withOpacity(0.08),
+              ),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.white.withOpacity(0.04),
+                  Colors.white.withOpacity(0.01),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Row(
+              children: [
+                if (showImage)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      track.imageUrl,
+                      width: screenWidth * 0.16,
+                      height: screenWidth * 0.16,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                if (showImage) SizedBox(width: screenWidth * 0.04),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        track.name,
+                        style: AppTextStyles.subheading(context).copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.2,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      if (showDescription)
+                        Padding(
+                          padding: EdgeInsets.only(top: screenHeight * 0.006),
+                          child: Text(
+                            track.description,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.body(context).copyWith(
+                              fontSize: 14,
+                              color: AppColors.white.withOpacity(0.7),
+                            ),
+                          ),
+                        ),
+                      if (showProgress)
+                        Padding(
+                          padding: EdgeInsets.only(top: screenHeight * 0.014),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(6),
+                                child: LinearProgressIndicator(
+                                  value: track.progress / 100,
+                                  minHeight: screenHeight * 0.01,
+                                  backgroundColor: Colors.white.withOpacity(0.05),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    AppColors.primary,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        if (showImage) const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            track.name,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              letterSpacing: 0.3,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    if (showDescription) const SizedBox(height: 14),
-                    if (showDescription)
-                      Text(
-                        track.description,
-                        style: TextStyle(
-                          fontSize: 14.5,
-                          color: Colors.white.withOpacity(0.75),
-                          height: 1.45,
-                        ),
-                      ),
-
-                    if (showProgress) const SizedBox(height: 20),
-                    if (showProgress)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: LinearProgressIndicator(
-                              value: track.progress / 100,
-                              minHeight: 5,
-                              backgroundColor: Colors.white.withOpacity(0.08),
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                AppColors.primary,
+                              SizedBox(height: screenHeight * 0.004),
+                              Text(
+                                '${track.progress.toInt()}% Complete',
+                                style: AppTextStyles.body(context).copyWith(
+                                  fontSize: 12,
+                                  color: AppColors.white.withOpacity(0.6),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                          const SizedBox(height: 6),
-                          Text(
-                            '${track.progress.toInt()}% Complete',
-                            style: TextStyle(
-                              fontSize: 12.5,
-                              color: Colors.white.withOpacity(0.6),
-                            ),
-                          ),
-                        ],
-                      ),
-                  ],
+                        ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
