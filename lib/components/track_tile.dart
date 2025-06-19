@@ -30,8 +30,8 @@ class TrackTile extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(24),
           onTap: () => onTrackTap(track),
-          splashColor: Colors.white.withOpacity(0.1), // Ripple color
-          highlightColor: Colors.white.withOpacity(0.05), // Press color
+          splashColor: Colors.white.withOpacity(0.1),
+          highlightColor: Colors.white.withOpacity(0.05),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(24),
             child: BackdropFilter(
@@ -39,13 +39,20 @@ class TrackTile extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.white.withOpacity(0.05),
+                      Colors.white.withOpacity(0.015),
+                    ],
+                  ),
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white.withOpacity(0.08)),
+                  border: Border.all(color: Colors.white.withOpacity(0.06)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 12,
+                      color: Colors.black.withOpacity(0.07),
+                      blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
                   ],
@@ -53,7 +60,7 @@ class TrackTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// Row with Image/Icon + Title
+            
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
