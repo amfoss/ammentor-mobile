@@ -10,6 +10,50 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class TaskReviewScreen extends ConsumerWidget {
   TaskReviewScreen({super.key});
 
+  void _showTrackSelector(BuildContext context, WidgetRef ref) {
+    final trackList = ref.read(tracksProvider).maybeWhen(
+      data: (list) => list,
+      orElse: () => [],
+    );
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.black.withOpacity(0.95),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+      ),
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var track in trackList)
+              ListTile(
+                title: Text(
+                  track.name,
+                  style: AppTextStyles.body(context).copyWith(color: Colors.white),
+                ),
+                onTap: () {
+                  ref.read(selectedTrackProvider.notifier).state = track.id;
+                  ref.read(taskReviewControllerProvider.notifier).fetchTasksForTrack(track.id);
+                  Navigator.pop(context);
+                },
+              ),
+            const Divider(color: Colors.white10),
+            ListTile(
+              title: Center(
+                child: Text(
+                  'Cancel',
+                  style: AppTextStyles.body(context).copyWith(color: Colors.redAccent),
+                ),
+              ),
+              onTap: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(taskReviewControllerProvider.notifier);
@@ -23,135 +67,142 @@ class TaskReviewScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Submit Task',
-          style: AppTextStyles.subheading(
-            context,
-          ).copyWith(color: AppColors.white),
+          style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
         ),
         backgroundColor: AppColors.background,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.018),
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.018),
         child: Column(
           children: [
-            // ===== Filter Buttons and Dropdown ===== //
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Hand in Button
-                ElevatedButton(
-                  onPressed: () {
-                    ref.read(activeTaskFilterProvider.notifier).state =
-                        'handin';
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        activeFilter == 'handin'
-                            ? AppColors.primary
-                            : AppColors.surface,
-                    foregroundColor:
-                        activeFilter == 'handin' ? Colors.black : Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.02,
+                vertical: screenHeight * 0.015,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.035),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.white.withOpacity(0.05)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
-                  child: Row(
-                    children: [
-                      if (activeFilter == 'handin')
-                        const Icon(Icons.check, color: Colors.black),
-                      SizedBox(width: screenWidth * 0.01),
-                      const Text('Hand in'),
-                    ],
-                  ),
-                ),
-
-                SizedBox(width: screenWidth * 0.02),
-
-                // Submissions Button
-                ElevatedButton(
-                  onPressed: () {
-                    ref.read(activeTaskFilterProvider.notifier).state =
-                        'submissions';
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        activeFilter == 'submissions'
-                            ? AppColors.primary
-                            : AppColors.surface,
-                    foregroundColor:
-                        activeFilter == 'submissions'
-                            ? Colors.black
-                            : Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      if (activeFilter == 'submissions')
-                        const Icon(Icons.check, color: Colors.black),
-                      SizedBox(width: screenWidth * 0.01),
-                      const Text('Submissions'),
-                    ],
-                  ),
-                ),
-
-                SizedBox(width: screenWidth * 0.02),
-
-                // Track Dropdown
-                tracks.when(
-                  data:
-                      (trackList) => DropdownButton<String>(
-                        value: selectedTrackId,
-                        items:
-                            trackList.map((track) {
-                              return DropdownMenuItem<String>(
-                                value: track.id,
-                                child: Text(track.name),
-                              );
-                            }).toList(),
-                        onChanged: (selectedTrackId) {
-                          ref.read(selectedTrackProvider.notifier).state =
-                              selectedTrackId;
-                          controller.fetchTasksForTrack(selectedTrackId!);
-                        },
-                        hint: const Text('Select Track'),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      ref.read(activeTaskFilterProvider.notifier).state = 'handin';
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: activeFilter == 'handin'
+                          ? AppColors.primary.withOpacity(0.12)
+                          : Colors.transparent,
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                  loading: () => const CircularProgressIndicator(),
-                  error: (_, __) => const Text('Error loading tracks'),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: screenHeight * 0.04,
-              child: Divider(color: AppColors.grey, thickness: 1.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    ),
+                    child: Text(
+                      'Hand in',
+                      style: AppTextStyles.caption(context).copyWith(
+                        color: activeFilter == 'handin'
+                            ? AppColors.primary
+                            : Colors.white.withOpacity(0.7),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: screenWidth * 0.02),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref.read(activeTaskFilterProvider.notifier).state = 'submissions';
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: activeFilter == 'submissions'
+                          ? AppColors.primary.withOpacity(0.12)
+                          : Colors.transparent,
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    ),
+                    child: Text(
+                      'Submissions',
+                      style: AppTextStyles.caption(context).copyWith(
+                        color: activeFilter == 'submissions'
+                            ? AppColors.primary
+                            : Colors.white.withOpacity(0.7),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: screenWidth * 0.02),
+                  GestureDetector(
+                    onTap: () => _showTrackSelector(context, ref),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.03),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.white.withOpacity(0.06)),
+                      ),
+                      child: Text(
+                        tracks.when(
+                          data: (list) {
+                            final selected = list.firstWhere(
+                              (t) => t.id == selectedTrackId,
+                              orElse: () => list[0],
+                            );
+                            return selected.name;
+                          },
+                          loading: () => 'Loading...',
+                          error: (_, __) => 'Error',
+                        ),
+                        style: AppTextStyles.caption(context).copyWith(
+                          color: Colors.white.withOpacity(0.9),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
 
-            // Task or Submission List
+            SizedBox(height: screenHeight * 0.025),
+
             Expanded(
-              child:
-                  taskList.isEmpty
-                      ? const Center(child: Text("No data found."))
-                      : ListView.separated(
-                        itemCount: taskList.length,
-                        separatorBuilder:
-                            (_, __) => SizedBox(height: screenHeight * 0.018),
-                        itemBuilder: (_, index) {
-                          final item = taskList[index];
+              child: taskList.isEmpty
+                  ? const Center(child: Text("No data found."))
+                  : ListView.separated(
+                      itemCount: taskList.length,
+                      separatorBuilder: (_, __) => SizedBox(height: screenHeight * 0.018),
+                      itemBuilder: (_, index) {
+                        final item = taskList[index];
 
-                          if (activeFilter == 'handin' && item is ReviewTask) {
-                            return ReviewTaskTile(task: item);
-                          } else if (activeFilter == 'submissions' &&
-                              item is Submission) {
-                            return SubmissionTile(submission: item);
-                          }
+                        if (activeFilter == 'handin' && item is ReviewTask) {
+                          return ReviewTaskTile(task: item);
+                        } else if (activeFilter == 'submissions' && item is Submission) {
+                          return SubmissionTile(submission: item);
+                        }
 
-                          return const SizedBox();
-                        },
-                      ),
+                        return const SizedBox();
+                      },
+                    ),
             ),
           ],
         ),

@@ -17,6 +17,7 @@ class TracksScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Tracks',
             style: AppTextStyles.subheading(context).copyWith(color: AppColors.white)),
         backgroundColor: AppColors.background,
