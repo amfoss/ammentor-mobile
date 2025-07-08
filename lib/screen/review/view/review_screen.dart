@@ -69,7 +69,7 @@ class TaskReviewScreen extends ConsumerWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'Submit Task',
+          'Submit-Task',
           style: AppTextStyles.subheading(context).copyWith(color: AppColors.white),
         ),
         backgroundColor: AppColors.background,
