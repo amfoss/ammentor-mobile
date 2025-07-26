@@ -152,7 +152,7 @@ class ProfileScreen extends ConsumerWidget {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.005),
+                SizedBox(height: screenHeight * 0.008),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
@@ -164,7 +164,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   ),
                   child: Text(
-                    user.role,
+                    user.role == 'mentee' ? 'Padawan' : 'Knight',
                     style: AppTextStyles.caption(context).copyWith(
                       fontSize: 12,
                       color: AppColors.primary,
