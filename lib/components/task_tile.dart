@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/screen/track/model/track_model.dart';
+import 'package:ammentor/components/task_description_dialog.dart';
 
 class TaskTile extends StatefulWidget {
   final Task task;
@@ -35,6 +36,18 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
     super.dispose();
   }
 
+  void _showDescriptionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => TaskDescriptionDialog(
+        title: widget.task.taskName,
+        description: widget.task.description,
+        points: widget.task.points,
+        deadline: widget.task.deadline,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
@@ -46,7 +59,7 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.008),
         child: InkWell(
-          onTap: () {},
+          onTap: () => _showDescriptionDialog(context),
           borderRadius: BorderRadius.circular(18),
           splashColor: Colors.white.withOpacity(0.06),
           child: Container(
