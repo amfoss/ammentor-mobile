@@ -21,6 +21,7 @@ class TaskSubmissionScreen extends ConsumerStatefulWidget {
 class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
   final TextEditingController _startDateController = TextEditingController();
   final TextEditingController _submissionLinkController = TextEditingController();
+  final TextEditingController _commitHashController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +82,12 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
               text: 'Submission link',
               controller: _submissionLinkController,
             ),
+            SizedBox(height: screenHeight * 0.012),
+            SubmissionInputRow(
+              icon: HugeIcons.strokeRoundedSourceCode,
+              text: 'Commit hash',
+              controller: _commitHashController,
+            ),
             const Spacer(),
             Padding(
               padding: EdgeInsets.symmetric(vertical: screenHeight * 0.024),
@@ -93,14 +100,13 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
                           try {
                             final DateTime parsedStartDate = DateTime.parse(_startDateController.text);
                             final int trackId = widget.task.trackId;
-
                             await controller.submitTask(
                               widget.task.taskNumber,
                               trackId,
                               _submissionLinkController.text,
                               parsedStartDate,
+                              commitHash: _commitHashController.text,
                             );
-
                             if (ref.read(taskSubmissionControllerProvider(widget.task.taskNumber)).isSubmissionSuccessful) {
                               Navigator.of(context).pop();
                             } else {

@@ -33,26 +33,28 @@ class TaskSubmissionController extends StateNotifier<TaskSubmissionState> {
   TaskSubmissionController(this.ref)
       : super(TaskSubmissionState.initial());
 
-Future<void> submitTask(
-  int taskNo,
-  int trackId,
-  String referenceLink,
-  DateTime startDate,
-) async {
-  try {
-    state = state.copyWith(isSubmitting: true, isSubmissionSuccessful: false);
+  Future<void> submitTask(
+    int taskNo,
+    int trackId,
+    String referenceLink,
+    DateTime startDate, {
+    String? commitHash,
+  }) async {
+    try {
+      state = state.copyWith(isSubmitting: true, isSubmissionSuccessful: false);
 
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString('user_email');
     if (email == null) throw Exception('Email not found.');
 
-    final body = jsonEncode({
-      "track_id": trackId,
-      "task_no": taskNo,
-      "reference_link": referenceLink,
-      "start_date": _convertDate(startDate),
-      "mentee_email": email,
-    });
+      final body = jsonEncode({
+        "track_id": trackId,
+        "task_no": taskNo,
+        "reference_link": referenceLink,
+        "start_date": _convertDate(startDate),
+        "mentee_email": email,
+        if (commitHash != null && commitHash.isNotEmpty) "commit_hash": commitHash,
+      });
 
     final response = await http.post(
       Uri.parse('${dotenv.env['BACKEND_URL']}/progress/submit-task'),
