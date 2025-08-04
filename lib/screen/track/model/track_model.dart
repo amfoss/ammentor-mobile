@@ -39,6 +39,7 @@ class Task {
   final String description;
   final int points;
   final bool isCompleted;
+  final int deadline;
 
   Task({
     required this.trackId,
@@ -47,6 +48,7 @@ class Task {
     required this.description,
     required this.points,
     this.isCompleted = false,
+    required this.deadline,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class Task {
       description: json['description'],
       points: json['points'],
       isCompleted: false,
+      deadline: json['deadline'] ?? 0,
     );
   }
 }
