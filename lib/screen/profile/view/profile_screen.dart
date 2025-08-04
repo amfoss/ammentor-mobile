@@ -164,7 +164,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   ),
                   child: Text(
-                    user.role == 'mentee' ? 'Padawan' : 'Knight / Master',
+                    user.role == 'mentee' ? 'Padawan' : 'Knight/Master',
                     style: AppTextStyles.caption(context).copyWith(
                       fontSize: 12,
                       color: AppColors.primary,
