@@ -15,6 +15,7 @@ class MenteeListScreen extends ConsumerStatefulWidget {
 class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
     with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
+  String _searchQuery = "";
 
   @override
   void initState() {
@@ -29,6 +30,54 @@ class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
   void dispose() {
     _animationController?.dispose();
     super.dispose();
+  }
+
+  List<dynamic> _filterMentees(List<dynamic> mentees) {
+    if (_searchQuery.isEmpty) return mentees;
+    return mentees.where((mentee) =>
+      mentee.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+      mentee.id.toLowerCase().contains(_searchQuery.toLowerCase())
+    ).toList();
+  }
+
+  Widget _buildSearchBar(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: Colors.white12, width: 0.7),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.search, color: AppColors.white, size: 22),
+          SizedBox(width: screenWidth * 0.02),
+          Expanded(
+            child: TextField(
+              style: AppTextStyles.input(context).copyWith(color: AppColors.white),
+              decoration: InputDecoration(
+          hintText: "Search mentee by name or email",
+          hintStyle: AppTextStyles.input(context).copyWith(color: AppColors.white70),
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          fillColor: AppColors.background,
+          filled: true,
+              ),
+              onChanged: (val) {
+          setState(() {
+            _searchQuery = val;
+          });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -63,19 +112,21 @@ class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
                 color: AppColors.grey,
                 thickness: 1.0,
               ),),
+            _buildSearchBar(context),
             Expanded(
               child: menteesAsync.when(
                 data: (mentees) {
-                  if (mentees.isEmpty) {
+                  final filteredMentees = _filterMentees(mentees);
+                  if (filteredMentees.isEmpty) {
                     return Center(child: Text('No mentees found', style: AppTextStyles.caption(context)));
                   }
                   return AnimatedBuilder(
                     animation: _animationController!,
                     builder: (context, child) {
                       return ListView.builder(
-                        itemCount: mentees.length,
+                        itemCount: filteredMentees.length,
                         itemBuilder: (context, index) {
-                          final mentee = mentees[index];
+                          final mentee = filteredMentees[index];
                           return FadeTransition(
                             opacity: Tween<double>(begin: 0, end: 1).animate(
                               CurvedAnimation(
