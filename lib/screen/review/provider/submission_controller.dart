@@ -36,7 +36,6 @@ class TaskSubmissionController extends StateNotifier<TaskSubmissionState> {
   Future<void> submitTask(
     int taskNo,
     int trackId,
-    String referenceLink,
     DateTime startDate, {
     String? commitHash,
   }) async {
@@ -50,7 +49,7 @@ class TaskSubmissionController extends StateNotifier<TaskSubmissionState> {
       final body = jsonEncode({
         "track_id": trackId,
         "task_no": taskNo,
-        "reference_link": referenceLink,
+        "reference_link": "string",
         "start_date": _convertDate(startDate),
         "mentee_email": email,
         if (commitHash != null && commitHash.isNotEmpty) "commit_hash": commitHash,
