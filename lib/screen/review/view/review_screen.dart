@@ -22,33 +22,41 @@ class TaskReviewScreen extends ConsumerWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
+      isScrollControlled: true,
       builder: (_) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var track in trackList)
-              ListTile(
-                title: Text(
-                  track.name,
-                  style: AppTextStyles.body(context).copyWith(color: Colors.white),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.7,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var track in trackList)
+                  ListTile(
+                    title: Text(
+                      track.name,
+                      style: AppTextStyles.body(context).copyWith(color: Colors.white),
+                    ),
+                    onTap: () {
+                      ref.read(selectedTrackProvider.notifier).state = track.id;
+                      ref.read(taskReviewControllerProvider.notifier).fetchTasksForTrack(track.id);
+                      Navigator.pop(context);
+                    },
+                  ),
+                const Divider(color: Colors.white10),
+                ListTile(
+                  title: Center(
+                    child: Text(
+                      'Cancel',
+                      style: AppTextStyles.body(context).copyWith(color: Colors.redAccent),
+                    ),
+                  ),
+                  onTap: () => Navigator.pop(context),
                 ),
-                onTap: () {
-                  ref.read(selectedTrackProvider.notifier).state = track.id;
-                  ref.read(taskReviewControllerProvider.notifier).fetchTasksForTrack(track.id);
-                  Navigator.pop(context);
-                },
-              ),
-            const Divider(color: Colors.white10),
-            ListTile(
-              title: Center(
-                child: Text(
-                  'Cancel',
-                  style: AppTextStyles.body(context).copyWith(color: Colors.redAccent),
-                ),
-              ),
-              onTap: () => Navigator.pop(context),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -96,90 +104,92 @@ class TaskReviewScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.read(activeTaskFilterProvider.notifier).state = 'handin';
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: activeFilter == 'handin'
-                          ? AppColors.primary.withOpacity(0.12)
-                          : Colors.transparent,
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    ),
-                    child: Text(
-                      'Hand in',
-                      style: AppTextStyles.caption(context).copyWith(
-                        color: activeFilter == 'handin'
-                            ? AppColors.primary
-                            : Colors.white.withOpacity(0.7),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: screenWidth * 0.02),
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.read(activeTaskFilterProvider.notifier).state = 'submissions';
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: activeFilter == 'submissions'
-                          ? AppColors.primary.withOpacity(0.12)
-                          : Colors.transparent,
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    ),
-                    child: Text(
-                      'Submissions',
-                      style: AppTextStyles.caption(context).copyWith(
-                        color: activeFilter == 'submissions'
-                            ? AppColors.primary
-                            : Colors.white.withOpacity(0.7),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: screenWidth * 0.02),
-                  GestureDetector(
-                    onTap: () => _showTrackSelector(context, ref),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.03),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.white.withOpacity(0.06)),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        ref.read(activeTaskFilterProvider.notifier).state = 'handin';
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: activeFilter == 'handin'
+                            ? AppColors.primary.withOpacity(0.12)
+                            : Colors.transparent,
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       ),
                       child: Text(
-                        tracks.when(
-                          data: (list) {
-                            final selected = list.firstWhere(
-                              (t) => t.id == selectedTrackId,
-                              orElse: () => list[0],
-                            );
-                            return selected.name;
-                          },
-                          loading: () => 'Loading...',
-                          error: (_, __) => 'Error',
-                        ),
+                        'Hand in',
                         style: AppTextStyles.caption(context).copyWith(
-                          color: Colors.white.withOpacity(0.9),
+                          color: activeFilter == 'handin'
+                              ? AppColors.primary
+                              : Colors.white.withOpacity(0.7),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(width: screenWidth * 0.02),
+                    ElevatedButton(
+                      onPressed: () {
+                        ref.read(activeTaskFilterProvider.notifier).state = 'submissions';
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: activeFilter == 'submissions'
+                            ? AppColors.primary.withOpacity(0.12)
+                            : Colors.transparent,
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      ),
+                      child: Text(
+                        'Submissions',
+                        style: AppTextStyles.caption(context).copyWith(
+                          color: activeFilter == 'submissions'
+                              ? AppColors.primary
+                              : Colors.white.withOpacity(0.7),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: screenWidth * 0.02),
+                    GestureDetector(
+                      onTap: () => _showTrackSelector(context, ref),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.03),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.white.withOpacity(0.06)),
+                        ),
+                        child: Text(
+                          tracks.when(
+                            data: (list) {
+                              final selected = list.firstWhere(
+                                (t) => t.id == selectedTrackId,
+                                orElse: () => list[0],
+                              );
+                              return selected.name;
+                            },
+                            loading: () => 'Loading...',
+                            error: (_, __) => 'Error',
+                          ),
+                          style: AppTextStyles.caption(context).copyWith(
+                            color: Colors.white.withOpacity(0.9),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
 
