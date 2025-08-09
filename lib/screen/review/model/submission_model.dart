@@ -5,11 +5,11 @@ class Submission {
   final String taskName;
   final String commitHash;
   final String status;
-  final DateTime submittedAt;
+  final DateTime? submittedAt;
   final DateTime? approvedAt;
   final DateTime? startDate;
-  final DateTime? endDate;
-  final String mentorFeedback;
+  final DateTime? endDate; // keep if you plan to add later
+  final String? mentorFeedback;
 
   Submission({
     required this.id,
@@ -22,29 +22,29 @@ class Submission {
     this.approvedAt,
     this.startDate,
     this.endDate,
-    required this.mentorFeedback,
+    this.mentorFeedback,
   });
 
   factory Submission.fromJson(Map<String, dynamic> json) {
+    DateTime? _d(v) {
+      if (v == null) return null;
+      final s = v.toString().trim();
+      if (s.isEmpty) return null;
+      return DateTime.parse(s); // handles 'YYYY-MM-DD'
+    }
+
     return Submission(
-      id: json['id'],
-      taskNo: json['task_no'] ?? 0,
-      taskId: json['task_id'],
-      taskName: json['task_name'] ?? '',
-      commitHash: json['commit_hash']?.toString() ?? '',
-      status: json['status']?.toString() ?? 'submitted',
-      submittedAt: DateTime.parse(json['submitted_at']),
-      approvedAt:
-          json['approved_at'] != null
-              ? DateTime.parse(json['approved_at'])
-              : null,
-      startDate:
-          json['start_date'] != null
-              ? DateTime.parse(json['start_date'])
-              : null,
-      endDate:
-          json['end_date'] != null ? DateTime.parse(json['end_date']) : null,
-      mentorFeedback: json['mentor_feedback']?.toString() ?? '',
+      id: (json['id'] as num).toInt(),
+      taskId: (json['task_id'] as num).toInt(),
+      taskNo: (json['task_no'] as num?)?.toInt() ?? 0,
+      taskName: (json['task_name'] ?? '').toString(),
+      commitHash: (json['commit_hash'] ?? '').toString(),
+      status: (json['status'] ?? 'submitted').toString(),
+      submittedAt: _d(json['submitted_at']),
+      approvedAt: _d(json['approved_at']),
+      startDate: _d(json['start_date']),
+      endDate: _d(json['end_date']), // backend may not send; stays null
+      mentorFeedback: json['mentor_feedback']?.toString(),
     );
   }
 }

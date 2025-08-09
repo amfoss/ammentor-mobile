@@ -132,18 +132,21 @@ class SubmissionDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             buildInfoCard(context, 'Task Name', submission.taskName, Icons.task),
-            buildInfoCard(context, 'Task No', submission.taskId.toString(), Icons.tag),
+            buildInfoCard(context, 'Task No', submission.taskNo.toString(), Icons.tag),
             buildInfoCard(context, 'Commit hash', submission.commitHash, Icons.code),
             buildInfoCard(context, 'Status', submission.status, Icons.info, isStatus: true),
             buildInfoCard(context, 'Start Date', formatDate(submission.startDate), Icons.event),
             buildInfoCard(context, 'Submitted At', formatDate(submission.submittedAt), Icons.upload),
             buildInfoCard(context, 'Approved At', formatDate(submission.approvedAt), Icons.verified),
+
             buildInfoCard(
               context,
               'Mentor Feedback',
-              submission.mentorFeedback.isEmpty ? 'No feedback given' : submission.mentorFeedback,
+              (submission.mentorFeedback == null || submission.mentorFeedback!.trim().isEmpty)
+                  ? 'No feedback given'
+                  : submission.mentorFeedback!,
               Icons.feedback,
-            ),
+            )
           ],
         ),
       ),

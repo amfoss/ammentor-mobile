@@ -29,58 +29,54 @@ class TaskSubmissionState {
 
 class TaskSubmissionController extends StateNotifier<TaskSubmissionState> {
   final Ref ref;
-
-  TaskSubmissionController(this.ref)
-      : super(TaskSubmissionState.initial());
+  TaskSubmissionController(this.ref) : super(TaskSubmissionState.initial());
 
   Future<void> submitTask(
     int taskNo,
     int trackId,
     DateTime startDate, {
-    String? commitHash,
+    required String commitHash, // <-- make required
   }) async {
     try {
       state = state.copyWith(isSubmitting: true, isSubmissionSuccessful: false);
 
-    final prefs = await SharedPreferences.getInstance();
-    final email = prefs.getString('user_email');
-    if (email == null) throw Exception('Email not found.');
+      final prefs = await SharedPreferences.getInstance();
+      final email = prefs.getString('user_email');
+      if (email == null) throw Exception('Email not found.');
 
       final body = jsonEncode({
         "track_id": trackId,
         "task_no": taskNo,
         "start_date": _convertDate(startDate),
         "mentee_email": email,
-        if (commitHash != null && commitHash.isNotEmpty) "commit_hash": commitHash,
+        "commit_hash": commitHash.trim(), // <-- always send
       });
 
-    final response = await http.post(
-      Uri.parse('${dotenv.env['BACKEND_URL']}/progress/submit-task'),
-      headers: {'Content-Type': 'application/json'},
-      body: body,
-    );
+      final url = '${dotenv.env['BACKEND_URL']}/progress/submit-task';
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      state = state.copyWith(isSubmitting: false, isSubmissionSuccessful: true);
-    } else if (response.statusCode == 409) {
-      // 🔁 Duplicate submission
-      throw Exception('You have already submitted this task.');
-    } else {
-      throw Exception('Submission failed with status ${response.statusCode}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        state = state.copyWith(isSubmitting: false, isSubmissionSuccessful: true);
+      } else if (response.statusCode == 409) {
+        throw Exception('You have already submitted this task.');
+      } else {
+        // Log server error body to see the exact reason
+        throw Exception('Submission failed ${response.statusCode}: ${response.body}');
+      }
+    } catch (e) {
+      print("Submission error: $e");
+      state = state.copyWith(isSubmitting: false, isSubmissionSuccessful: false);
+      rethrow;
     }
-  } catch (e) {
-    print("Submission error: $e");
-    state = state.copyWith(isSubmitting: false, isSubmissionSuccessful: false);
-    rethrow; // So UI can catch and show proper message
   }
 }
 
-String _convertDate(DateTime date) {
-  return "${date.year.toString().padLeft(4, '0')}-"
-         "${date.month.toString().padLeft(2, '0')}-"
-         "${date.day.toString().padLeft(2, '0')}";
-}
-}
+String _convertDate(DateTime d) =>
+    "${d.year.toString().padLeft(4,'0')}-${d.month.toString().padLeft(2,'0')}-${d.day.toString().padLeft(2,'0')}";
 
 final taskSubmissionControllerProvider =
     StateNotifierProvider.family<TaskSubmissionController, TaskSubmissionState, int>(
