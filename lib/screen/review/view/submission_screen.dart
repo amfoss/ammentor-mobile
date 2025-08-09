@@ -20,7 +20,6 @@ class TaskSubmissionScreen extends ConsumerStatefulWidget {
 
 class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
   final TextEditingController _startDateController = TextEditingController();
-  final TextEditingController _submissionLinkController = TextEditingController();
   final TextEditingController _commitHashController = TextEditingController();
 
   @override
@@ -78,12 +77,6 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
             ),
             SizedBox(height: screenHeight * 0.012),
             SubmissionInputRow(
-              icon: HugeIcons.strokeRoundedLink01,
-              text: 'Submission link',
-              controller: _submissionLinkController,
-            ),
-            SizedBox(height: screenHeight * 0.012),
-            SubmissionInputRow(
               icon: HugeIcons.strokeRoundedSourceCode,
               text: 'Commit hash',
               controller: _commitHashController,
@@ -103,7 +96,6 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
                             await controller.submitTask(
                               widget.task.taskNumber,
                               trackId,
-                              _submissionLinkController.text,
                               parsedStartDate,
                               commitHash: _commitHashController.text,
                             );

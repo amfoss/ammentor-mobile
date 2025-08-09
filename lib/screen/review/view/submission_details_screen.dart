@@ -133,7 +133,7 @@ class SubmissionDetailsScreen extends StatelessWidget {
           children: [
             buildInfoCard(context, 'Task Name', submission.taskName, Icons.task),
             buildInfoCard(context, 'Task No', submission.taskId.toString(), Icons.tag),
-            buildInfoCard(context, 'Submission Link', submission.referenceLink, Icons.link, isLink: true),
+            buildInfoCard(context, 'Commit hash', submission.commitHash, Icons.code),
             buildInfoCard(context, 'Status', submission.status, Icons.info, isStatus: true),
             buildInfoCard(context, 'Start Date', formatDate(submission.startDate), Icons.event),
             buildInfoCard(context, 'Submitted At', formatDate(submission.submittedAt), Icons.upload),
