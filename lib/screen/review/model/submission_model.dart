@@ -3,7 +3,6 @@ class Submission {
   final int taskId;
   final int taskNo;
   final String taskName;
-  final String referenceLink;
   final String commitHash;
   final String status;
   final DateTime submittedAt;
@@ -17,7 +16,6 @@ class Submission {
     required this.taskId,
     required this.taskNo,
     required this.taskName,
-    required this.referenceLink,
     required this.commitHash,
     required this.status,
     required this.submittedAt,
@@ -33,7 +31,6 @@ class Submission {
       taskNo: json['task_no'] ?? 0,
       taskId: json['task_id'],
       taskName: json['task_name'] ?? '',
-      referenceLink: json['reference_link']?.toString() ?? '',
       commitHash: json['commit_hash']?.toString() ?? '',
       status: json['status']?.toString() ?? 'submitted',
       submittedAt: DateTime.parse(json['submitted_at']),

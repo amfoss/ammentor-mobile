@@ -49,7 +49,6 @@ class TaskSubmissionController extends StateNotifier<TaskSubmissionState> {
       final body = jsonEncode({
         "track_id": trackId,
         "task_no": taskNo,
-        "reference_link": "string",
         "start_date": _convertDate(startDate),
         "mentee_email": email,
         if (commitHash != null && commitHash.isNotEmpty) "commit_hash": commitHash,

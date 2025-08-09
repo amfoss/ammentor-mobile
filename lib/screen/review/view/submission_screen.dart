@@ -81,12 +81,6 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
               text: 'Commit hash',
               controller: _commitHashController,
             ),
-            SizedBox(height: screenHeight * 0.012),
-            SubmissionInputRow(
-              icon: HugeIcons.strokeRoundedSourceCode,
-              text: 'Commit hash',
-              controller: _commitHashController,
-            ),
             const Spacer(),
             Padding(
               padding: EdgeInsets.symmetric(vertical: screenHeight * 0.024),
