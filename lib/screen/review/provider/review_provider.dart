@@ -24,7 +24,9 @@ class ApiService {
   }
 
   Future<List<ReviewTask>> fetchTasksForTrack(String trackId) async {
-    final response = await http.get(Uri.parse('$_baseUrl/tracks/$trackId/tasks'));
+    final response = await http.get(
+      Uri.parse('$_baseUrl/tracks/$trackId/tasks'),
+    );
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
       return jsonResponse.map((task) => ReviewTask.fromJson(task)).toList();
@@ -33,29 +35,29 @@ class ApiService {
     }
   }
 
-Future<List<Submission>> fetchUserSubmissions({
-  required String email,
-  required String trackId,
-}) async {
-  final uri = Uri.https(
-    _baseUrl.replaceFirst('https://', ''),
-    '/submissions/',
-    {'email': email, 'track_id': trackId},
-  );
+  Future<List<Submission>> fetchUserSubmissions({
+    required String email,
+    required String trackId,
+  }) async {
+    final uri = Uri.https(
+      _baseUrl.replaceFirst('https://', ''),
+      '/submissions/',
+      {'email': email, 'track_id': trackId},
+    );
 
-  debugPrint('Encoded URL: $uri');
+    debugPrint('Encoded URL: $uri');
 
-  final response = await http.get(uri);
+    final response = await http.get(uri);
 
-  if (response.statusCode == 200) {
-    List jsonResponse = json.decode(response.body);
-    return jsonResponse.map((task) => Submission.fromJson(task)).toList();
-  } else {
-    debugPrint('Status Code: ${response.statusCode}');
-    debugPrint('Response Body: ${response.body}');
-    throw Exception('Failed to fetch submissions');
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((task) => Submission.fromJson(task)).toList();
+    } else {
+      debugPrint('Status Code: ${response.statusCode}');
+      debugPrint('Response Body: ${response.body}');
+      throw Exception('Failed to fetch submissions');
+    }
   }
-}
 }
 
 /// -- PROVIDERS -- ///
@@ -66,7 +68,13 @@ final tracksProvider = FutureProvider<List<Track>>((ref) async {
   return api.fetchTracks();
 });
 
-final selectedTrackProvider = StateProvider<String?>((ref) => '1'); // Default: Vidyaratna
+final selectedTrackProvider = StateProvider<String?>((ref) {
+  final tracksAsync = ref.watch(tracksProvider);
+  return tracksAsync.maybeWhen(
+    data: (tracks) => tracks.isNotEmpty ? tracks.first.id.toString() : null,
+    orElse: () => null,
+  );
+});
 
 final emailProvider = FutureProvider<String>((ref) async {
   final prefs = await SharedPreferences.getInstance();
@@ -75,7 +83,7 @@ final emailProvider = FutureProvider<String>((ref) async {
   return email;
 });
 
-final activeTaskFilterProvider = StateProvider<String>((ref) => 'handin'); // or 'submissions'
+final activeTaskFilterProvider = StateProvider<String>((ref) => 'handin');
 
 /// -- TASK CONTROLLER: dynamic type allows both ReviewTask and Submission -- ///
 class TaskReviewController extends StateNotifier<List<dynamic>> {
@@ -118,7 +126,10 @@ class TaskReviewController extends StateNotifier<List<dynamic>> {
       if (email == null) {
         throw Exception('Email not found in local storage.');
       }
-      final submissions = await api.fetchUserSubmissions(email: email, trackId: trackId);
+      final submissions = await api.fetchUserSubmissions(
+        email: email,
+        trackId: trackId,
+      );
       state = submissions;
     } catch (e) {
       debugPrint('Error fetching submissions: $e');
@@ -129,11 +140,14 @@ class TaskReviewController extends StateNotifier<List<dynamic>> {
 
 final taskReviewControllerProvider =
     StateNotifierProvider<TaskReviewController, List<dynamic>>(
-  (ref) => TaskReviewController(ref),
-);
+      (ref) => TaskReviewController(ref),
+    );
 
 /// Optional: if you ever want just submissions directly
-final submissionsProvider = FutureProvider.family<List<Submission>, String>((ref, trackId) async {
+final submissionsProvider = FutureProvider.family<List<Submission>, String>((
+  ref,
+  trackId,
+) async {
   final api = ref.read(apiServiceProvider);
   final email = await ref.watch(emailProvider.future);
   return api.fetchUserSubmissions(email: email, trackId: trackId);
