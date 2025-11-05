@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/components/theme.dart';
-import 'package:ammentor/screen/evaluation/model/evaluation_model.dart';
-import 'package:ammentor/screen/evaluation/model/mentee_tasks_model.dart';
-import 'package:ammentor/screen/evaluation/provider/evaluation_provider.dart';
+import 'package:ammentor/screen/mentor-evaluation/model/evaluation_model.dart';
+import 'package:ammentor/screen/mentor-evaluation/model/mentee_tasks_model.dart';
+import 'package:ammentor/screen/mentor-evaluation/provider/evaluation_provider.dart';
 
 class TaskEvaluationScreen extends ConsumerStatefulWidget {
   final Task task;

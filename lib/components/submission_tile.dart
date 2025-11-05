@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/theme.dart';
-import 'package:ammentor/screen/review/model/submission_model.dart';
-import 'package:ammentor/screen/review/view/submission_details_screen.dart';
+import 'package:ammentor/screen/mentee-submissions/model/submission_model.dart';
+import 'package:ammentor/screen/mentee-submissions/view/submission_details_screen.dart';
 
 class SubmissionTile extends StatelessWidget {
   final Submission submission;

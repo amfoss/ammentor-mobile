@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ammentor/screen/evaluation/model/mentee_list_model.dart';
+import 'package:ammentor/screen/mentor-evaluation/model/mentee_list_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';

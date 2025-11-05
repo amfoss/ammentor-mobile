@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/components/mentee_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ammentor/screen/evaluation/view/mentee_tasks_screen.dart';
-import 'package:ammentor/screen/evaluation/provider/mentee_list_provider.dart';
+import 'package:ammentor/screen/mentor-evaluation/view/mentee_tasks_screen.dart';
+import 'package:ammentor/screen/mentor-evaluation/provider/mentee_list_provider.dart';
 
 class MenteeListScreen extends ConsumerStatefulWidget {
   const MenteeListScreen({super.key});

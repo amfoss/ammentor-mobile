@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/theme.dart';
-import 'package:ammentor/screen/evaluation/model/mentee_list_model.dart';
+import 'package:ammentor/screen/mentor-evaluation/model/mentee_list_model.dart';
 
 class MenteeTile extends StatelessWidget {
   final int number;

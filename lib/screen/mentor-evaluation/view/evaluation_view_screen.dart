@@ -6,16 +6,21 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ammentor/screen/evaluation/model/mentee_tasks_model.dart';
-import 'package:ammentor/screen/evaluation/provider/evaluation_provider.dart';
+import 'package:ammentor/screen/mentor-evaluation/model/mentee_tasks_model.dart';
+import 'package:ammentor/screen/mentor-evaluation/provider/evaluation_provider.dart';
 
 /// Updated to accept trackId dynamically
-final submissionProvider = FutureProvider.family<Map<String, dynamic>?, (String, int, int)>((ref, params) async {
+final submissionProvider = FutureProvider.family<
+  Map<String, dynamic>?,
+  (String, int, int)
+>((ref, params) async {
   final menteeEmail = params.$1;
   final submissionId = params.$2;
   final trackId = params.$3;
 
-  final url = Uri.parse('${dotenv.env['BACKEND_URL']}/submissions/?email=$menteeEmail&track_id=$trackId');
+  final url = Uri.parse(
+    '${dotenv.env['BACKEND_URL']}/submissions/?email=$menteeEmail&track_id=$trackId',
+  );
   final response = await http.get(url);
 
   if (response.statusCode == 200) {
@@ -32,26 +37,34 @@ final submissionProvider = FutureProvider.family<Map<String, dynamic>?, (String,
 class TaskEvaluationViewScreen extends ConsumerStatefulWidget {
   final Task task;
   final String menteeEmail;
+  final int trackId;
   final VoidCallback? onTaskEvaluated;
 
   const TaskEvaluationViewScreen({
     super.key,
     required this.task,
     required this.menteeEmail,
+    required this.trackId,
     this.onTaskEvaluated,
   });
 
   @override
-  ConsumerState<TaskEvaluationViewScreen> createState() => _TaskEvaluationViewScreenState();
+  ConsumerState<TaskEvaluationViewScreen> createState() =>
+      _TaskEvaluationViewScreenState();
 }
 
-class _TaskEvaluationViewScreenState extends ConsumerState<TaskEvaluationViewScreen> {
-  final int defaultTrackId = 1;
-
+class _TaskEvaluationViewScreenState
+    extends ConsumerState<TaskEvaluationViewScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    ref.invalidate(submissionProvider((widget.menteeEmail, widget.task.submissionId, defaultTrackId)));
+    ref.invalidate(
+      submissionProvider((
+        widget.menteeEmail,
+        widget.task.submissionId,
+        widget.trackId,
+      )),
+    );
   }
 
   @override
@@ -59,15 +72,18 @@ class _TaskEvaluationViewScreenState extends ConsumerState<TaskEvaluationViewScr
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final submissionAsync = ref.watch(submissionProvider((widget.menteeEmail, widget.task.submissionId, defaultTrackId)));
+    final submissionAsync = ref.watch(
+      submissionProvider((
+        widget.menteeEmail,
+        widget.task.submissionId,
+        widget.trackId,
+      )),
+    );
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(
-          'Task Details',
-          style: TextStyle(color: AppColors.white),
-        ),
+        title: Text('Task Details', style: TextStyle(color: AppColors.white)),
         backgroundColor: AppColors.background,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.white),
@@ -79,13 +95,25 @@ class _TaskEvaluationViewScreenState extends ConsumerState<TaskEvaluationViewScr
       ),
       body: submissionAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => const Center(child: Text('Failed to load submission', style: TextStyle(color: Colors.white))),
+        error:
+            (err, _) => const Center(
+              child: Text(
+                'Failed to load submission',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
         data: (submissionData) {
           if (submissionData == null) {
-            return const Center(child: Text('Submission not found', style: TextStyle(color: Colors.white)));
+            return const Center(
+              child: Text(
+                'Submission not found',
+                style: TextStyle(color: Colors.white),
+              ),
+            );
           }
 
-          final statusRaw = (submissionData['status'] ?? '').toString().toLowerCase();
+          final statusRaw =
+              (submissionData['status'] ?? '').toString().toLowerCase();
           final mentorFeedback = submissionData['mentor_feedback'] ?? '';
           final startDate = submissionData['start_date'];
           final submittedAt = submissionData['submitted_at'];
@@ -122,29 +150,56 @@ class _TaskEvaluationViewScreenState extends ConsumerState<TaskEvaluationViewScr
                 ),
                 SizedBox(
                   height: screenHeight * 0.03,
-                  child: Divider(
-                    color: AppColors.grey,
-                    thickness: 1.0,
-                  ),
+                  child: Divider(color: AppColors.grey, thickness: 1.0),
                 ),
                 Text(
                   'Submission:',
-                  style: AppTextStyles.label(context).copyWith(color: AppColors.white70),
+                  style: AppTextStyles.label(
+                    context,
+                  ).copyWith(color: AppColors.white70),
                 ),
                 SizedBox(height: screenHeight * 0.01),
-                _buildSubmissionDetail(HugeIcons.strokeRoundedSunrise, startDate ?? "No start date", context),
-                _buildSubmissionDetail(HugeIcons.strokeRoundedSunset, submittedAt ?? "No submission date", context),
-                _buildSubmissionDetail(HugeIcons.strokeRoundedLink01, referenceLink ?? "No link", context),
-                _buildSubmissionDetail(HugeIcons.strokeRoundedCheckmarkBadge02, "Status: $statusText", context),
-                if (mentorFeedback != null && mentorFeedback.toString().isNotEmpty && mentorFeedback.toString() != "null")
-                  _buildSubmissionDetail(HugeIcons.strokeRoundedComment01, "Mentor Remark: $mentorFeedback", context),
+                _buildSubmissionDetail(
+                  HugeIcons.strokeRoundedSunrise,
+                  startDate ?? "No start date",
+                  context,
+                ),
+                _buildSubmissionDetail(
+                  HugeIcons.strokeRoundedSunset,
+                  submittedAt ?? "No submission date",
+                  context,
+                ),
+                _buildSubmissionDetail(
+                  HugeIcons.strokeRoundedLink01,
+                  referenceLink ?? "No link",
+                  context,
+                ),
+                _buildSubmissionDetail(
+                  HugeIcons.strokeRoundedCheckmarkBadge02,
+                  "Status: $statusText",
+                  context,
+                ),
+                if (mentorFeedback != null &&
+                    mentorFeedback.toString().isNotEmpty &&
+                    mentorFeedback.toString() != "null")
+                  _buildSubmissionDetail(
+                    HugeIcons.strokeRoundedComment01,
+                    "Mentor Remark: $mentorFeedback",
+                    context,
+                  ),
                 SizedBox(height: screenHeight * 0.03),
                 if (statusRaw == "paused")
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {
-                        final evaluationController = ref.read(taskEvaluationControllerProvider(widget.task).notifier);
-                        await evaluationController.submitEvaluation(status: "approved");
+                        final evaluationController = ref.read(
+                          taskEvaluationControllerProvider(
+                            widget.task,
+                          ).notifier,
+                        );
+                        await evaluationController.submitEvaluation(
+                          status: "approved",
+                        );
 
                         int popCount = 0;
                         Navigator.of(context).popUntil((route) {
@@ -169,7 +224,9 @@ class _TaskEvaluationViewScreenState extends ConsumerState<TaskEvaluationViewScr
                       ),
                       child: Text(
                         'Evaluate and return',
-                        style: AppTextStyles.button(context).copyWith(fontSize: screenWidth * 0.04),
+                        style: AppTextStyles.button(
+                          context,
+                        ).copyWith(fontSize: screenWidth * 0.04),
                       ),
                     ),
                   ),
@@ -181,7 +238,11 @@ class _TaskEvaluationViewScreenState extends ConsumerState<TaskEvaluationViewScr
     );
   }
 
-  Widget _buildSubmissionDetail(IconData icon, String text, BuildContext context) {
+  Widget _buildSubmissionDetail(
+    IconData icon,
+    String text,
+    BuildContext context,
+  ) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Padding(

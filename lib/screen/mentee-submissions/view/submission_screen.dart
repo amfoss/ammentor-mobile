@@ -5,8 +5,8 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/components/submission_input_row.dart';
-import 'package:ammentor/screen/review/model/review_model.dart';
-import 'package:ammentor/screen/review/provider/submission_controller.dart';
+import 'package:ammentor/screen/mentee-submissions/model/review_model.dart';
+import 'package:ammentor/screen/mentee-submissions/provider/submission_controller.dart';
 
 
 class TaskSubmissionScreen extends ConsumerStatefulWidget {
