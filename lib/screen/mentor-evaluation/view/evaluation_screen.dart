@@ -62,7 +62,7 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text('Evaluation', style: AppTextStyles.subheading(context).copyWith(color: Colors.white)),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: w * 0.05, vertical: h * 0.02),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +116,7 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
               ),
             ),
 
-            const Spacer(),
+            SizedBox(height: h * 0.03),
 
             Row(
               children: [
@@ -153,6 +153,7 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                 ),
               ],
             ),
+            SizedBox(height: h * 0.02),
           ],
         ),
       ),
