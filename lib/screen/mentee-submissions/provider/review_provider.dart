@@ -6,8 +6,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:ammentor/screen/track/model/track_model.dart';
-import 'package:ammentor/screen/review/model/review_model.dart';
-import 'package:ammentor/screen/review/model/submission_model.dart';
+import 'package:ammentor/screen/mentee-submissions/model/review_model.dart';
+import 'package:ammentor/screen/mentee-submissions/model/submission_model.dart';
 
 /// -- API SERVICE -- ///
 class ApiService {

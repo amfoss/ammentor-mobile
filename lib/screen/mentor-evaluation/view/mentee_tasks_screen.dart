@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/components/mentee_task_tile.dart';
-import 'package:ammentor/screen/evaluation/model/mentee_list_model.dart';
-import 'package:ammentor/screen/evaluation/provider/mentee_tasks_provider.dart';
+import 'package:ammentor/screen/mentor-evaluation/model/mentee_list_model.dart';
+import 'package:ammentor/screen/mentor-evaluation/provider/mentee_tasks_provider.dart';
 import 'package:ammentor/screen/track/provider/track_provider.dart';
 import 'package:ammentor/screen/track/model/track_model.dart';
 
@@ -134,7 +134,8 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
                       return TaskTile(
                         task: task,
                         onTaskEvaluated: _refreshTasks,
-                        menteeEmail: widget.mentee.id,
+                        menteeEmail: widget.mentee.id, trackId: int.parse(selectedTrack!.id),
+                        
                       );
                     },
                   );

@@ -2,7 +2,7 @@ import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/screen/leaderboard/view/leaderboard_screen.dart';
 import 'package:ammentor/screen/profile/view/profile_screen.dart';
 import 'package:ammentor/screen/track/view/track_screen.dart';
-import 'package:ammentor/screen/evaluation/view/mentee_list_screen.dart';
+import 'package:ammentor/screen/mentor-evaluation/view/mentee_list_screen.dart';
 import 'package:flutter/material.dart';
 class MentorHomePage extends StatefulWidget {
   const MentorHomePage({super.key});

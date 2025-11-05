@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/components/theme.dart';
-import 'package:ammentor/screen/evaluation/view/evaluation_screen.dart';
-import 'package:ammentor/screen/evaluation/view/evaluation_view_screen.dart';
-import 'package:ammentor/screen/evaluation/model/mentee_tasks_model.dart';
+import 'package:ammentor/screen/mentor-evaluation/view/evaluation_screen.dart';
+import 'package:ammentor/screen/mentor-evaluation/view/evaluation_view_screen.dart';
+import 'package:ammentor/screen/mentor-evaluation/model/mentee_tasks_model.dart';
 
 class TaskTile extends ConsumerWidget {
   final Task task;
   final VoidCallback? onTaskEvaluated;
   final String? menteeEmail;
+  final int trackId;
 
   const TaskTile({
     super.key,
     required this.task,
     this.onTaskEvaluated,
     this.menteeEmail,
+    required this.trackId,
   });
 
   @override
@@ -30,16 +32,19 @@ class TaskTile extends ConsumerWidget {
         onTap: () async {
           final result = await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => task.status == TaskStatus.returned
-                  ? TaskEvaluationViewScreen(
-                      task: task,
-                      menteeEmail: menteeEmail ?? "",
-                      onTaskEvaluated: onTaskEvaluated,
-                    )
-                  : TaskEvaluationScreen(
-                      task: task,
-                      onEvaluated: onTaskEvaluated,
-                    ),
+              builder:
+                  (context) =>
+                      task.status == TaskStatus.returned
+                          ? TaskEvaluationViewScreen(
+                            task: task,
+                            menteeEmail: menteeEmail ?? "",
+                            onTaskEvaluated: onTaskEvaluated,
+                            trackId: trackId,
+                          )
+                          : TaskEvaluationScreen(
+                            task: task,
+                            onEvaluated: onTaskEvaluated,
+                          ),
             ),
           );
           if (result == true && onTaskEvaluated != null) {
@@ -47,7 +52,10 @@ class TaskTile extends ConsumerWidget {
           }
         },
         child: Ink(
-          padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.018),
+          padding: EdgeInsets.symmetric(
+            horizontal: w * 0.04,
+            vertical: h * 0.018,
+          ),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.025),
             borderRadius: BorderRadius.circular(18),

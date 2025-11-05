@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ammentor/components/theme.dart';
-import 'package:ammentor/screen/review/model/submission_model.dart';
+import 'package:ammentor/screen/mentee-submissions/model/submission_model.dart';
 
 class SubmissionDetailsScreen extends StatelessWidget {
   final Submission submission;

@@ -1,10 +1,10 @@
 import 'package:ammentor/components/submission_tile.dart';
-import 'package:ammentor/screen/review/model/review_model.dart';
-import 'package:ammentor/screen/review/model/submission_model.dart';
+import 'package:ammentor/screen/mentee-submissions/model/review_model.dart';
+import 'package:ammentor/screen/mentee-submissions/model/submission_model.dart';
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/components/review_task_tile.dart';
-import 'package:ammentor/screen/review/provider/review_provider.dart';
+import 'package:ammentor/screen/mentee-submissions/provider/review_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TaskReviewScreen extends ConsumerWidget {
