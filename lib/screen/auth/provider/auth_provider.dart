@@ -9,16 +9,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 final userEmailProvider = StateProvider<String?>((ref) => null);
 final storage = FlutterSecureStorage();
 
-
 Future<void> initializeUserEmail(WidgetRef ref) async {
   final prefs = await SharedPreferences.getInstance();
   final email = prefs.getString('user_email');
   ref.read(userEmailProvider.notifier).state = email;
 }
-class AuthController {
 
+class AuthController {
   Future<OtpResponse> sendOtp(String email) async {
-        final url = Uri.parse('${dotenv.env['BACKEND_URL']}/auth/send-otp/$email');
+    final url = Uri.parse('${dotenv.env['BACKEND_URL']}/auth/send-otp/$email');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -36,17 +35,31 @@ class AuthController {
     );
     try {
       final response = await http.get(url);
-      if (response.statusCode == 200) {
-        await storage.write(key: 'isLoggedIn', value: 'true');
-        await storage.write(key: 'userEmail', value: email);
-         await storage.write(key: 'userRole', value: role.name);
-        return OtpResponse(message: "OTP verified", success: true);
+      if (response.statusCode != 200) {
+        final body = jsonDecode(response.body);
+
+        return OtpResponse(
+          message: body['detail'] ?? "Invalid OTP",
+          success: false,
+        );
       }
       final body = jsonDecode(response.body);
-      return OtpResponse(message: body['detail'] ?? "Invalid OTP", success: false);
+      final backendRole = body['role'];
+      if (backendRole == null) {
+        return OtpResponse(message: "User not found", success: false);
+      }
+      if (backendRole != role.name) {
+        return OtpResponse(
+          message: "User mail and role mismatch",
+          success: false,
+        );
+      }
+      await storage.write(key: 'isLoggedIn', value: 'true');
+      await storage.write(key: 'userEmail', value: email);
+      await storage.write(key: 'userRole', value: role.name);
+      return OtpResponse(message: "OTP verified", success: true);
     } catch (_) {
       return OtpResponse(message: "Error verifying OTP", success: false);
     }
   }
-  
 }
