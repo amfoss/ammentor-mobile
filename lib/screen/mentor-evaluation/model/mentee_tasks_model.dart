@@ -1,6 +1,7 @@
 enum TaskStatus { pending, returned }
 
 class Task {
+  final int taskId;
   final int submissionId;
   final int taskNumber;
   final String taskName;
@@ -14,6 +15,7 @@ class Task {
   Task({
     required this.submissionId,
     required this.taskNumber,
+    required this.taskId,
     required this.taskName,
     required this.status,
     this.referenceLink,
@@ -26,9 +28,13 @@ class Task {
   factory Task.fromSubmission(Submission submission, String taskName) {
     return Task(
       submissionId: submission.id,
-      taskNumber: submission.taskId,
+      taskNumber: submission.taskNo,
       taskName: taskName,
-      status: submission.status == 'submitted' ? TaskStatus.pending : TaskStatus.returned,
+      taskId: submission.taskNo,
+      status:
+          submission.status == 'submitted'
+              ? TaskStatus.pending
+              : TaskStatus.returned,
       referenceLink: submission.referenceLink,
       startDate: submission.startDate,
       submittedAt: submission.submittedAt,
@@ -41,6 +47,7 @@ class Task {
 class Submission {
   final int id;
   final int menteeId;
+  final int taskNo;
   final int taskId;
   final String referenceLink;
   final String status;
@@ -48,30 +55,34 @@ class Submission {
   final String? approvedAt;
   final String? mentorFeedback;
   final String? startDate;
-
+  final String? taskName;
   Submission({
     required this.id,
-    required this.menteeId,
     required this.taskId,
+    required this.menteeId,
+    required this.taskNo,
     required this.referenceLink,
     required this.status,
     this.submittedAt,
     this.approvedAt,
     this.mentorFeedback,
     this.startDate,
+    this.taskName
   });
 
   factory Submission.fromJson(Map<String, dynamic> json) {
     return Submission(
       id: json['id'],
       menteeId: json['mentee_id'],
-      taskId: json['task_id'],
+      taskNo: json['task_no'],
       referenceLink: json['reference_link'],
       status: json['status'],
       submittedAt: json['submitted_at'],
       approvedAt: json['approved_at'],
       mentorFeedback: json['mentor_feedback'],
       startDate: json['start_date'],
+      taskId: json['task_id'],
+      taskName: json['task_name'],
     );
   }
 }

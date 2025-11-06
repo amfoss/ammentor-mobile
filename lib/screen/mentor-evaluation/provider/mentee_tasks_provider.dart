@@ -31,12 +31,12 @@ Future<List<Task>> fetchMenteeTasks(
 
   final Map<int, Submission> latestSubmissions = {};
   for (final sub in submissions) {
-    final existing = latestSubmissions[sub.taskId];
+    final existing = latestSubmissions[sub.taskNo];
     if (existing == null ||
         (sub.submittedAt != null &&
             (existing.submittedAt == null ||
              DateTime.tryParse(sub.submittedAt!)?.isAfter(DateTime.tryParse(existing.submittedAt ?? '') ?? DateTime(1970)) == true))) {
-      latestSubmissions[sub.taskId] = sub;
+      latestSubmissions[sub.taskNo] = sub;
     }
   }
 
@@ -49,12 +49,12 @@ Future<List<Task>> fetchMenteeTasks(
 
   return filtered.map((s) {
     final trackTask = trackTasks.firstWhere(
-      (t) => t.id == s.taskId,
+      (t) => t.id == s.taskNo,
       orElse: () => TrackTask(
-        id: s.taskId,
+        id: s.taskNo,
         trackId: trackId,
         taskNo: -1,
-        title: 'Task ${s.taskId}',
+        title: '${s.taskName}',
         description: '',
         points: 0,
         deadline: null,
