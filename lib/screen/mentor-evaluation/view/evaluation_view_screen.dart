@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/screen/mentor-evaluation/model/mentee_tasks_model.dart';
 import 'package:ammentor/screen/mentor-evaluation/provider/evaluation_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Updated to accept trackId dynamically
 final submissionProvider = FutureProvider.family<
@@ -245,21 +246,51 @@ class _TaskEvaluationViewScreenState
   ) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
+    final isLink = text.isNotEmpty &&
+        text.toLowerCase() != "no link" &&
+        (text.startsWith("http") || text.startsWith("www") || text.contains("."));
+
+    Future<void> _openLink(String url) async {
+      String normalized = url.trim();
+
+      if (!normalized.startsWith('http://') &&
+          !normalized.startsWith('https://')) {
+        normalized = 'https://$normalized';
+      }
+
+      final uri = Uri.tryParse(normalized);
+
+      if (uri != null && await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Invalid or unreachable link")),
+        );
+      }
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-      child: Row(
-        children: [
-          Icon(icon, color: AppColors.grey),
-          SizedBox(width: screenWidth * 0.02),
-          Flexible(
-            child: Text(
-              text,
-              style: AppTextStyles.caption(context),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
+      child: InkWell(
+        onTap: isLink ? () => _openLink(text) : null,
+        child: Row(
+          children: [
+            Icon(icon, color: AppColors.grey),
+            SizedBox(width: screenWidth * 0.02),
+            Flexible(
+              child: Text(
+                text,
+                style: AppTextStyles.caption(context).copyWith(
+                  color: isLink ? Colors.blue : Colors.white,
+                  decoration: isLink ? TextDecoration.underline : null,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
