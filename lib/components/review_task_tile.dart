@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/screen/mentee-submissions/model/review_model.dart';
-import 'package:ammentor/screen/mentee-submissions/view/submission_screen.dart';
+import 'package:ammentor/screen/mentee-submissions/view/hand_in_task_details_screen.dart';
 
 class ReviewTaskTile extends ConsumerWidget {
   final ReviewTask task;

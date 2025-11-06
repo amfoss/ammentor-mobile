@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/components/theme.dart';
-import 'package:ammentor/screen/mentor-evaluation/view/evaluation_screen.dart';
-import 'package:ammentor/screen/mentor-evaluation/view/evaluation_view_screen.dart';
+import 'package:ammentor/screen/mentor-evaluation/view/evaluation_screen_pending_tasks.dart';
+import 'package:ammentor/screen/mentor-evaluation/view/evaluation_screen_returned_tasks.dart';
 import 'package:ammentor/screen/mentor-evaluation/model/mentee_tasks_model.dart';
 
 class TaskTile extends ConsumerWidget {
