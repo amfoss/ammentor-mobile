@@ -75,24 +75,24 @@ class TrackTile extends StatelessWidget {
                         fontSize: 14,
                       ),
                     ),
-                  if (showProgress) ...[
-                    const SizedBox(height: 8),
-                    LinearProgressIndicator(
-                      value: track.progress / 100,
-                      backgroundColor: Colors.grey[700],
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${track.progress.toInt()}% Complete',
-                      style: TextStyle(
-                        color: AppColors.white.withOpacity(0.7),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
+                  // if (showProgress) ...[
+                  //   const SizedBox(height: 8),
+                  //   LinearProgressIndicator(
+                  //     value: track.progress / 100,
+                  //     backgroundColor: Colors.grey[700],
+                  //     valueColor: const AlwaysStoppedAnimation<Color>(
+                  //       AppColors.primary,
+                  //     ),
+                  //   ),
+                  //   const SizedBox(height: 4),
+                  //   Text(
+                  //     '${track.progress.toInt()}% Complete',
+                  //     style: TextStyle(
+                  //       color: AppColors.white.withOpacity(0.7),
+                  //       fontSize: 12,
+                  //     ),
+                  //   ),
+                  // ],
                 ],
               ),
             ),
