@@ -58,8 +58,10 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   table_calendar: ^3.0.9  
   url_launcher: ^6.3.2
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.4
   flutter_test:
     sdk: flutter
 
@@ -70,14 +72,28 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
 
+# flutter_native_splash:
+#   android: true
+#   ios: true
+#   color: "#000000"
+#   branding: "assets/images/amfoss_bulb_white_logo.png"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  adaptive_icon_background: "#000000"
+  # adaptive_icon_foreground: "assets/images/amfoss_bulb_white_logo.png"
+  min_sdk_android: 21
+  image_path: "assets/images/amfoss_bulb_white_logo.png"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-flutter_icons:
-  image_path: "assets/images/amfoss-bulb-white@3x.png" 
-  android: true
-  ios: true
-  remove_alpha_ios: true
+# flutter_icons:
+#   image_path: "assets/images/amfoss-bulb-white@3x.png" 
+#   android: true
+#   ios: true
+#   remove_alpha_ios: true
 # The following section is specific to Flutter packages.
 flutter:
 
