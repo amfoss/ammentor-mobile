@@ -82,7 +82,7 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   adaptive_icon_background: "#000000"
-  # adaptive_icon_foreground: "assets/images/amfoss_bulb_white_logo.png"
+  adaptive_icon_foreground: "assets/images/amfoss_bulb_white_logo.png"
   min_sdk_android: 21
   image_path: "assets/images/amfoss_bulb_white_logo.png"
 
