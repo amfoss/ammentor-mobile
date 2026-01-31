@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/screen/mentee-submissions/model/submission_model.dart';
+import 'package:ammentor/components/link_text.dart';
 
 class SubmissionDetailsScreen extends StatelessWidget {
   final Submission submission;
@@ -13,6 +14,7 @@ class SubmissionDetailsScreen extends StatelessWidget {
     if (date == null) return 'Pending';
     return DateFormat('dd MMM yyyy').format(date);
   }
+
 
   Widget buildInfoCard(
     BuildContext context,
@@ -84,25 +86,12 @@ class SubmissionDetailsScreen extends StatelessWidget {
                           ),
                         ),
                       )
-                    : isLink
-                        ? GestureDetector(
-                            onTap: () async {
-                              final uri = Uri.parse(value);
-                              if (await canLaunchUrl(uri)) {
-                                await launchUrl(uri, mode: LaunchMode.externalApplication);
-                              }
-                            },
-                            child: Text(
-                              value,
-                              style: AppTextStyles.link(context).copyWith(fontWeight: FontWeight.w500),
-                            ),
-                          )
-                        : Text(
-                            value,
-                            style: AppTextStyles.body(context).copyWith(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                    : LinkText(
+                        text: value,
+                        style: AppTextStyles.body(context).copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
               ],
             ),
           ),

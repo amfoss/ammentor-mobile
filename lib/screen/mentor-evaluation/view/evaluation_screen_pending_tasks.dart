@@ -1,3 +1,4 @@
+import 'package:ammentor/components/link_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,7 +6,6 @@ import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/screen/mentor-evaluation/model/evaluation_model.dart';
 import 'package:ammentor/screen/mentor-evaluation/model/mentee_tasks_model.dart';
 import 'package:ammentor/screen/mentor-evaluation/provider/evaluation_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class TaskEvaluationScreen extends ConsumerStatefulWidget {
   final Task task;
@@ -164,39 +164,23 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
 
-    final isLink = text.startsWith("http");
-
-    Future<void> _openLink(String url) async {
-      final uri = Uri.tryParse(url);
-      if (uri != null && await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Invalid or unreachable link")),
-        );
-      }
-    }
-
     return Padding(
       padding: EdgeInsets.symmetric(vertical: h * 0.01),
-      child: InkWell(
-        onTap: isLink ? () => _openLink(text) : null,
-        child: Row(
+      child: Row(
           children: [
             Icon(icon, size: w * 0.048, color: AppColors.grey),
             SizedBox(width: w * 0.03),
-            Expanded(
-              child: Text(
-                text,
+            Flexible(
+              child: LinkText(
+                text: text,
                 style: AppTextStyles.caption(context).copyWith(
-                  color: isLink ? Colors.blue : Colors.white,
-                  decoration: isLink ? TextDecoration.underline : null,
+                  color: Colors.white,
                 ),
+                maxLines: 3,
               ),
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
