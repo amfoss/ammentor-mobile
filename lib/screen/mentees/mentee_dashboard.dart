@@ -35,68 +35,69 @@ class _MenteeHomePageState extends State<MenteeHomePage> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       body: _pages[_page],
-      bottomNavigationBar: Container(
-        
-        padding: EdgeInsets.symmetric(horizontal: screenWidth*0.01 , vertical: screenHeight*0.03),
-        decoration: BoxDecoration(
-          color: AppColors.background,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(0),
-            topRight: Radius.circular(0),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 6,
-              offset: const Offset(0, -2),
+      bottomNavigationBar: SafeArea( 
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth*0.01 , vertical: screenHeight*0.03),
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(0),
+              topRight: Radius.circular(0),
             ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: List.generate(_navItems.length, (index) {
-            final item = _navItems[index];
-            final isSelected = _page == index;
-
-            return GestureDetector(
-              onTap: () => setState(() => _page = index),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                padding: EdgeInsets.symmetric(
-                  horizontal: isSelected ? 16 : 0,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.primary.withOpacity(0.1)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      item.icon,
-                      color: isSelected ? AppColors.primary : Colors.white,
-                      size: 22,
-                    ),
-                    if (isSelected) ...[
-                       SizedBox(width: screenWidth * 0.02),
-                      Text(
-                        item.label,
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 6,
+                offset: const Offset(0, -2),
               ),
-            );
-          }),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(_navItems.length, (index) {
+              final item = _navItems[index];
+              final isSelected = _page == index;
+
+              return GestureDetector(
+                onTap: () => setState(() => _page = index),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isSelected ? 16 : 0,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AppColors.primary.withOpacity(0.1)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        item.icon,
+                        color: isSelected ? AppColors.primary : Colors.white,
+                        size: 22,
+                      ),
+                      if (isSelected) ...[
+                        SizedBox(width: screenWidth * 0.02),
+                        Text(
+                          item.label,
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              );
+            }),
+          ),
         ),
-      ),
+      )
     );
   }
 }
