@@ -132,7 +132,7 @@ class SubmissionDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             buildInfoCard(context, 'Task Name', submission.taskName, Icons.task),
-            buildInfoCard(context, 'Task No', submission.taskId.toString(), Icons.tag),
+            buildInfoCard(context, 'Task No', submission.taskNo.toString(), Icons.tag),
             buildInfoCard(context, 'Submission Link', submission.referenceLink, Icons.link, isLink: true),
             buildInfoCard(context, 'Status', submission.status, Icons.info, isStatus: true),
             buildInfoCard(context, 'Start Date', formatDate(submission.startDate), Icons.event),
