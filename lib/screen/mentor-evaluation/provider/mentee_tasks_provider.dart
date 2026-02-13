@@ -46,6 +46,8 @@ Future<List<Task>> fetchMenteeTasks(
     if (filter == 'returned') return status == 'approved' || status == 'paused';
     return false;
   }).toList();
+  
+  filtered.sort((a,b) => a.taskNo.compareTo(b.taskNo));
 
   return filtered.map((s) {
     final trackTask = trackTasks.firstWhere(
