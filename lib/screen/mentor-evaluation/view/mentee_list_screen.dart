@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ammentor/components/theme.dart';
 import 'package:ammentor/components/mentee_tile.dart';
+import 'package:ammentor/components/custom_text_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ammentor/screen/mentor-evaluation/view/mentee_tasks_screen.dart';
 import 'package:ammentor/screen/mentor-evaluation/provider/mentee_list_provider.dart';
@@ -15,6 +16,8 @@ class MenteeListScreen extends ConsumerStatefulWidget {
 class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
     with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
+  final TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
 
   @override
   void initState() {
@@ -27,6 +30,7 @@ class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
 
   @override
   void dispose() {
+    searchController.dispose();
     _animationController?.dispose();
     super.dispose();
   }
@@ -63,19 +67,43 @@ class _MenteeListScreenState extends ConsumerState<MenteeListScreen>
                 color: AppColors.grey,
                 thickness: 1.0,
               ),),
+
+            SizedBox(height: screenHeight * 0.01),
+
+            CustomTextField(
+              controller: searchController,
+              label: "Search",
+              hintText: "Search Mentee...",
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+              width: screenWidth,
+            ),
+
+            SizedBox(height: screenHeight * 0.01),
+            
             Expanded(
               child: menteesAsync.when(
                 data: (mentees) {
-                  if (mentees.isEmpty) {
-                    return Center(child: Text('No mentees found', style: AppTextStyles.caption(context)));
+                  final filteredMentees = mentees.where((mentee) {
+                    return mentee.name
+                        .toLowerCase()
+                        .contains(searchQuery.toLowerCase());
+                  }).toList();
+
+                  if (filteredMentees.isEmpty) {
+                    return Center(child: Text(searchQuery.isEmpty ? 'No mentees available' : "No mentees found", style: AppTextStyles.caption(context)));
                   }
+
                   return AnimatedBuilder(
                     animation: _animationController!,
                     builder: (context, child) {
                       return ListView.builder(
-                        itemCount: mentees.length,
+                        itemCount: filteredMentees.length,
                         itemBuilder: (context, index) {
-                          final mentee = mentees[index];
+                          final mentee = filteredMentees[index];
                           return FadeTransition(
                             opacity: Tween<double>(begin: 0, end: 1).animate(
                               CurvedAnimation(
