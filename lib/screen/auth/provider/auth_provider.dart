@@ -6,8 +6,18 @@ import 'package:ammentor/screen/auth/model/auth_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final httpClientProvider = Provider<http.Client>((ref) {
+  return http.Client();
+});
+
+final authControllerProvider = Provider((ref) {
+  return AuthController(ref);
+});
+
 final userEmailProvider = StateProvider<String?>((ref) => null);
-final storage = FlutterSecureStorage();
+final storageProvider = Provider<FlutterSecureStorage>((ref) {
+  return const FlutterSecureStorage();
+});
 
 Future<void> initializeUserEmail(WidgetRef ref) async {
   final prefs = await SharedPreferences.getInstance();
@@ -16,12 +26,17 @@ Future<void> initializeUserEmail(WidgetRef ref) async {
 }
 
 class AuthController {
+
+  final Ref ref;
+  AuthController(this.ref);
+
   Future<OtpResponse> sendOtp(String email) async {
     final url = Uri.parse('${dotenv.env['BACKEND_URL']}/auth/send-otp/$email');
     try {
-      final response = await http.get(url);
+      final httpClient = ref.read(httpClientProvider);
+      final response = await httpClient.get(url);
       if (response.statusCode == 200) {
-        return OtpResponse(message: "OTP sent successfully", success: true);
+      return OtpResponse(message: "OTP sent successfully", success: true);
       }
       return OtpResponse(message: "Failed to send OTP", success: false);
     } catch (_) {
@@ -30,11 +45,13 @@ class AuthController {
   }
 
   Future<OtpResponse> verifyOtp(String email, String otp, UserRole role) async {
+    final storage = ref.read(storageProvider);
     final url = Uri.parse(
       '${dotenv.env['BACKEND_URL']}/auth/verify-otp/$email?otp=$otp',
     );
     try {
-      final response = await http.get(url);
+      final httpClient = ref.read(httpClientProvider);
+      final response = await httpClient.get(url);
       if (response.statusCode != 200) {
         final body = jsonDecode(response.body);
 

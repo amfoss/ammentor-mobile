@@ -7,6 +7,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:ammentor/screen/auth/provider/auth_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ammentor/screen/leaderboard/model/leaderboard_model.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -392,6 +393,7 @@ class ProfileScreen extends ConsumerWidget {
         ),
         child: ElevatedButton(
           onPressed: () async {
+            final storage = const FlutterSecureStorage();
             await storage.deleteAll();
             ref.invalidate(userEmailProvider);
             Navigator.of(context).pushAndRemoveUntil(

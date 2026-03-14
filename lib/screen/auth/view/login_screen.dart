@@ -75,7 +75,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     await prefs.setString('user_email', email);
     ref.read(userEmailProvider.notifier).state = email;
 
-    final auth = AuthController();
+    final auth = ref.read(authControllerProvider);
+
     final response = await auth.sendOtp(email);
 
     if (!mounted) return;

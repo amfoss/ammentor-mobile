@@ -4,6 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+final httpClientProvider = Provider<http.Client>((ref) {
+  return http.Client();
+});
+
 class TaskSubmissionState {
   final bool isSubmitting;
   final bool isSubmissionSuccessful;
@@ -54,7 +58,9 @@ Future<void> submitTask(
       "mentee_email": email,
     });
 
-    final response = await http.post(
+    final httpClient = ref.read(httpClientProvider);
+
+    final response = await httpClient.post(
       Uri.parse('${dotenv.env['BACKEND_URL']}/progress/submit-task'),
       headers: {'Content-Type': 'application/json'},
       body: body,
