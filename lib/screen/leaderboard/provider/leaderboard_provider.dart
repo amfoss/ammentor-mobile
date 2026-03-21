@@ -6,8 +6,13 @@ import 'package:ammentor/screen/leaderboard/model/leaderboard_model.dart';
 
 final baseUrl = dotenv.env['BACKEND_URL'];
 
+final httpClientProvider = Provider<http.Client>((ref) {
+  return http.Client();
+});
+
 final trackListProvider = FutureProvider<List<Track>>((ref) async {
-  final response = await http.get(Uri.parse('$baseUrl/tracks/'));
+  final httpClient = ref.read(httpClientProvider);
+  final response = await httpClient.get(Uri.parse('$baseUrl/tracks/'));
 
   if (response.statusCode == 200) {
     final List<dynamic> data = json.decode(response.body);
@@ -19,9 +24,10 @@ final trackListProvider = FutureProvider<List<Track>>((ref) async {
 
 final selectedTrackProvider = StateProvider<Track?>((ref) => null);
 
-final leaderboardProvider =
-    FutureProvider.family<List<LeaderboardUser>, int>((ref, trackId) async {
-  final response = await http.get(Uri.parse('$baseUrl/leaderboard/$trackId'));
+final leaderboardProvider = FutureProvider.family<List<LeaderboardUser>, int>((ref, trackId) async {
+
+  final httpClient = ref.read(httpClientProvider);
+  final response = await httpClient.get(Uri.parse('$baseUrl/leaderboard/$trackId'));
 
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
