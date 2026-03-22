@@ -20,7 +20,7 @@ class OtpVerificationDialog extends StatelessWidget {
     final h = MediaQuery.of(context).size.height;
 
     return Dialog(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       insetPadding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.06),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(28),
@@ -29,11 +29,11 @@ class OtpVerificationDialog extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: w * 0.05, vertical: h * 0.035),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
+              color: AppColors.white.withOpacity(0.05),
               borderRadius: BorderRadius.circular(28),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
+                  color: AppColors.black.withOpacity(0.15),
                   blurRadius: 30,
                   offset: Offset(0, 10),
                 ),

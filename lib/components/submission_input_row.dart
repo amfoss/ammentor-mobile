@@ -36,7 +36,7 @@ class SubmissionInputRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: Colors.white),
+            Icon(icon, color: AppColors.white),
             SizedBox(width: screenWidth * 0.04),
             Expanded(
               child: controller != null
@@ -71,7 +71,7 @@ class SubmissionInputRow extends StatelessWidget {
                     ),
             ),
             if (onTap != null)
-              const Icon(Icons.keyboard_arrow_down, color: Colors.white70),
+              const Icon(Icons.keyboard_arrow_down, color: AppColors.white70),
           ],
         ),
       ),

@@ -46,7 +46,7 @@ class _MenteeHomePageState extends State<MenteeHomePage> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: AppColors.black.withOpacity(0.08),
                 blurRadius: 6,
                 offset: const Offset(0, -2),
               ),
@@ -69,14 +69,14 @@ class _MenteeHomePageState extends State<MenteeHomePage> {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppColors.primary.withOpacity(0.1)
-                        : Colors.transparent,
+                        : AppColors.transparent,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     children: [
                       Icon(
                         item.icon,
-                        color: isSelected ? AppColors.primary : Colors.white,
+                        color: isSelected ? AppColors.primary : AppColors.white,
                         size: 22,
                       ),
                       if (isSelected) ...[

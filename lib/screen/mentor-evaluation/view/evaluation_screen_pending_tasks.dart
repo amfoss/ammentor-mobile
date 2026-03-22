@@ -59,8 +59,8 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: AppColors.background,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text('Evaluation', style: AppTextStyles.subheading(context).copyWith(color: Colors.white)),
+        iconTheme: const IconThemeData(color: AppColors.white),
+        title: Text('Evaluation', style: AppTextStyles.subheading(context).copyWith(color: AppColors.white)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: w * 0.05, vertical: h * 0.02),
@@ -72,7 +72,7 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
               style: AppTextStyles.heading(context).copyWith(
                 fontSize: h * 0.03,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
             SizedBox(height: h * 0.02),
@@ -91,15 +91,15 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
               onChanged: (val) =>
                   ref.read(taskEvaluationControllerProvider(widget.task).notifier).updateFeedback(val),
               maxLines: 6,
-              style: AppTextStyles.input(context).copyWith(color: Colors.white),
-              cursorColor: Colors.white,
+              style: AppTextStyles.input(context).copyWith(color: AppColors.white),
+              cursorColor: AppColors.white,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(w * 0.04),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.03),
+                fillColor: AppColors.white.withOpacity(0.03),
                 hintText: 'Type your remarks...',
                 hintStyle: AppTextStyles.input(context).copyWith(
-                  color: Colors.white.withOpacity(0.3),
+                  color: AppColors.white.withOpacity(0.3),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
@@ -125,7 +125,7 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                     onPressed: () => _handleEvaluation(context, 'approved'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.black,
+                      foregroundColor: AppColors.black,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       padding: EdgeInsets.symmetric(vertical: h * 0.018),
                     ),
@@ -141,7 +141,7 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
                     onPressed: () => _handleEvaluation(context, 'paused'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.red,
-                      foregroundColor: Colors.black,
+                      foregroundColor: AppColors.black,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       padding: EdgeInsets.symmetric(vertical: h * 0.018),
                     ),
@@ -174,7 +174,7 @@ class _TaskEvaluationScreenState extends ConsumerState<TaskEvaluationScreen> {
               child: LinkText(
                 text: text,
                 style: AppTextStyles.caption(context).copyWith(
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
                 maxLines: 3,
               ),

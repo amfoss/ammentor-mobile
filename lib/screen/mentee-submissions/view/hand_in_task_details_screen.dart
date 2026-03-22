@@ -53,7 +53,7 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
                     style: AppTextStyles.subheading(context).copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
@@ -115,8 +115,8 @@ class _TaskSubmissionScreenState extends ConsumerState<TaskSubmissionScreen> {
                           }
                         },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    foregroundColor: Colors.black,
+                    backgroundColor: AppColors.amber,
+                    foregroundColor: AppColors.black,
                     padding: EdgeInsets.symmetric(vertical: screenHeight * 0.016),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.0)),
                   ),

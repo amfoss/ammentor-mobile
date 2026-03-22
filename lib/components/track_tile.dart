@@ -47,7 +47,7 @@ class TrackTile extends StatelessWidget {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: Colors.grey[300],
+                        color: AppColors.grey[300],
                         child: const Center(child: Text('No Image')),
                       );
                     },
@@ -79,7 +79,7 @@ class TrackTile extends StatelessWidget {
                   //   const SizedBox(height: 8),
                   //   LinearProgressIndicator(
                   //     value: track.progress / 100,
-                  //     backgroundColor: Colors.grey[700],
+                  //     backgroundColor: AppColors.grey[700],
                   //     valueColor: const AlwaysStoppedAnimation<Color>(
                   //       AppColors.primary,
                   //     ),

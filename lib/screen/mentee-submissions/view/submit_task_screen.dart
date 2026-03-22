@@ -18,7 +18,7 @@ class TaskReviewScreen extends ConsumerWidget {
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.black.withOpacity(0.95),
+      backgroundColor: AppColors.black.withOpacity(0.95),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
@@ -36,7 +36,7 @@ class TaskReviewScreen extends ConsumerWidget {
                   ListTile(
                     title: Text(
                       track.name,
-                      style: AppTextStyles.body(context).copyWith(color: Colors.white),
+                      style: AppTextStyles.body(context).copyWith(color: AppColors.white),
                     ),
                     onTap: () {
                       ref.read(selectedTrackProvider.notifier).state = track.id;
@@ -44,12 +44,12 @@ class TaskReviewScreen extends ConsumerWidget {
                       Navigator.pop(context);
                     },
                   ),
-                const Divider(color: Colors.white10),
+                const Divider(color: AppColors.white10),
                 ListTile(
                   title: Center(
                     child: Text(
                       'Cancel',
-                      style: AppTextStyles.body(context).copyWith(color: Colors.redAccent),
+                      style: AppTextStyles.body(context).copyWith(color: AppColors.redAccent),
                     ),
                   ),
                   onTap: () => Navigator.pop(context),
@@ -93,12 +93,12 @@ class TaskReviewScreen extends ConsumerWidget {
                 vertical: screenHeight * 0.015,
               ),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.035),
+                color: AppColors.white.withOpacity(0.035),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withOpacity(0.05)),
+                border: Border.all(color: AppColors.white.withOpacity(0.05)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: AppColors.black.withOpacity(0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -115,9 +115,9 @@ class TaskReviewScreen extends ConsumerWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: activeFilter == 'handin'
                             ? AppColors.primary.withOpacity(0.12)
-                            : Colors.transparent,
+                            : AppColors.transparent,
                         elevation: 0,
-                        shadowColor: Colors.transparent,
+                        shadowColor: AppColors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -128,7 +128,7 @@ class TaskReviewScreen extends ConsumerWidget {
                         style: AppTextStyles.caption(context).copyWith(
                           color: activeFilter == 'handin'
                               ? AppColors.primary
-                              : Colors.white.withOpacity(0.7),
+                              : AppColors.white.withOpacity(0.7),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -141,9 +141,9 @@ class TaskReviewScreen extends ConsumerWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: activeFilter == 'submissions'
                             ? AppColors.primary.withOpacity(0.12)
-                            : Colors.transparent,
+                            : AppColors.transparent,
                         elevation: 0,
-                        shadowColor: Colors.transparent,
+                        shadowColor: AppColors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -154,7 +154,7 @@ class TaskReviewScreen extends ConsumerWidget {
                         style: AppTextStyles.caption(context).copyWith(
                           color: activeFilter == 'submissions'
                               ? AppColors.primary
-                              : Colors.white.withOpacity(0.7),
+                              : AppColors.white.withOpacity(0.7),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -165,9 +165,9 @@ class TaskReviewScreen extends ConsumerWidget {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.03),
+                          color: AppColors.white.withOpacity(0.03),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.white.withOpacity(0.06)),
+                          border: Border.all(color: AppColors.white.withOpacity(0.06)),
                         ),
                         child: Text(
                           tracks.when(
@@ -182,7 +182,7 @@ class TaskReviewScreen extends ConsumerWidget {
                             error: (_, __) => 'Error',
                           ),
                           style: AppTextStyles.caption(context).copyWith(
-                            color: Colors.white.withOpacity(0.9),
+                            color: AppColors.white.withOpacity(0.9),
                             fontWeight: FontWeight.w500,
                           ),
                         ),

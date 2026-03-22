@@ -23,7 +23,7 @@ class LinkText extends StatelessWidget {
     if (match == null) {
       return Text(
         text,
-        style: style ?? AppTextStyles.caption(context).copyWith(color: Colors.white),
+        style: style ?? AppTextStyles.caption(context).copyWith(color: AppColors.white),
         maxLines: maxLines,
         overflow: TextOverflow.ellipsis,
       );
@@ -37,13 +37,13 @@ class LinkText extends StatelessWidget {
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
       text: TextSpan(
-        style: style ?? AppTextStyles.caption(context).copyWith(color: Colors.white),
+        style: style ?? AppTextStyles.caption(context).copyWith(color: AppColors.white),
         children: [
           TextSpan(text: before),
           TextSpan(
             text: url,
             style: AppTextStyles.caption(context).copyWith(
-              color: Colors.blue,
+              color: AppColors.blue,
               decoration: TextDecoration.underline,
             ),
             recognizer: TapGestureRecognizer()

@@ -163,15 +163,15 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
         height: h * 0.045,
         padding: EdgeInsets.symmetric(horizontal: w * 0.04),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.transparent,
-          border: Border.all(color: isSelected ? AppColors.primary : Colors.white24),
+          color: isSelected ? AppColors.primary : AppColors.transparent,
+          border: Border.all(color: isSelected ? AppColors.primary : AppColors.white24),
           borderRadius: BorderRadius.circular(20),
         ),
         alignment: Alignment.center,
         child: Text(
           label[0].toUpperCase() + label.substring(1),
           style: AppTextStyles.caption(context).copyWith(
-            color: isSelected ? Colors.black : Colors.white70,
+            color: isSelected ? AppColors.black : AppColors.white70,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -207,9 +207,9 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: h * 0.008, horizontal: w * 0.045),
                       decoration: BoxDecoration(
-                        color: isSelected ? AppColors.primary : Colors.transparent,
+                        color: isSelected ? AppColors.primary : AppColors.transparent,
                         border: Border.all(
-                          color: isSelected ? AppColors.primary : Colors.white24,
+                          color: isSelected ? AppColors.primary : AppColors.white24,
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(20),
@@ -217,7 +217,7 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
                       child: Text(
                         track.name,
                         style: AppTextStyles.caption(context).copyWith(
-                          color: isSelected ? Colors.black : Colors.white70,
+                          color: isSelected ? AppColors.black : AppColors.white70,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -233,9 +233,9 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
         height: h * 0.045,
         padding: EdgeInsets.symmetric(horizontal: w * 0.035),
         decoration: BoxDecoration(
-          color: Colors.transparent,
+          color: AppColors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white24),
+          border: Border.all(color: AppColors.white24),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -245,7 +245,7 @@ class _MenteeTasksScreenState extends ConsumerState<MenteeTasksScreen> {
               style: AppTextStyles.caption(context),
             ),
             SizedBox(width: w * 0.015),
-            Icon(Icons.expand_more_rounded, color: Colors.white60, size: 18),
+            Icon(Icons.expand_more_rounded, color: AppColors.white60, size: 18),
           ],
         ),
       ),

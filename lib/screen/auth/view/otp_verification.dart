@@ -175,8 +175,8 @@ class _OtpVerificationState extends ConsumerState<OtpVerification> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
               ),
               child: isLoading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : Text("Login", style: AppTextStyles.caption(context).copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                  ? const CircularProgressIndicator(color: AppColors.white)
+                  : Text("Login", style: AppTextStyles.caption(context).copyWith(color: AppColors.white, fontWeight: FontWeight.bold)),
             ),
           ],
         ),

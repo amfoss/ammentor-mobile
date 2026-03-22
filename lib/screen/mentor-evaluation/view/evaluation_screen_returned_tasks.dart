@@ -100,7 +100,7 @@ class _TaskEvaluationViewScreenState
             (err, _) => const Center(
               child: Text(
                 'Failed to load submission',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: AppColors.white),
               ),
             ),
         data: (submissionData) {
@@ -108,7 +108,7 @@ class _TaskEvaluationViewScreenState
             return const Center(
               child: Text(
                 'Submission not found',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: AppColors.white),
               ),
             );
           }
@@ -214,7 +214,7 @@ class _TaskEvaluationViewScreenState
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.black,
+                        foregroundColor: AppColors.black,
                         padding: EdgeInsets.symmetric(
                           horizontal: screenWidth * 0.04,
                           vertical: screenHeight * 0.01,
@@ -257,7 +257,7 @@ class _TaskEvaluationViewScreenState
               child: LinkText(
                 text: text,
                 style: AppTextStyles.caption(context).copyWith(
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
                 maxLines: 3,
               ),

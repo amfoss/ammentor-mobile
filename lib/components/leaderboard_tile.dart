@@ -33,11 +33,11 @@ class _LeaderboardTileState extends State<LeaderboardTile>
   Color? _getGlowColor(int rank) {
     switch (rank) {
       case 1:
-        return Colors.amberAccent.withOpacity(0.3);
+        return AppColors.amberAccent.withOpacity(0.3);
       case 2:
-        return Colors.grey.withOpacity(0.25);
+        return AppColors.grey.withOpacity(0.25);
       case 3:
-        return Colors.brown.withOpacity(0.2);
+        return AppColors.brown.withOpacity(0.2);
       default:
         return null;
     }
@@ -51,11 +51,11 @@ class _LeaderboardTileState extends State<LeaderboardTile>
   Color _getRankIconColor(int rank) {
     switch (rank) {
       case 1:
-        return Colors.amberAccent;
+        return AppColors.amberAccent;
       case 2:
-        return Colors.grey[300]!;
+        return AppColors.grey[300]!;
       case 3:
-        return Colors.brown[300]!;
+        return AppColors.brown[300]!;
       default:
         return AppColors.white.withOpacity(0.85);
     }
@@ -101,13 +101,13 @@ class _LeaderboardTileState extends State<LeaderboardTile>
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
           child: Material(
-            color: Colors.transparent,
+            color: AppColors.transparent,
             borderRadius: BorderRadius.circular(20),
             child: InkWell(
               borderRadius: BorderRadius.circular(20),
               onTap: widget.onTap,
-              splashColor: Colors.white.withOpacity(0.08),
-              highlightColor: Colors.white.withOpacity(0.04),
+              splashColor: AppColors.white.withOpacity(0.08),
+              highlightColor: AppColors.white.withOpacity(0.04),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: BackdropFilter(
@@ -117,12 +117,12 @@ class _LeaderboardTileState extends State<LeaderboardTile>
                     decoration: BoxDecoration(
                       color: widget.isCurrentUser
                           ? AppColors.primary.withOpacity(0.15)
-                          : Colors.white.withOpacity(0.035),
+                          : AppColors.white.withOpacity(0.035),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
                         color: widget.isCurrentUser
                             ? AppColors.primary
-                            : Colors.white.withOpacity(0.06),
+                            : AppColors.white.withOpacity(0.06),
                         width: 1.2,
                       ),
                       boxShadow: [
@@ -147,7 +147,7 @@ class _LeaderboardTileState extends State<LeaderboardTile>
                               fontSize: 16,
                               color: widget.isCurrentUser
                                   ? AppColors.primary
-                                  : Colors.white.withOpacity(0.95),
+                                  : AppColors.white.withOpacity(0.95),
                             ),
                           ),
                           SizedBox(width: screenWidth * 0.03),
@@ -162,7 +162,7 @@ class _LeaderboardTileState extends State<LeaderboardTile>
                             widget.name,
                             style: AppTextStyles.body(context).copyWith(
                               fontSize: 15,
-                              color: Colors.white.withOpacity(0.95),
+                              color: AppColors.white.withOpacity(0.95),
                               fontWeight: FontWeight.w500,
                             ),
                             overflow: TextOverflow.ellipsis,
