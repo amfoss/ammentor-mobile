@@ -27,18 +27,18 @@ class ReviewTaskTile extends ConsumerWidget {
             );
           }
         },
-        splashColor: Colors.white.withOpacity(0.04),
-        highlightColor: Colors.white.withOpacity(0.02),
+        splashColor: AppColors.white.withOpacity(0.04),
+        highlightColor: AppColors.white.withOpacity(0.02),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.02),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.025),
+            color: AppColors.white.withOpacity(0.025),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.07), width: 0.8),
+            border: Border.all(color: AppColors.white.withOpacity(0.07), width: 0.8),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.07),
+                color: AppColors.black.withOpacity(0.07),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -51,7 +51,7 @@ class ReviewTaskTile extends ConsumerWidget {
                 width: w * 0.1,
                 height: w * 0.1,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.12),
+                  color: AppColors.white.withOpacity(0.12),
                   shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,

@@ -61,22 +61,22 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
         child: InkWell(
           onTap: () => _showDescriptionDialog(context),
           borderRadius: BorderRadius.circular(18),
-          splashColor: Colors.white.withOpacity(0.06),
+          splashColor: AppColors.white.withOpacity(0.06),
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.white.withOpacity(0.03),
-                  Colors.white.withOpacity(0.015),
+                  AppColors.white.withOpacity(0.03),
+                  AppColors.white.withOpacity(0.015),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.white12, width: 0.7),
+              border: Border.all(color: AppColors.white12, width: 0.7),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: AppColors.black.withOpacity(0.05),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -91,7 +91,7 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                   height: w * 0.1,
                   decoration: BoxDecoration(
                     color: isCompleted
-                        ? Colors.white
+                        ? AppColors.white
                         : AppColors.primary.withOpacity(0.12),
                     shape: BoxShape.circle,
                   ),
@@ -99,7 +99,7 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                   child: Text(
                     '${widget.task.taskNumber}',
                     style: AppTextStyles.body(context).copyWith(
-                      color: isCompleted ? Colors.black : AppColors.white,
+                      color: isCompleted ? AppColors.black : AppColors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                     ),
@@ -110,7 +110,7 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                   child: Text(
                     widget.task.taskName,
                     style: AppTextStyles.subheading(context).copyWith(
-                      color: isCompleted ? Colors.black : AppColors.white,
+                      color: isCompleted ? AppColors.black : AppColors.white,
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
@@ -120,7 +120,7 @@ class _TaskTileState extends State<TaskTile> with SingleTickerProviderStateMixin
                 Text(
                   '${widget.task.points} pts',
                   style: AppTextStyles.body(context).copyWith(
-                    color: isCompleted ? Colors.black : Colors.grey[400],
+                    color: isCompleted ? AppColors.black : AppColors.grey[400],
                     fontSize: 13,
                   ),
                 ),

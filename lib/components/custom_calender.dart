@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:ammentor/components/theme.dart';
+
+
 
 Future<void> showModernCalendarPicker({
   required BuildContext context,
@@ -12,7 +15,7 @@ Future<void> showModernCalendarPicker({
   await showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.transparent,
+    backgroundColor: AppColors.transparent,
     builder: (_) => StatefulBuilder(
       builder: (context, setState) {
         return Container(
@@ -35,25 +38,25 @@ Future<void> showModernCalendarPicker({
                   formatButtonVisible: false,
                   titleCentered: true,
                   titleTextStyle: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
                   ),
-                  leftChevronIcon: const Icon(Icons.chevron_left, color: Colors.white70),
-                  rightChevronIcon: const Icon(Icons.chevron_right, color: Colors.white70),
+                  leftChevronIcon: const Icon(Icons.chevron_left, color: AppColors.white70),
+                  rightChevronIcon: const Icon(Icons.chevron_right, color: AppColors.white70),
                 ),
                 calendarStyle: CalendarStyle(
                   selectedDecoration: const BoxDecoration(
-                    color: Colors.yellow,
+                    color: AppColors.yellow,
                     shape: BoxShape.circle,
                   ),
                   selectedTextStyle: const TextStyle(
-                    color: Colors.black, 
+                    color: AppColors.black, 
                     fontWeight: FontWeight.w600,
                   ),
-                  defaultTextStyle: const TextStyle(color: Colors.white),
-                  weekendTextStyle: const TextStyle(color: Colors.white70),
-                  todayTextStyle: const TextStyle(color: Colors.white),
+                  defaultTextStyle: const TextStyle(color: AppColors.white),
+                  weekendTextStyle: const TextStyle(color: AppColors.white70),
+                  todayTextStyle: const TextStyle(color: AppColors.white),
                   todayDecoration: const BoxDecoration(), 
                 ),
                 onDaySelected: (selected, focused) {
@@ -72,7 +75,7 @@ Future<void> showModernCalendarPicker({
                 child: const Text(
                   'Done',
                   style: TextStyle(
-                    color: Colors.yellow,
+                    color: AppColors.yellow,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),

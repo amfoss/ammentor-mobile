@@ -35,7 +35,7 @@ class _CustomButtonState extends State<CustomButton> {
     return Container(
       width: screenWidth * 0.7,
       decoration: BoxDecoration(
-        color: Colors.grey[800],
+        color: AppColors.grey[800],
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -76,7 +76,7 @@ class _CustomButtonState extends State<CustomButton> {
                 return ListTile(
                   contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
                   leading: CircleAvatar(
-                    backgroundColor: Colors.black,
+                    backgroundColor: AppColors.black,
                     radius: 10,
                     child: option == _selected
                         ? const Icon(Icons.check, color: AppColors.background, size: 14)

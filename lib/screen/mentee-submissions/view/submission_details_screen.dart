@@ -24,7 +24,7 @@ class SubmissionDetailsScreen extends StatelessWidget {
     bool isLink = false,
     bool isStatus = false,
   }) {
-    final Color cardColor = Colors.white.withOpacity(0.025);
+    final Color cardColor = AppColors.white.withOpacity(0.025);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -32,10 +32,10 @@ class SubmissionDetailsScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: cardColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: AppColors.white.withOpacity(0.05)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppColors.black.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -46,7 +46,7 @@ class SubmissionDetailsScreen extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(top: 2),
-            child: Icon(icon, color: Colors.white70, size: 20),
+            child: Icon(icon, color: AppColors.white70, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -56,7 +56,7 @@ class SubmissionDetailsScreen extends StatelessWidget {
                 Text(
                   title,
                   style: AppTextStyles.caption(context).copyWith(
-                    color: Colors.white70,
+                    color: AppColors.white70,
                     fontSize: 13,
                   ),
                 ),
@@ -67,10 +67,10 @@ class SubmissionDetailsScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: value.toLowerCase() == 'approved'
-                                ? [Colors.greenAccent.withOpacity(0.3), Colors.green]
+                                ? [AppColors.greenAccent.withOpacity(0.3), AppColors.green]
                                 : value.toLowerCase() == 'submitted'
-                                    ? [Colors.yellow.shade100, Colors.yellow.shade600]
-                                    : [Colors.redAccent.withOpacity(0.3), Colors.red],
+                                    ? [AppColors.yellow.shade100, AppColors.yellow.shade600]
+                                    : [AppColors.redAccent.withOpacity(0.3), AppColors.red],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
@@ -80,8 +80,8 @@ class SubmissionDetailsScreen extends StatelessWidget {
                           value.capitalize(),
                           style: AppTextStyles.caption(context).copyWith(
                             color: value.toLowerCase() == 'submitted'
-                                ? Colors.black
-                                : Colors.white,
+                                ? AppColors.black
+                                : AppColors.white,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

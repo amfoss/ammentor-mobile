@@ -20,7 +20,7 @@ class TaskDescriptionDialog extends StatelessWidget {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Dialog(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       insetPadding: EdgeInsets.symmetric(horizontal: w * 0.06, vertical: h * 0.18),
       child: Container(
         decoration: BoxDecoration(

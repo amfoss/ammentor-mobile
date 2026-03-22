@@ -156,7 +156,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       ElevatedButton(
                         onPressed: isLoading ? null : sendOtp,
                         child: isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
+                            ? const CircularProgressIndicator(color: AppColors.white)
                             : Text(
                                 'Get OTP',
                                 style: AppTextStyles.button(context).copyWith(

@@ -25,10 +25,10 @@ Color getTextColor(String status) {
   switch (status.toLowerCase()) {
     case 'approved':
     case 'submitted':
-      return Colors.black;
+      return AppColors.black;
     case 'rejected':
     default:
-      return Colors.white;
+      return AppColors.white;
   }
 }
   @override
@@ -57,10 +57,10 @@ Color getTextColor(String status) {
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(16.0),
-          border: Border.all(color: Colors.white.withOpacity(0.05), width: 0.8),
+          border: Border.all(color: AppColors.white.withOpacity(0.05), width: 0.8),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: AppColors.black.withOpacity(0.06),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -73,7 +73,7 @@ Color getTextColor(String status) {
               width: w * 0.1,
               height: w * 0.1,
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.07),
+                color: AppColors.black.withOpacity(0.07),
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
@@ -109,7 +109,7 @@ Color getTextColor(String status) {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.1),
+                color: AppColors.black.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(

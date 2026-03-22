@@ -28,7 +28,7 @@ class TaskTile extends ConsumerWidget {
       padding: EdgeInsets.only(top: h * 0.005, bottom: h * 0.005),
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
-        splashColor: Colors.white.withOpacity(0.05),
+        splashColor: AppColors.white.withOpacity(0.05),
         onTap: () async {
           final result = await Navigator.of(context).push(
             MaterialPageRoute(
@@ -57,12 +57,12 @@ class TaskTile extends ConsumerWidget {
             vertical: h * 0.018,
           ),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.025),
+            color: AppColors.white.withOpacity(0.025),
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: Colors.white12, width: 0.5),
+            border: Border.all(color: AppColors.white12, width: 0.5),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.04),
+                color: AppColors.black.withOpacity(0.04),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -75,9 +75,9 @@ class TaskTile extends ConsumerWidget {
                 height: w * 0.1,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Colors.transparent,
+                  color: AppColors.transparent,
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white30, width: 1),
+                  border: Border.all(color: AppColors.white30, width: 1),
                 ),
                 child: Text(
                   '${task.taskNumber}',

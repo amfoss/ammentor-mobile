@@ -7,7 +7,14 @@ class AppColors {
   static const surface = Color(0xFF2E2E2E);
   static const white = Colors.white;
   static const white70 = Colors.white70;
-  static const red = Colors.redAccent;
+  static const white24 = Colors.white24;
+  static const white60 = Colors.white60;
+  static const white12 = Colors.white12;
+  static const white30 = Colors.white30;
+  static const white10 = Colors.white10;
+  static const red = Colors.red;
+  static const redAccent = Colors.redAccent;
+  static const blue = Colors.blue;
   static const grey = Colors.grey;
   static const darkgrey = Color(0xFF2E2E2E);
   static const errorDark = Color(0xFFB00020);
@@ -16,8 +23,14 @@ class AppColors {
   static const textDark = Color(0xFF393939);
   static const accent = Color(0xFF9F7BFF);
   static const green = Colors.green;
+  static const greenAccent = Colors.greenAccent;
   static const orange = Colors.orange;
-
+  static const yellow = Colors.yellow;  
+  static const black = Colors.black;
+  static const transparent = Colors.transparent;
+  static const amber = Colors.amber;
+  static const amberAccent = Colors.amberAccent;
+  static const brown = Colors.brown; 
 
 }
 

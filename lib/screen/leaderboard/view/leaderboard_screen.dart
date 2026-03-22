@@ -92,9 +92,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.04),
+                                color: AppColors.white.withOpacity(0.04),
                                 borderRadius: BorderRadius.circular(18),
-                                border: Border.all(color: Colors.white.withOpacity(0.06)),
+                                border: Border.all(color: AppColors.white.withOpacity(0.06)),
                               ),
                               child: SizedBox(
                                 height: 42,
@@ -123,7 +123,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                                           decoration: BoxDecoration(
                                             color: isSelected
                                                 ? AppColors.primary.withOpacity(0.12)
-                                                : Colors.transparent,
+                                                : AppColors.transparent,
                                             borderRadius: BorderRadius.circular(10),
                                             boxShadow: isSelected
                                                 ? [
@@ -142,7 +142,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                                               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                                               color: isSelected
                                                   ? AppColors.primary
-                                                  : Colors.white.withOpacity(0.7),
+                                                  : AppColors.white.withOpacity(0.7),
                                             ),
                                           ),
                                         ),
@@ -161,7 +161,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                           child: Container(
                             height: 2.5,
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.08),
+                              color: AppColors.white.withOpacity(0.08),
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),

@@ -19,7 +19,7 @@ class UserPopupDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       child: Stack(
         children: [
@@ -30,12 +30,12 @@ class UserPopupDialog extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.06),
+                  color: AppColors.white.withOpacity(0.06),
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                  border: Border.all(color: AppColors.white.withOpacity(0.1)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
+                      color: AppColors.black.withOpacity(0.15),
                       blurRadius: 25,
                       offset: const Offset(0, 8),
                     ),
@@ -59,14 +59,14 @@ class UserPopupDialog extends StatelessWidget {
                                 name,
                                 style: AppTextStyles.subheading(context).copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                 ),
                               ),
                               const SizedBox(height: 6),
                               Text(
                                 'Rank: #$rank   |   $points pts',
                                 style: AppTextStyles.caption(context).copyWith(
-                                  color: Colors.white.withOpacity(0.7),
+                                  color: AppColors.white.withOpacity(0.7),
                                 ),
                               ),
                             ],

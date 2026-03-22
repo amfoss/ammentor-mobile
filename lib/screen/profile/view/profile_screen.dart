@@ -98,18 +98,18 @@ class ProfileScreen extends ConsumerWidget {
         color: AppColors.darkgrey.withOpacity(0.9),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.white.withOpacity(0.08),
+          color: AppColors.white.withOpacity(0.08),
           width: 0.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.15),
+            color: AppColors.black.withOpacity(0.15),
             blurRadius: 15,
             offset: const Offset(0, 5),
             spreadRadius: 0,
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.black.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
             spreadRadius: 0,
@@ -123,7 +123,7 @@ class ProfileScreen extends ConsumerWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: AppColors.black.withOpacity(0.2),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -132,7 +132,7 @@ class ProfileScreen extends ConsumerWidget {
             child: CircleAvatar(
               backgroundImage: NetworkImage(user.avatarUrl),
               radius: 32,
-              backgroundColor: Colors.grey[800],
+              backgroundColor: AppColors.grey[800],
             ),
           ),
           SizedBox(width: screenWidth * 0.05),
@@ -193,12 +193,12 @@ class ProfileScreen extends ConsumerWidget {
         color: AppColors.darkgrey.withOpacity(0.9),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: Colors.white.withOpacity(0.08),
+          color: AppColors.white.withOpacity(0.08),
           width: 0.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.12),
+            color: AppColors.black.withOpacity(0.12),
             blurRadius: 12,
             offset: const Offset(0, 4),
             spreadRadius: 0,
@@ -255,12 +255,12 @@ class ProfileScreen extends ConsumerWidget {
   //       color: AppColors.darkgrey.withOpacity(0.9),
   //       borderRadius: BorderRadius.circular(18),
   //       border: Border.all(
-  //         color: Colors.white.withOpacity(0.08),
+  //         color: AppColors.white.withOpacity(0.08),
   //         width: 0.5,
   //       ),
   //       boxShadow: [
   //         BoxShadow(
-  //           color: Colors.black.withOpacity(0.12),
+  //           color: AppColors.black.withOpacity(0.12),
   //           blurRadius: 12,
   //           offset: const Offset(0, 4),
   //           spreadRadius: 0,
@@ -275,12 +275,12 @@ class ProfileScreen extends ConsumerWidget {
   //             Container(
   //               padding: const EdgeInsets.all(10),
   //               decoration: BoxDecoration(
-  //                 color: Colors.amber.withOpacity(0.15),
+  //                 color: AppColors.amber.withOpacity(0.15),
   //                 borderRadius: BorderRadius.circular(12),
   //               ),
   //               child: const Icon(
   //                 HugeIcons.strokeRoundedCheckmarkBadge02,
-  //                 color: Colors.amber,
+  //                 color: AppColors.amber,
   //                 size: 20,
   //               ),
   //             ),
@@ -297,7 +297,7 @@ class ProfileScreen extends ConsumerWidget {
   //             Container(
   //               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
   //               decoration: BoxDecoration(
-  //                 color: Colors.white.withOpacity(0.1),
+  //                 color: AppColors.white.withOpacity(0.1),
   //                 borderRadius: BorderRadius.circular(12),
   //               ),
   //               child: Text(
@@ -342,7 +342,7 @@ class ProfileScreen extends ConsumerWidget {
   //                       child: Text(
   //                         badge[0],
   //                         style: const TextStyle(
-  //                           color: Colors.white,
+  //                           color: AppColors.white,
   //                           fontSize: 18,
   //                           fontWeight: FontWeight.w700,
   //                         ),
@@ -354,10 +354,10 @@ class ProfileScreen extends ConsumerWidget {
   //             : Container(
   //                 padding: const EdgeInsets.all(20),
   //                 decoration: BoxDecoration(
-  //                   color: Colors.white.withOpacity(0.05),
+  //                   color: AppColors.white.withOpacity(0.05),
   //                   borderRadius: BorderRadius.circular(12),
   //                   border: Border.all(
-  //                     color: Colors.white.withOpacity(0.1),
+  //                     color: AppColors.white.withOpacity(0.1),
   //                     width: 1,
   //                     style: BorderStyle.solid,
   //                   ),
@@ -401,7 +401,7 @@ class ProfileScreen extends ConsumerWidget {
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.errorDark,
-            foregroundColor: Colors.white,
+            foregroundColor: AppColors.white,
             padding: EdgeInsets.symmetric(
               horizontal: screenWidth * 0.2,
               vertical: screenHeight * 0.018,
@@ -422,7 +422,7 @@ class ProfileScreen extends ConsumerWidget {
               Text(
                 'Sign Out',
                 style: AppTextStyles.button(context).copyWith(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                   letterSpacing: -0.1,

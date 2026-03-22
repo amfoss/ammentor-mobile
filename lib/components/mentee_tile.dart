@@ -28,15 +28,15 @@ class MenteeTile extends StatelessWidget {
           vertical: height * 0.02,
         ),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.03),
+          color: AppColors.white.withOpacity(0.03),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Colors.white.withOpacity(0.06),
+            color: AppColors.white.withOpacity(0.06),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: AppColors.black.withOpacity(0.05),
               blurRadius: 6,
               offset: const Offset(0, 3),
             ),
@@ -49,13 +49,13 @@ class MenteeTile extends StatelessWidget {
               height: height * 0.04,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.06),
+                color: AppColors.white.withOpacity(0.06),
               ),
               alignment: Alignment.center,
               child: Text(
                 '$number',
                 style: AppTextStyles.caption(context).copyWith(
-                  color: Colors.white.withOpacity(0.9),
+                  color: AppColors.white.withOpacity(0.9),
                   fontWeight: FontWeight.w600,
                   fontSize: 13.5,
                 ),
@@ -64,12 +64,12 @@ class MenteeTile extends StatelessWidget {
             SizedBox(width: width * 0.04),
             CircleAvatar(
               radius: 22,
-              backgroundColor: Colors.transparent,
+              backgroundColor: AppColors.transparent,
               backgroundImage: mentee.imageUrl != null
                   ? NetworkImage(mentee.imageUrl!)
                   : null,
               child: mentee.imageUrl == null
-                  ? Icon(Icons.person, size: 22, color: Colors.white.withOpacity(0.6))
+                  ? Icon(Icons.person, size: 22, color: AppColors.white.withOpacity(0.6))
                   : null,
             ),
             SizedBox(width: width * 0.04),
@@ -77,7 +77,7 @@ class MenteeTile extends StatelessWidget {
               child: Text(
                 mentee.name,
                 style: AppTextStyles.caption(context).copyWith(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                 ),
@@ -86,7 +86,7 @@ class MenteeTile extends StatelessWidget {
             Text(
               '${mentee.totalPoints} pts',
               style: AppTextStyles.caption(context).copyWith(
-                color: Colors.white.withOpacity(0.7),
+                color: AppColors.white.withOpacity(0.7),
                 fontWeight: FontWeight.w500,
                 fontSize: 13.5,
               ),
